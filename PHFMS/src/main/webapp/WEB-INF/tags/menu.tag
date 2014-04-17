@@ -6,15 +6,6 @@
 <script type="text/javascript" src="<c:url value="/resources/script/jquery-migrate-1.1.0.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/script/jquery.ui.menubar.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/script/flexigrid.pack.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/script/select.min.js"/>"></script>
-<script>
-    $('select.drop-select').each(function(){
-        new Select({
-            el: this,
-            selectLikeAlignment: $(this).attr('data-select-like-alignement') || 'auto'
-        });
-    });
-</script>
 <style>
 	TABLE.Table
 	{
