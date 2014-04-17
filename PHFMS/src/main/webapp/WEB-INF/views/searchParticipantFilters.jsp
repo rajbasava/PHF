@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title>Arhatic Yoga Retreat - Search Particpants</title>
+    <title>Arhatic Yoga Retreat - Search Participants</title>
     <script type="text/javascript">
         $(function() {
             var moveLeft = 250;
@@ -19,19 +19,26 @@
         });
     </script>
 </head>
-<mytags:style/>
-</head>
 <body>
+<div class="formdata">
+<div class="formtitle">Search Participants</div>
+<div class="formbody">
 <form:form method="post" action="listParticipants.htm" commandName="participantCriteria">
 <input type="hidden" name="page" value="<c:out value="${page}"/>"/>
 <input type="hidden" name="registrationId" value="<c:out value="${registrationId}"/>"/>
 <table align="center" cellspacing="2">
     <tr>
+        <td><form:label path="participantId">Id</form:label></td>
+        <td><form:input path="participantId" /></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
         <td><form:label path="name"><spring:message code="label.name"/></form:label></td>
         <td><form:input path="name" /></td>
-        <td><form:label path="foundation"><spring:message code="label.foundation"/></form:label></td>
+        <td><form:label path="foundationId"><spring:message code="label.foundation"/></form:label></td>
         <td>
-            <form:select path="foundation">
+            <form:select path="foundationId">
                 <form:option value="" label="--- Select ---"/>
                 <form:options items="${allFoundations}" />
             </form:select>
@@ -40,11 +47,11 @@
     <tr>
         <td><form:label path="email"><spring:message code="label.email"/></form:label></td>
         <td><form:input path="email" /></td>
-        <td><form:label path="level"><spring:message code="label.courseType"/></form:label></td>
+        <td width="40%"><form:label path="courseTypeId">Course</form:label></td>
         <td>
-            <form:select path="level">
+            <form:select path="courseTypeId">
                 <form:option value="" label="--- Select ---"/>
-                <form:options items="${allParticipantLevels}" />
+                <form:options items="${allParticipantCourseTypes}" />
             </form:select>
         </td>
     </tr>
@@ -54,12 +61,18 @@
         <td><form:label path="vip"><spring:message code="label.vip"/></form:label></td>
         <td><form:checkbox path="vip"/></td>
     </tr>
+<table>
+</div>
+<div class="formfooter">
+<table width="100%">
     <tr>
-        <td colspan="4" align="center">
+        <td align="right">
             <div id="button">
-                <a id="submit" href="#"><spring:message code="label.search"/></a>
+                <a id="submit" href="#">Search</a>
             </div>
         </td>
     </tr>
 </table>
 </form:form>
+</div>
+</div>

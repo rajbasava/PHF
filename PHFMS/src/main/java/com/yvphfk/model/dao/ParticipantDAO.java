@@ -5,17 +5,16 @@
 package com.yvphfk.model.dao;
 
 import com.yvphfk.model.ParticipantCourseForm;
+import com.yvphfk.model.ParticipantCriteria;
 import com.yvphfk.model.form.Event;
 import com.yvphfk.model.form.EventPayment;
 import com.yvphfk.model.form.EventRegistration;
 import com.yvphfk.model.form.HistoryRecord;
 import com.yvphfk.model.Login;
 import com.yvphfk.model.form.Participant;
-import com.yvphfk.model.ParticipantCriteria;
 import com.yvphfk.model.form.ParticipantCourse;
 import com.yvphfk.model.form.ParticipantSeat;
 import com.yvphfk.model.PaymentCriteria;
-import com.yvphfk.model.form.ReferenceGroup;
 import com.yvphfk.model.RegisteredParticipant;
 import com.yvphfk.model.RegistrationCriteria;
 import com.yvphfk.model.RegistrationForm;

@@ -20,7 +20,6 @@ import com.yvphfk.model.ParticipantCriteria;
 import com.yvphfk.model.form.ParticipantCourse;
 import com.yvphfk.model.form.ParticipantSeat;
 import com.yvphfk.model.PaymentCriteria;
-import com.yvphfk.model.form.ReferenceGroup;
 import com.yvphfk.model.RegisteredParticipant;
 import com.yvphfk.model.RegistrationCriteria;
 import com.yvphfk.model.RegistrationForm;
@@ -525,7 +524,16 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(Participant.class);
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.add(Restrictions.eq("active", true));
 
+
+        if (participantCriteria.getParticipantId() != null) {
+            criteria.add(Restrictions.eq("participant.id", participantCriteria.getParticipantId()));
+            List<Participant> results = criteria.list();
+
+            session.close();
+            return results;
+        }
 
         if (!Util.nullOrEmptyOrBlank(participantCriteria.getName())) {
             criteria.add(Restrictions.ilike("name", participantCriteria.getName(), MatchMode.ANYWHERE));
@@ -535,17 +543,25 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
             criteria.add(Restrictions.ilike("email", participantCriteria.getEmail(), MatchMode.ANYWHERE));
         }
 
-        if (!Util.nullOrEmptyOrBlank(participantCriteria.getFoundation())) {
-            String foundation = participantCriteria.getFoundation();
-            criteria.add(Restrictions.ilike("foundation", foundation, MatchMode.ANYWHERE));
-        }
-
         if (!Util.nullOrEmptyOrBlank(participantCriteria.getMobile())) {
             criteria.add(Restrictions.like("mobile", "%" + participantCriteria.getMobile() + "%"));
         }
 
         if (participantCriteria.isVip()) {
             criteria.add(Restrictions.eq("vip", participantCriteria.isVip()));
+        }
+
+        if (participantCriteria.getFoundationId() != null) {
+            criteria.createAlias("courses", "courses");
+            Integer foundationId = participantCriteria.getFoundationId();
+            criteria.add(Restrictions.eq("courses.foundation.id", foundationId));
+        }
+
+        if (participantCriteria.getCourseTypeId() != null) {
+            if (criteria.getAlias() != null && !criteria.getAlias().equals("courses")) {
+                criteria.createAlias("courses", "courses");
+            }
+            criteria.add(Restrictions.eq("courses.courseType.id", participantCriteria.getCourseTypeId()));
         }
 
         List<Participant> results = criteria.list();

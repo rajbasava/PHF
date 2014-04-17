@@ -87,7 +87,7 @@
                 <li><a href="#">Search</a>
                      <ul>
                         <c:if test="${user.access.admin}" >
-                            <li><a href="searchPranicHealers.htm">Pranic Healer</a></li>
+                            <li><a href="searchParticipants.htm">Participants</a></li>
                         </c:if>
                         <li><a href="search.htm">Registrations</a></li>
                      </ul>

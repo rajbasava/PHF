@@ -7,12 +7,23 @@ package com.yvphfk.model;
 
 public class ParticipantCriteria
 {
+    private Integer participantId;
     private String name;
     private String mobile;
     private String email;
-    private String level;
-    private String foundation;
+    private Integer foundationId;
     private boolean vip;
+    private Integer courseTypeId;
+
+    public Integer getParticipantId ()
+    {
+        return participantId;
+    }
+
+    public void setParticipantId (Integer participantId)
+    {
+        this.participantId = participantId;
+    }
 
     public String getName ()
     {
@@ -44,24 +55,14 @@ public class ParticipantCriteria
         this.email = email;
     }
 
-    public String getLevel ()
+    public Integer getFoundationId ()
     {
-        return level;
+        return foundationId;
     }
 
-    public void setLevel (String level)
+    public void setFoundationId (Integer foundationId)
     {
-        this.level = level;
-    }
-
-    public String getFoundation ()
-    {
-        return foundation;
-    }
-
-    public void setFoundation (String foundation)
-    {
-        this.foundation = foundation;
+        this.foundationId = foundationId;
     }
 
     public boolean isVip ()
@@ -72,5 +73,15 @@ public class ParticipantCriteria
     public void setVip (boolean vip)
     {
         this.vip = vip;
+    }
+
+    public Integer getCourseTypeId ()
+    {
+        return courseTypeId;
+    }
+
+    public void setCourseTypeId (Integer courseTypeId)
+    {
+        this.courseTypeId = courseTypeId;
     }
 }

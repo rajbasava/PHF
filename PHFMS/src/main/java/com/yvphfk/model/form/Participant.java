@@ -10,8 +10,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "phk_participant")
@@ -51,6 +53,9 @@ public class Participant extends BaseForm
 
     @Column(name = "COUNTRY")
     private String country;
+
+    @OneToMany(mappedBy = "participant")
+    private Set<ParticipantCourse> courses;
 
     @Column(name = "PREPAREDBY", updatable = false)
     private String preparedBy;
@@ -169,6 +174,16 @@ public class Participant extends BaseForm
     public void setCountry (String country)
     {
         this.country = country;
+    }
+
+    public Set<ParticipantCourse> getCourses ()
+    {
+        return courses;
+    }
+
+    public void setCourses (Set<ParticipantCourse> courses)
+    {
+        this.courses = courses;
     }
 
     public String getPreparedBy ()

@@ -15,7 +15,6 @@ import com.yvphfk.model.form.Participant;
 import com.yvphfk.model.ParticipantCriteria;
 import com.yvphfk.model.form.ParticipantSeat;
 import com.yvphfk.model.PaymentCriteria;
-import com.yvphfk.model.form.ReferenceGroup;
 import com.yvphfk.model.RegisteredParticipant;
 import com.yvphfk.model.RegistrationCriteria;
 import org.springframework.beans.factory.annotation.Autowired;

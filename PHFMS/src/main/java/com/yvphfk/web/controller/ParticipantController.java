@@ -4,40 +4,17 @@
 */
 package com.yvphfk.web.controller;
 
-import com.yvphfk.common.PaymentMode;
-import com.yvphfk.common.Util;
 import com.yvphfk.model.Login;
-import com.yvphfk.model.Option;
-import com.yvphfk.model.ParticipantCourseForm;
 import com.yvphfk.model.ParticipantCriteria;
-import com.yvphfk.model.RegisteredParticipant;
-import com.yvphfk.model.RegistrationCriteria;
-import com.yvphfk.model.RegistrationPayments;
-import com.yvphfk.model.form.Event;
-import com.yvphfk.model.form.EventFee;
-import com.yvphfk.model.form.EventPayment;
-import com.yvphfk.model.form.EventRegistration;
-import com.yvphfk.model.form.HistoryRecord;
-import com.yvphfk.model.form.Participant;
+import com.yvphfk.model.ParticipantCourseForm;
 import com.yvphfk.model.form.ParticipantCourse;
-import com.yvphfk.model.form.ParticipantSeat;
-import com.yvphfk.model.form.ReferenceGroup;
-import com.yvphfk.model.form.validator.PaymentValidator;
-import com.yvphfk.model.form.validator.RegistrationValidator;
 import com.yvphfk.service.EventService;
 import com.yvphfk.service.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -54,7 +31,7 @@ public class ParticipantController extends CommonController
                                     ParticipantCriteria participantCriteria,
                                     HttpServletRequest request)
     {
-        map.put("participantCriteria", new ParticipantCriteria());
+        map.put("participantCriteria", participantCriteria);
         if (participantCriteria != null) {
             //todo if the page is replace, we should search participant that are not participating in the current event.
             map.put("participantList", participantService.listParticipants(participantCriteria));
