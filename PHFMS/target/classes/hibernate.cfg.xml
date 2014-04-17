@@ -1,0 +1,26 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <mapping class="com.yvphfk.model.form.HistoryRecord"/>
+        <mapping class="com.yvphfk.model.form.Participant"/>
+        <mapping class="com.yvphfk.model.form.Volunteer"/>
+        <mapping class="com.yvphfk.model.form.LoggedInVolunteer"/>
+        <mapping class="com.yvphfk.model.form.ParticipantSeat"/>
+        <mapping class="com.yvphfk.model.form.Event"/>
+        <mapping class="com.yvphfk.model.form.EventFee"/>
+        <mapping class="com.yvphfk.model.form.EventRegistration"/>
+        <mapping class="com.yvphfk.model.form.EventPayment"/>
+        <mapping class="com.yvphfk.model.form.ReferenceGroup"/>
+        <mapping class="com.yvphfk.model.form.RowMeta"/>
+        <mapping class="com.yvphfk.model.form.PHFoundation"/>
+        <mapping class="com.yvphfk.model.form.Kit"/>
+        <mapping class="com.yvphfk.model.form.VolunteerKit"/>
+        <mapping class="com.yvphfk.model.form.CourseType"/>
+        <mapping class="com.yvphfk.model.form.Trainer"/>
+        <mapping class="com.yvphfk.model.form.TrainerCourse"/>
+        <mapping class="com.yvphfk.model.form.ParticipantCourse"/>
+    </session-factory>
+</hibernate-configuration>
