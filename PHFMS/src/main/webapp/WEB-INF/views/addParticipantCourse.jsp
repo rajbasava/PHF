@@ -10,13 +10,13 @@
 	<mytags:menu/>
 	<script type="text/javascript">
 		$(document).ready(function(){
-            $("#addParticipantCourse input[name='participantCourse.startDate']").datepicker({
+            $("#participantCourseForm input[name='participantCourse.startDate']").datepicker({
                 showOn: 'button',
                 dateFormat: 'dd/mm/yy',
                 buttonImageOnly: true,
                 buttonImage: '<c:url value="/resources/img/calendar.gif"/>'
             });
-            $("#addParticipantCourse input[name='participantCourse.endDate']").datepicker({
+            $("#participantCourseForm input[name='participantCourse.endDate']").datepicker({
                 showOn: 'button',
                 dateFormat: 'dd/mm/yy',
                 buttonImageOnly: true,
@@ -38,6 +38,7 @@
 <body>
 <form:form method="post" action="" commandName="participantCourseForm">
 <form:errors path="*" cssClass="errorblock" element="div" />
+<form:hidden path="participantId"/>
 <table align="center" cellspacing="2" cellspacing="2" width="80%">
     <tr>
         <td>
@@ -48,60 +49,64 @@
             </table>
         </td>
     </tr>
+    <c:choose>
+        <c:when test="${showParticipantDetails}">
+            <tr>
+                <td>
+                    <table width="100%" cellpadding="1" cellspacing="1">
+                        <tr style="background-color:#E8E8E8;">
+                            <td align="left"><b>Contact Details:</b></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table width="100%" cellpadding="1" cellspacing="1">
+                        <tr>
+                            <td width="60%">
+                                <table width="100%" cellpadding="1" cellspacing="1">
+                                    <tr>
+                                        <td width="40%"><form:label path="participant.name"><spring:message code="label.name"/></form:label></td>
+                                        <td><form:input path="participant.name" size="50"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="40%"><form:label path="participant.mobile"><spring:message code="label.mobile"/></form:label></td>
+                                        <td><form:input path="participant.mobile" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="40%"><form:label path="participant.home"><spring:message code="label.home"/></form:label></td>
+                                        <td><form:input path="participant.home" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="40%"><form:label path="participant.email"><spring:message code="label.email"/></form:label></td>
+                                        <td><form:input path="participant.email" /></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                <table width="100%" cellpadding="1" cellspacing="1">
+                                    <tr>
+                                        <td width="40%"><form:label path="participant.vip"><spring:message code="label.vip"/></form:label></td>
+                                        <td><form:checkbox path="participant.vip"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="40%"><form:label path="participant.vipDesc"><spring:message code="label.vipDesc"/></form:label></td>
+                                        <td><form:input path="participant.vipDesc"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </c:when>
+    </c:choose>
     <tr>
         <td>
             <table width="100%" cellpadding="1" cellspacing="1">
                 <tr style="background-color:#E8E8E8;">
-                    <td align="left"><b>Contact Details:</b></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <table width="100%" cellpadding="1" cellspacing="1">
-                <tr>
-                    <td width="60%">
-                        <table width="100%" cellpadding="1" cellspacing="1">
-                            <tr>
-                                <td width="40%"><form:label path="participant.name"><spring:message code="label.name"/></form:label></td>
-                                <td><form:input path="participant.name" size="50"/></td>
-                            </tr>
-                            <tr>
-                                <td width="40%"><form:label path="participant.mobile"><spring:message code="label.mobile"/></form:label></td>
-                                <td><form:input path="participant.mobile" /></td>
-                            </tr>
-                            <tr>
-                                <td width="40%"><form:label path="participant.home"><spring:message code="label.home"/></form:label></td>
-                                <td><form:input path="participant.home" /></td>
-                            </tr>
-                            <tr>
-                                <td width="40%"><form:label path="participant.email"><spring:message code="label.email"/></form:label></td>
-                                <td><form:input path="participant.email" /></td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td>
-                        <table width="100%" cellpadding="1" cellspacing="1">
-                            <tr>
-                                <td width="40%"><form:label path="participant.vip"><spring:message code="label.vip"/></form:label></td>
-                                <td><form:checkbox path="participant.vip"/></td>
-                            </tr>
-                            <tr>
-                                <td width="40%"><form:label path="participant.vipDesc"><spring:message code="label.vipDesc"/></form:label></td>
-                                <td><form:input path="participant.vipDesc"/></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <table width="100%" cellpadding="1" cellspacing="1">
-                <tr style="background-color:#E8E8E8;">
-                    <td align="left"><b>Event Details:</b></td>
+                    <td align="left"><b>Course Details:</b></td>
                 </tr>
             </table>
         </td>

@@ -109,8 +109,15 @@ public class RegistrationController extends CommonController
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
         String action = registeredParticipant.getAction();
 
-        registeredParticipant.getRegistration().setEvent(
+        EventRegistration eventRegistration = registeredParticipant.getRegistration();
+        eventRegistration.setEvent(
                 eventService.getEvent(registeredParticipant.getEventId()));
+        eventRegistration.setCourseType(
+                eventService.getCourseType(eventRegistration.getCourseTypeId()));
+        eventRegistration.setFoundation(
+                eventService.getFoundation(eventRegistration.getFoundationId()));
+        eventRegistration.setEventFee(
+                eventService.getEventFee(registeredParticipant.getEventFeeId()));
 
         RegistrationValidator validator = new RegistrationValidator();
         validator.validate(registeredParticipant, errors);
@@ -170,7 +177,8 @@ public class RegistrationController extends CommonController
         RegisteredParticipant registeredParticipant = populateRegisteredParticipant(strRegistrationId);
         if (registeredParticipant != null) {
             map.put("registeredParticipant", registeredParticipant);
-            map.put("allParticipantCourseTypes", allCourseTypes());
+            map.put("participant", registeredParticipant.getParticipant());
+            map.put("allCourseTypes", allCourseTypes());
             map.put("allPaymentModes", PaymentMode.allPaymentModes());
             map.put("allFoundations", allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));
@@ -186,11 +194,14 @@ public class RegistrationController extends CommonController
         if (!Util.nullOrEmptyOrBlank(strRegistrationId)) {
             Integer registrationId = Integer.parseInt(strRegistrationId);
             EventRegistration registration = participantService.getEventRegistration(registrationId);
+            registration.setCourseTypeId(registration.getCourseType().getId());
+            registration.setFoundationId(registration.getFoundation().getId());
             RegisteredParticipant registeredParticipant = new RegisteredParticipant();
             registeredParticipant.setRegistration(registration);
             registeredParticipant.setParticipant(registration.getParticipant());
             registeredParticipant.setAllHistoryRecords(registration.getHistoryRecords());
             registeredParticipant.setEventId(registration.getEvent().getId());
+            registeredParticipant.setEventFeeId(registration.getEventFee().getId());
             registeredParticipant.setAction(RegisteredParticipant.ActionUpdate);
             registeredParticipant.setStatus(registration.getStatus());
             return registeredParticipant;

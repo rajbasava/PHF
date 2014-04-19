@@ -7,22 +7,22 @@ package com.yvphfk.model.dao;
 import com.yvphfk.common.AmountPaidCategory;
 import com.yvphfk.common.SeatingType;
 import com.yvphfk.common.Util;
+import com.yvphfk.model.Login;
 import com.yvphfk.model.ParticipantCourseForm;
+import com.yvphfk.model.ParticipantCriteria;
+import com.yvphfk.model.PaymentCriteria;
+import com.yvphfk.model.RegisteredParticipant;
+import com.yvphfk.model.RegistrationCriteria;
+import com.yvphfk.model.RegistrationForm;
 import com.yvphfk.model.form.BaseForm;
 import com.yvphfk.model.form.CourseType;
 import com.yvphfk.model.form.Event;
 import com.yvphfk.model.form.EventPayment;
 import com.yvphfk.model.form.EventRegistration;
 import com.yvphfk.model.form.HistoryRecord;
-import com.yvphfk.model.Login;
 import com.yvphfk.model.form.Participant;
-import com.yvphfk.model.ParticipantCriteria;
 import com.yvphfk.model.form.ParticipantCourse;
 import com.yvphfk.model.form.ParticipantSeat;
-import com.yvphfk.model.PaymentCriteria;
-import com.yvphfk.model.RegisteredParticipant;
-import com.yvphfk.model.RegistrationCriteria;
-import com.yvphfk.model.RegistrationForm;
 import com.yvphfk.model.form.VolunteerKit;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -55,14 +55,14 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
     @Autowired
     private ReloadableResourceBundleMessageSource messageSource;
 
-    public Participant addParticipant (Participant participant)
+    public Participant saveOrUpdateParticipant (Participant participant)
     {
         Session session = sessionFactory.openSession();
         //todo check the uniqueness of the participant before adding.
-        session.save(participant);
+        session.saveOrUpdate(participant);
         createAndAddHistoryRecord(
                 messageSource.getMessage("key.participantAdded",
-                        new Object[] {participant.getId(),
+                        new Object[]{participant.getId(),
                                 participant.getName()},
                         null),
                 Util.getCurrentUser().getEmail(),
@@ -77,11 +77,12 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
     {
         Session session = sessionFactory.openSession();
         //todo check the uniqueness of the participant before adding.
-        Participant participant =  participantCourseForm.getParticipant();
-        addParticipant(participant);
+        Participant participant = participantCourseForm.getParticipant();
+        if (participant != null) {
+            saveOrUpdateParticipant(participant);
+        }
 
         ParticipantCourse participantCourse = participantCourseForm.getParticipantCourse();
-        participantCourse.setParticipant(participant);
 
         session.save(participantCourse);
 //        createAndAddHistoryRecord(
@@ -113,7 +114,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
                 return null;
             }
             //todo check the uniqueness of the participant before adding.
-            addParticipant(participant);
+            saveOrUpdateParticipant(participant);
             registration.setParticipant(participant);
 
             if (Util.nullOrEmptyOrBlank(registration.getStatus())) {
@@ -142,7 +143,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         }
         else if (RegisteredParticipant.ActionUpdate.equals(registeredParticipant.getAction())) {
             //  todo update changes properties of registration objects to comments
-            session.update(participant);
+            participant = getParticipant(participant.getId());
             registration.setParticipant(participant);
             HistoryRecord record =
                     createHistoryRecord(
@@ -528,7 +529,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
 
         if (participantCriteria.getParticipantId() != null) {
-            criteria.add(Restrictions.eq("participant.id", participantCriteria.getParticipantId()));
+            criteria.add(Restrictions.eq("id", participantCriteria.getParticipantId()));
             List<Participant> results = criteria.list();
 
             session.close();
@@ -905,6 +906,20 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         session.update(registration);
         session.flush();
         session.close();
+    }
+
+    public List<ParticipantCourse> getCourses (Integer participantId)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(ParticipantCourse.class);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.add(Restrictions.eq("active", true));
+
+        criteria.add(Restrictions.eq("participant.id", participantId));
+        List<ParticipantCourse> results = criteria.list();
+
+        session.close();
+        return results;
     }
 
 }

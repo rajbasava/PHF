@@ -51,9 +51,10 @@
                             <tr>
                                 <td  width="5%"><c:out value="${participant.id}"/></td>
                                 <td  width="20%" class="YLink">
-                                    <form id="updatePart<c:out value="${participant.id}"/>" method="post" action="updateParticipant.htm">
+                                    <form id="openPart<c:out value="${participant.id}"/>" method="post" action="showParticipantDetails.htm">
                                         <input type="hidden" name="participantId" value="<c:out value="${participant.id}"/>" />
-                                        <a href="#" onclick="document.getElementById('updatePart<c:out value="${participant.id}"/>').submit();">
+                                        <input type="hidden" name="isEdit" value="false" />
+                                        <a href="#" onclick="document.getElementById('openPart<c:out value="${participant.id}"/>').submit();">
                                             <c:out value="${participant.name}"/>
                                         </a>
                                     </form>

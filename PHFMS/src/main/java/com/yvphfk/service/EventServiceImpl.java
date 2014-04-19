@@ -14,6 +14,7 @@ import com.yvphfk.model.form.Event;
 import com.yvphfk.model.form.EventFee;
 import com.yvphfk.model.form.EventRegistration;
 import com.yvphfk.model.form.Kit;
+import com.yvphfk.model.form.PHFoundation;
 import com.yvphfk.model.form.ParticipantSeat;
 import com.yvphfk.model.form.ReferenceGroup;
 import com.yvphfk.model.form.VolunteerKit;
@@ -212,5 +213,10 @@ public class EventServiceImpl implements EventService
         return eventDAO.listReferenceGroups();
     }
 
-
+    @Override
+    @Transactional
+    public PHFoundation getFoundation (Integer foundationId)
+    {
+        return eventDAO.getFoundation(foundationId);
+    }
 }

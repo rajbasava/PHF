@@ -11,6 +11,7 @@ import com.yvphfk.model.form.Event;
 import com.yvphfk.model.form.EventFee;
 import com.yvphfk.model.form.EventRegistration;
 import com.yvphfk.model.form.Kit;
+import com.yvphfk.model.form.PHFoundation;
 import com.yvphfk.model.form.ParticipantSeat;
 import com.yvphfk.model.form.ReferenceGroup;
 import com.yvphfk.model.form.VolunteerKit;
@@ -65,5 +66,7 @@ public interface EventService
     public ReferenceGroup getReferenceGroup (String name);
 
     public List<ReferenceGroup> listReferenceGroups ();
+
+    public PHFoundation getFoundation (Integer foundationId);
 
 }

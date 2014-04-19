@@ -45,6 +45,9 @@ public class Participant extends BaseForm
     @Column(name = "VIPDESC")
     private String vipDesc;
 
+    @Column(name = "address")
+    private String address;
+
     @Column(name = "CITY")
     private String city;
 
@@ -144,6 +147,16 @@ public class Participant extends BaseForm
     public void setVipDesc (String vipDesc)
     {
         this.vipDesc = vipDesc;
+    }
+
+    public String getAddress ()
+    {
+        return address;
+    }
+
+    public void setAddress (String address)
+    {
+        this.address = address;
     }
 
     public String getCity ()

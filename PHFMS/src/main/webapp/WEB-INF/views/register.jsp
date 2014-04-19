@@ -184,9 +184,9 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td width="30%"><form:label path="registration.courseType.Id"><spring:message code="label.courseType"/></form:label></td>
+                                <td width="30%"><form:label path="registration.courseTypeId"><spring:message code="label.courseType"/></form:label></td>
                                 <td>
-                                    <form:select path="registration.courseType.Id">
+                                    <form:select path="registration.courseTypeId">
                                         <form:option value="" label="--- Select ---"/>
                                         <form:options items="${allParticipantCourseTypes}" />
                                     </form:select>

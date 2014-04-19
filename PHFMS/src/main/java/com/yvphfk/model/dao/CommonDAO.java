@@ -6,8 +6,11 @@
 package com.yvphfk.model.dao;
 
 import com.yvphfk.model.form.BaseForm;
+import com.yvphfk.model.form.PHFoundation;
 
 public interface CommonDAO
 {
     public void saveOrUpdate (BaseForm form);
+
+    public PHFoundation getFoundation (Integer foundationId);
 }

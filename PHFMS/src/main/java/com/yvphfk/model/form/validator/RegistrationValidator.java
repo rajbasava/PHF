@@ -34,7 +34,9 @@ public class RegistrationValidator implements Validator
         }
 
         RegisteredParticipant participant = (RegisteredParticipant) target;
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "participant.name", "participant.name");
+        if (RegisteredParticipant.ActionRegister.equals(participant.getAction())) {
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "participant.name", "participant.name");
+        }
 //        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "participant.mobile", "participant.mobile");
 
         if (participant.getParticipant().isVip()) {

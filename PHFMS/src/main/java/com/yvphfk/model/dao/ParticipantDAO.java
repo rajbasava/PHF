@@ -63,4 +63,8 @@ public interface ParticipantDAO extends CommonDAO
 
     public void updateRegistration (RegistrationForm registrationForm);
 
+    public List<ParticipantCourse> getCourses (Integer participantId);
+
+    public Participant saveOrUpdateParticipant (Participant participant);
+
 }

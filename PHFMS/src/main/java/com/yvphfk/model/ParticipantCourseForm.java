@@ -10,7 +10,9 @@ import com.yvphfk.model.form.ParticipantCourse;
 public class ParticipantCourseForm
 {
     private Participant participant;
+    private Integer participantId;
     private ParticipantCourse participantCourse;
+    private boolean showParticipantDetails;
 
     public Participant getParticipant ()
     {
@@ -20,6 +22,16 @@ public class ParticipantCourseForm
     public void setParticipant (Participant participant)
     {
         this.participant = participant;
+    }
+
+    public Integer getParticipantId ()
+    {
+        return participantId;
+    }
+
+    public void setParticipantId (Integer participantId)
+    {
+        this.participantId = participantId;
     }
 
     public ParticipantCourse getParticipantCourse ()
@@ -34,7 +46,9 @@ public class ParticipantCourseForm
 
     public void initialize (String email)
     {
-        participant.initialize(email);
+        if (participant != null) {
+            participant.initialize(email);
+        }
         participantCourse.initialize(email);
     }
 }

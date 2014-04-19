@@ -139,6 +139,44 @@
                     $("div#seatsDisplay").show();
                 }
             });
+
+            $("#results").flexigrid({
+                    colModel : [
+                        {display: 'Prepared By', width : 150, align: 'left'},
+                        {display: 'Time Created', width : 100, align: 'left'},
+                        {display: '<spring:message code="label.amountPaid"/>', width : 75, align: 'left'},
+                        {display: '<spring:message code="label.receiptInfo"/>', width : 75, align: 'left'},
+                        {display: '<spring:message code="label.receiptDate"/>', width : 100, align: 'left'},
+                        {display: '<spring:message code="label.mode"/>', width : 100, align: 'left'},
+                        {display: '<spring:message code="label.pdcNotClear"/>', width : 75, align: 'left'},
+                        {display: '<spring:message code="label.pdc"/>', width : 75, align: 'left'},
+                        {display: '<spring:message code="label.pdcDate"/>', width : 100, align: 'left'},
+                        {display: '<spring:message code="label.remarks"/>', width : 300, align: 'left'}
+                    ],
+                    useRp: true,
+                    rp: 10,
+                    showTableToggleBtn: false,
+                    resizable: false,
+                    height: 300,
+                    width: 1290,
+                    singleSelect: true
+            });
+
+            $("#comments").flexigrid({
+                    colModel : [
+                        {display: 'Prepared By', width : 150, align: 'left'},
+                        {display: 'Time Created', width : 100, align: 'left'},
+                        {display: 'Comment', width : 1000, align: 'left'}
+                    ],
+                    useRp: true,
+                    rp: 10,
+                    showTableToggleBtn: false,
+                    resizable: false,
+                    height: 300,
+                    width: 1290,
+                    singleSelect: true
+            });
+
 	    });
     </script>
     <style>
@@ -192,51 +230,9 @@
             <li><a href="#tabs-4">History</a></li>
         </ul>
         <div id="tabs-1">
-            <table>
-                <tr>
-                    <td><form:label path="participant.name"><spring:message code="label.name"/></form:label></td>
-                    <td><form:input path="participant.name" size="50" readonly="${isRegVolunteer || isInfoVolunteer}"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="participant.mobile"><spring:message code="label.mobile"/></form:label></td>
-                    <td><form:input path="participant.mobile" readonly="${isRegVolunteer || isInfoVolunteer}"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="participant.home"><spring:message code="label.home"/></form:label></td>
-                    <td><form:input path="participant.home" readonly="${isRegVolunteer || isInfoVolunteer}"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="participant.email"><spring:message code="label.email"/></form:label></td>
-                    <td><form:input path="participant.email" readonly="${isRegVolunteer || isInfoVolunteer}"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="registration.foundation"><spring:message code="label.foundation"/></form:label></td>
-                    <td>
-                    	<c:choose>
-	   						<c:when test="${isRegVolunteer || isInfoVolunteer}">
-		   						<form:select path="registration.foundation" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
-		                            <form:option value="" label="--- Select ---"/>
-		                            <form:options items="${allFoundations}"/>
-		                        </form:select>
-	                        </c:when>
-	   						<c:otherwise>
-	   							<form:select path="registration.foundation">
-	                            	<form:option value="" label="--- Select ---"/>
-	                            	<form:options items="${allFoundations}"/>
-	                        	</form:select>
-	   						</c:otherwise>
-   						</c:choose>
-                    </td>
-                </tr>
-                <tr>
-                    <td><form:label path="participant.vip"><spring:message code="label.vip"/></form:label></td>
-                    <td><form:checkbox path="participant.vip" readonly="${isRegVolunteer || isInfoVolunteer}" onclick="return ${isSpotRegVolunteer || isAdmin}"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="participant.vipDesc"><spring:message code="label.vipDesc"/></form:label></td>
-                    <td><form:input path="participant.vipDesc" readonly="${isRegVolunteer || isInfoVolunteer}"/></td>
-                </tr>
-            </table>
+            <jsp:include page="participantSummary.jsp">
+                <jsp:param name="class" value="formdataTab"/>
+             </jsp:include>
         </div>
         <div id="tabs-2">
 			<table width="80%" cellspacing="1" cellpadding="1">
@@ -267,19 +263,19 @@
                                 <td><form:checkbox path="registration.review" onclick="return ${isSpotRegVolunteer || isAdmin}"/></td>
                             </tr>
                             <tr>
-                                <td><form:label path="registration.courseType.shortName"><spring:message code="label.courseType"/></form:label></td>
+                                <td><form:label path="registration.courseTypeId"><spring:message code="label.courseType"/></form:label></td>
                                 <td>
                                 	<c:choose>
 										<c:when test="${isInfoVolunteer || isRegVolunteer}">
-		                                    <form:select path="registration.courseType.shortName" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
+		                                    <form:select path="registration.courseTypeId" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
 		                                        <form:option value="NONE" label="--- Select ---"/>
-		                                        <form:options items="${allParticipantLevels}" />
+		                                        <form:options items="${allCourseTypes}" />
 		                                    </form:select>										
 										</c:when>
 										<c:otherwise>
-		                                    <form:select path="registration.courseType.shortName">
+		                                    <form:select path="registration.courseTypeId">
 		                                        <form:option value="NONE" label="--- Select ---"/>
-		                                        <form:options items="${allParticipantLevels}" />
+		                                        <form:options items="${allCourseTypes}" />
 		                                    </form:select>										
 										</c:otherwise>
 									</c:choose>
@@ -334,10 +330,28 @@
 		                                    </form:select>										
 										</c:otherwise>
 									</c:choose>                                
-
                                 </td>
                             </tr>
-						</table>	
+                            <tr>
+                                <td><form:label path="registration.foundationId"><spring:message code="label.foundation"/></form:label></td>
+                                <td>
+									<c:choose>
+										<c:when test="${isInfoVolunteer || isRegVolunteer}">
+		                                    <form:select path="registration.foundationId" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
+		                                        <form:option value="" label="--- Select ---"/>
+		                                        <form:options items="${allFoundations}" />
+		                                    </form:select>
+										</c:when>
+										<c:otherwise>
+		                                    <form:select path="registration.foundationId">
+		                                        <form:option value="" label="--- Select ---"/>
+		                                        <form:options items="${allFoundations}" />
+		                                    </form:select>
+										</c:otherwise>
+									</c:choose>
+                                </td>
+                            </tr>
+						</table>
 					</td>
 					<td>	
 						<table>
@@ -384,59 +398,60 @@
 			</table>
         </div>
         <div id="tabs-3">
-			<table>
-				<tr>
-					<c:if  test="${!empty registeredParticipant.registration.payments}">
-						<table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
-							<tr>
-								<td>Prepared By</td>
-								<td>Time Created</td>
-								<td><spring:message code="label.amountPaid"/></td>
-								<td><spring:message code="label.receiptInfo"/></td>
-								<td><spring:message code="label.receiptDate"/></td>
-								<td><spring:message code="label.mode"/></td>
-								<td><spring:message code="label.pdcNotClear"/></td>
-								<td><spring:message code="label.pdc"/></td>
-								<td><spring:message code="label.pdcDate"/></td>
-								<td><spring:message code="label.remarks"/></td>
-							</tr>
-							<c:forEach items="${registeredParticipant.registration.payments}" var="payment">
-								<tr>
-									<td><c:out value="${payment.preparedBy}"/> </td>
-									<td><c:out value="${payment.timeCreated}"/></td>
-									<td><c:out value="${payment.amountPaid}"/></td>
-									<td><c:out value="${payment.receiptInfo}"/></td>
-									<td><c:out value="${payment.receiptDate}"/></td>
-									<td><c:out value="${payment.mode}"/></td>
-									<td><c:out value="${payment.pdcNotClear}"/></td>
-									<td><c:out value="${payment.pdc}"/></td>
-									<td><c:out value="${payment.pdcDate}"/></td>
-									<td><c:out value="${payment.remarks}"/></td>
-								</tr>
-							</c:forEach>
-						</table>
-					</c:if>
-				</tr>
-			</table>
+            <table width="100%">
+                <tr style="background-color:#E8E8E8;">
+                    <td>Payments</td>
+                </tr>
+                <tr>
+                    <td>
+                        <c:if  test="${!empty registeredParticipant.registration.payments}">
+                            <table id="results">
+                                <tbody>
+                                    <c:forEach items="${registeredParticipant.registration.payments}" var="payment">
+                                        <tr>
+                                            <td><c:out value="${payment.preparedBy}"/> </td>
+                                            <td><c:out value="${payment.timeCreated}"/></td>
+                                            <td><c:out value="${payment.amountPaid}"/></td>
+                                            <td><c:out value="${payment.receiptInfo}"/></td>
+                                            <td><c:out value="${payment.receiptDate}"/></td>
+                                            <td><c:out value="${payment.mode}"/></td>
+                                            <td><c:out value="${payment.pdcNotClear}"/></td>
+                                            <td><c:out value="${payment.pdc}"/></td>
+                                            <td><c:out value="${payment.pdcDate}"/></td>
+                                            <td><c:out value="${payment.remarks}"/></td>
+                                        </tr>
+                                    </c:forEach>
+                                <tbody>
+                            </table>
+					    </c:if>
+                    </td>
+                </tr>
+            </table>
         </div>
         <div id="tabs-4">
             <c:if  test="${!empty registeredParticipant.registration.historyRecords}">
-				<table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
-					<tr>
-						<td>Prepared By</td>
-						<td>Time Created</td>
-						<td>Comment</td>
-					</tr>
-					<c:forEach items="${registeredParticipant.registration.historyRecords}" var="historyRecord">
-						<c:if  test="${!empty historyRecord.comment}">
-							<tr>
-								<td><c:out value="${historyRecord.preparedBy}"/> </td>
-								<td><c:out value="${historyRecord.timeCreated}"/></td>
-								<td><c:out value="${historyRecord.comment}"/></td>
-							</tr>
-						</c:if>
-					</c:forEach>
-				</table>
+            <table width="100%">
+                <tr style="background-color:#E8E8E8;">
+                    <td>History Records</td>
+                </tr>
+                <tr>
+                    <td>
+                        <table id="comments">
+                            <tbody>
+                                <c:forEach items="${registeredParticipant.registration.historyRecords}" var="historyRecord">
+                                    <c:if  test="${!empty historyRecord.comment}">
+                                        <tr>
+                                            <td><c:out value="${historyRecord.preparedBy}"/> </td>
+                                            <td><c:out value="${historyRecord.timeCreated}"/></td>
+                                            <td><c:out value="${historyRecord.comment}"/></td>
+                                        </tr>
+                                    </c:if>
+                                </c:forEach>
+                            <tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
             </c:if>
         </div>
     </div>

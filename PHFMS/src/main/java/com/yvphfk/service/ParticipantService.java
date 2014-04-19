@@ -12,6 +12,7 @@ import com.yvphfk.model.form.EventRegistration;
 import com.yvphfk.model.form.HistoryRecord;
 import com.yvphfk.model.Login;
 import com.yvphfk.model.form.Participant;
+import com.yvphfk.model.form.ParticipantCourse;
 import com.yvphfk.model.form.ParticipantSeat;
 import com.yvphfk.model.PaymentCriteria;
 import com.yvphfk.model.RegisteredParticipant;
@@ -50,5 +51,9 @@ public interface ParticipantService
     public List<ParticipantSeat> getAllSeats (Event event);
 
     public void addParticipantSeat (ParticipantSeat participantSeat);
+
+    public List<ParticipantCourse> getCourses (Integer participantId);
+
+    public Participant saveOrUpdateParticipant (Participant participant);
 
 }

@@ -13,6 +13,7 @@ import com.yvphfk.model.form.HistoryRecord;
 import com.yvphfk.model.Login;
 import com.yvphfk.model.form.Participant;
 import com.yvphfk.model.ParticipantCriteria;
+import com.yvphfk.model.form.ParticipantCourse;
 import com.yvphfk.model.form.ParticipantSeat;
 import com.yvphfk.model.PaymentCriteria;
 import com.yvphfk.model.RegisteredParticipant;
@@ -115,4 +116,14 @@ public class ParticipantServiceImpl implements ParticipantService
         participantDAO.addParticipantSeat(participantSeat);
     }
 
+    @Transactional
+    public List<ParticipantCourse> getCourses (Integer participantId)
+    {
+        return participantDAO.getCourses(participantId);
+    }
+
+    public Participant saveOrUpdateParticipant (Participant participant)
+    {
+        return participantDAO.saveOrUpdateParticipant(participant);
+    }
 }

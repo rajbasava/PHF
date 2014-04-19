@@ -128,6 +128,12 @@ public class EventRegistration extends BaseForm
     @Transient
     private Integer foundationId;
 
+    @Transient
+    private Integer courseTypeId;
+
+    @Transient
+    private Integer eventFeeId;
+
     public Integer getId ()
     {
         return id;
@@ -439,5 +445,25 @@ public class EventRegistration extends BaseForm
     public void setLocalEventKitStatus (boolean localEventKitStatus)
     {
         this.localEventKitStatus = localEventKitStatus;
+    }
+
+    public Integer getCourseTypeId ()
+    {
+        return courseTypeId;
+    }
+
+    public void setCourseTypeId (Integer courseTypeId)
+    {
+        this.courseTypeId = courseTypeId;
+    }
+
+    public Integer getEventFeeId ()
+    {
+        return eventFeeId;
+    }
+
+    public void setEventFeeId (Integer eventFeeId)
+    {
+        this.eventFeeId = eventFeeId;
     }
 }
