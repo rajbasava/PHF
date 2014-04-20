@@ -6,6 +6,27 @@
 <head>
 	<title>Events - Yoga Vidya Pranic Healing Foundation of Karnataka</title>
     <script type="text/javascript">
+        function getTrainers(){
+            if ($("select#courseTypeId").val() == ''){
+               $("select#eventFeeId").html('<option value=""> --- Select --- </option>');
+            }
+            else {
+                $.getJSON(
+                    "getTrainersForCourse.htm",
+                    {courseTypeId: $("select#courseTypeId").val()},
+                    function(data) {
+                        var options = '<option value="-1"> --- Select --- </option>';
+                        var len = data.length;
+                        for(var i=0; i<len; i++){
+                            options +=  '<option value="' + data[i].id + '">' + data[i].value + '</option>';
+                        }
+						$("select#primaryTrainerId").html(options);
+						$("select#secondaryTrainerId").html(options);
+                    }
+                );
+            }
+        }
+
         $(document).ready(function(){
             $("#startDate").datepicker({ showOn: 'button', dateFormat: 'dd/mm/yy', buttonImageOnly: true, buttonImage: '<c:url value="/resources/img/calendar.gif"/>' });
             $("#endDate").datepicker({ showOn: 'button', dateFormat: 'dd/mm/yy', buttonImageOnly: true, buttonImage: '<c:url value="/resources/img/calendar.gif"/>' });
@@ -16,6 +37,18 @@
                  $("#event").get(0).setAttribute('action', 'saveOrUpdateEvent.htm');
                  $("#event").submit();
             });
+
+             $("select#courseTypeId").change(function()
+             {
+				 getTrainers();
+             });
+
+             $("select#courseTypeId").focus(function()
+             {
+				 getTrainers();
+             });
+
+             getTrainers();
 
         });
     </script>
@@ -75,11 +108,21 @@
                 </tr>
 			    <tr>
                     <td><form:label path="primaryTrainerId">Primary Trainer</form:label></td>
-                    <td><form:input path="primaryTrainerId" size="30"/></td>
+                    <td>
+                        <form:select path="primaryTrainerId">
+                            <form:option value="-1" label="--- Select ---"/>
+                            <form:options items="${allTrainers}" itemValue="id" itemLabel="value"/>
+                        </form:select>
+                    </td>
                 </tr>
 			    <tr>
                     <td><form:label path="secondaryTrainerId">Secondary Trainer</form:label></td>
-                    <td><form:input path="secondaryTrainerId" size="30"/></td>
+                    <td>
+                        <form:select path="secondaryTrainerId">
+                            <form:option value="-1" label="--- Select ---"/>
+                            <form:options items="${allTrainers}" itemValue="id" itemLabel="value"/>
+                        </form:select>
+                    </td>
                 </tr>
             </table>
         </td>

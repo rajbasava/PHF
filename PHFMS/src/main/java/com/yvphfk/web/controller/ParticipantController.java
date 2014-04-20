@@ -6,17 +6,23 @@ package com.yvphfk.web.controller;
 
 import com.yvphfk.common.Util;
 import com.yvphfk.model.Login;
+import com.yvphfk.model.Option;
 import com.yvphfk.model.ParticipantCourseForm;
 import com.yvphfk.model.ParticipantCriteria;
+import com.yvphfk.model.TrainerCriteria;
 import com.yvphfk.model.form.Participant;
 import com.yvphfk.model.form.ParticipantCourse;
+import com.yvphfk.model.form.Trainer;
+import com.yvphfk.model.form.TrainerCourse;
 import com.yvphfk.service.EventService;
 import com.yvphfk.service.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -87,12 +93,177 @@ public class ParticipantController extends CommonController
         }
         participantCourse.setParticipant(participant);
 
-        participantService.addParticipantCourse(participantCourseForm);
+        participantCourse = participantService.addParticipantCourse(participantCourseForm);
 
         request.setAttribute("isForward", "true");
         request.setAttribute("isEdit", "false");
-        request.setAttribute("participantId", String.valueOf(participantCourseForm.getParticipantId()));
+        request.setAttribute("participantId", String.valueOf(participantCourse.getParticipant().getId()));
         return "forward:/showParticipantDetails.htm";
+    }
+
+    @RequestMapping("/listTrainers")
+    public String listTrainers (Map<String, Object> map,
+                                TrainerCriteria trainerCriteria,
+                                HttpServletRequest request)
+    {
+        map.put("trainerCriteria", trainerCriteria);
+        if (trainerCriteria != null) {
+            //todo if the page is replace, we should search participant that are not participating in the current event.
+            map.put("trainers", participantService.listTrainers(trainerCriteria));
+            map.put("allParticipantCourseTypes", allCourseTypes());
+            map.put("allFoundations", allFoundations());
+        }
+
+        return "manageTrainers";
+    }
+
+    @RequestMapping(value = "/getTrainersForCourse", produces = "application/json; charset=utf-8")
+    public
+    @ResponseBody
+    List<Option> getTrainersForCourse (Map<String, Object> map,
+                                       HttpServletRequest request)
+    {
+        String strCourseTypeId = request.getParameter("courseTypeId");
+        TrainerCriteria trainerCriteria = new TrainerCriteria();
+        if (!Util.nullOrEmptyOrBlank(strCourseTypeId)) {
+            trainerCriteria.setCourseTypeId(Integer.parseInt(strCourseTypeId));
+        }
+
+        List<Trainer> trainers = participantService.listTrainers(trainerCriteria);
+        List options = new ArrayList();
+        for (Trainer trainer : trainers) {
+            options.add(new Option(trainer.getId(), trainer.getParticipant().getName()));
+        }
+
+        return options;
+    }
+
+    @RequestMapping("/showManageTrainers")
+    public String showManageTrainers (Map<String, Object> map)
+    {
+        map.put("trainerCriteria", new TrainerCriteria());
+        map.put("allParticipantCourseTypes", allCourseTypes());
+        map.put("allFoundations", allFoundations());
+        return "manageTrainers";
+    }
+
+    @RequestMapping("/addTrainer")
+    public String addTrainer (Map<String, Object> map,
+                              HttpServletRequest request)
+    {
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+
+        Participant participant = null;
+        String strParticipantId = request.getParameter("participantId");
+        if (!Util.nullOrEmptyOrBlank(strParticipantId)) {
+            participant = participantService.getParticipant(Integer.parseInt(strParticipantId));
+        }
+        Trainer trainer = new Trainer();
+        trainer.setParticipant(participant);
+        trainer.initialize(login.getEmail());
+
+        trainer = participantService.addTrainer(trainer);
+
+        request.setAttribute("isForward", "true");
+        request.setAttribute("isEdit", "false");
+        request.setAttribute("participantId", String.valueOf(trainer.getParticipant().getId()));
+        request.setAttribute("trainerId", String.valueOf(trainer.getId()));
+        return "forward:/showTrainerDetails.htm";
+    }
+
+    @RequestMapping("/showTrainerDetails")
+    public String showTrainerDetails (Map<String, Object> map,
+                                      HttpServletRequest request)
+    {
+        boolean isFwd = false;
+        String strIsFwd = (String) request.getAttribute("isForward");
+
+        if (!Util.nullOrEmptyOrBlank(strIsFwd)) {
+            isFwd = Boolean.parseBoolean(strIsFwd);
+        }
+
+        String strTrainerId = null;
+        String strIsEdit = null;
+        if (isFwd) {
+            strTrainerId = (String) request.getAttribute("trainerId");
+            strIsEdit = (String) request.getAttribute("isEdit");
+        }
+        else {
+            strTrainerId = request.getParameter("trainerId");
+            strIsEdit = request.getParameter("isEdit");
+        }
+
+        Integer trainerId = null;
+        if (!Util.nullOrEmptyOrBlank(strTrainerId)) {
+            trainerId = Integer.parseInt(strTrainerId);
+        }
+
+        boolean isEdit = false;
+        if (!Util.nullOrEmptyOrBlank(strIsEdit)) {
+            isEdit = Boolean.parseBoolean(strIsEdit);
+        }
+
+        Trainer trainer = participantService.getTrainer(trainerId);
+        Participant participant = trainer.getParticipant();
+
+        List<TrainerCourse> courses = participantService.getTrainerCourses(trainer.getId());
+
+        map.put("participant", participant);
+        map.put("trainer", trainer);
+        map.put("courses", courses);
+        return "trainerDetails";
+    }
+
+    @RequestMapping("/showAddTrainerCourse")
+    public String showAddTrainerCourse (Map<String, Object> map,
+                                        HttpServletRequest request)
+    {
+        String strTrainerId = request.getParameter("trainerId");
+
+        Integer trainerId = null;
+        if (!Util.nullOrEmptyOrBlank(strTrainerId)) {
+            trainerId = Integer.parseInt(strTrainerId);
+        }
+
+        Trainer trainer = participantService.getTrainer(trainerId);
+        TrainerCourse trainerCourse = new TrainerCourse();
+        trainerCourse.setTrainer(trainer);
+        trainerCourse.setTrainerId(trainer.getId());
+
+        map.put("trainerCourse", trainerCourse);
+        map.put("trainer", trainer);
+        map.put("trainerId", strTrainerId);
+        map.put("allParticipantCourseTypes", allCourseTypes());
+        map.put("allFoundations", allFoundations());
+        return "addTrainerCourse";
+    }
+
+    @RequestMapping("/addTrainerCourse")
+    public String addTrainerCourse (Map<String, Object> map,
+                                    HttpServletRequest request,
+                                    TrainerCourse trainerCourse)
+    {
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+
+        Trainer trainer =
+                participantService.getTrainer(
+                        trainerCourse.getTrainerId());
+        trainerCourse.setTrainer(trainer);
+        trainerCourse.setCourseType(
+                eventService.getCourseType(
+                        trainerCourse.getCourseTypeId()));
+        trainerCourse.setFoundation(
+                eventService.getFoundation(
+                        trainerCourse.getFoundationId()));
+
+        trainerCourse.initialize(login.getEmail());
+        trainerCourse = participantService.addTrainerCourse(trainerCourse);
+
+        request.setAttribute("isForward", "true");
+        request.setAttribute("isEdit", "false");
+        request.setAttribute("participantId", String.valueOf(trainer.getParticipant().getId()));
+        request.setAttribute("trainerId", String.valueOf(trainer.getId()));
+        return "forward:/showTrainerDetails.htm";
     }
 
     @RequestMapping("/updateParticipant")
@@ -112,7 +283,7 @@ public class ParticipantController extends CommonController
     @RequestMapping("/showAddParticipantCourse")
     public String showAddParticipantCourse (HttpServletRequest request, Map<String, Object> map)
     {
-        ParticipantCourseForm participantCourseForm =  new ParticipantCourseForm();
+        ParticipantCourseForm participantCourseForm = new ParticipantCourseForm();
         String strParticipantId = request.getParameter("participantId");
         if (!Util.nullOrEmptyOrBlank(strParticipantId)) {
             participantCourseForm.setParticipantId(Integer.parseInt(strParticipantId));
@@ -162,5 +333,6 @@ public class ParticipantController extends CommonController
         map.put("isEdit", isEdit);
         return "participantDetails";
     }
+
 
 }

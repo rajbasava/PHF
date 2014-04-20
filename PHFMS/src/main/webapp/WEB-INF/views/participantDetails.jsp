@@ -14,22 +14,29 @@
             $("a#addCourseToParticipant").button();
             $("a#addCourseToParticipant").css("font-size", "11px");
             $("a#addCourseToParticipant").click(function() {
-                 $("#modifyEvent").get(0).setAttribute('action', 'showAddParticipantCourse.htm');
-                 $("#modifyEvent").submit();
+                 $("#modifyParticipantDetails").get(0).setAttribute('action', 'showAddParticipantCourse.htm');
+                 $("#modifyParticipantDetails").submit();
+            });
+
+            $("a#addTrainer").button();
+            $("a#addTrainer").css("font-size", "11px");
+            $("a#addTrainer").click(function() {
+                 $("#modifyParticipantDetails").get(0).setAttribute('action', 'addTrainer.htm');
+                 $("#modifyParticipantDetails").submit();
             });
 
             $("a#registerForCourse").button();
             $("a#registerForCourse").css("font-size", "11px");
             $("a#registerForCourse").click(function() {
-                 $("#modifyEvent").get(0).setAttribute('action', 'registerForCourse.htm');
-                 $("#modifyEvent").submit();
+                 $("#modifyParticipantDetails").get(0).setAttribute('action', 'registerForCourse.htm');
+                 $("#modifyParticipantDetails").submit();
             });
 
             $("a#editParticipant").button();
             $("a#editParticipant").css("font-size", "11px");
             $("a#editParticipant").click(function() {
-                 $("#modifyEvent").get(0).setAttribute('action', 'showParticipantDetails.htm');
-                 $("#modifyEvent").submit();
+                 $("#modifyParticipantDetails").get(0).setAttribute('action', 'showParticipantDetails.htm');
+                 $("#modifyParticipantDetails").submit();
             });
 
             $("#results").flexigrid({
@@ -62,6 +69,7 @@
     <c:otherwise>
         <jsp:include page="participantSummary.jsp">
             <jsp:param name="class" value="formdata"/>
+            <jsp:param name="title" value="Participant"/>
         </jsp:include>
     </c:otherwise>
 </c:choose>
@@ -94,7 +102,7 @@
 </c:if>
 
 <div>
-    <form id="modifyEvent" method="post" action="">
+    <form id="modifyParticipantDetails" method="post" action="">
         <input type="hidden" name="participantId" value="<c:out value="${participant.id}"/>" />
         <input type="hidden" name="isEdit" value="true" />
         <table width="100%" >
@@ -102,6 +110,7 @@
             <tr style="background-color:#E8E8E8;">
                 <td align="center" cellpadding="2px">
                     <a id="addCourseToParticipant" href="#">Add Course</a>
+                    <a id="addTrainer" href="#">Add Trainer</a>
                     <a id="registerForCourse" href="#">Register</a>
                     <a id="editParticipant" href="#">Edit</a>
                 </td>

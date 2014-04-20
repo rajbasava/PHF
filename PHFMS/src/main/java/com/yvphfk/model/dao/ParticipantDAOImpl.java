@@ -14,6 +14,7 @@ import com.yvphfk.model.PaymentCriteria;
 import com.yvphfk.model.RegisteredParticipant;
 import com.yvphfk.model.RegistrationCriteria;
 import com.yvphfk.model.RegistrationForm;
+import com.yvphfk.model.TrainerCriteria;
 import com.yvphfk.model.form.BaseForm;
 import com.yvphfk.model.form.CourseType;
 import com.yvphfk.model.form.Event;
@@ -23,6 +24,8 @@ import com.yvphfk.model.form.HistoryRecord;
 import com.yvphfk.model.form.Participant;
 import com.yvphfk.model.form.ParticipantCourse;
 import com.yvphfk.model.form.ParticipantSeat;
+import com.yvphfk.model.form.Trainer;
+import com.yvphfk.model.form.TrainerCourse;
 import com.yvphfk.model.form.VolunteerKit;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -71,6 +74,68 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         session.flush();
         session.close();
         return participant;
+    }
+
+    public Trainer addTrainer (Trainer trainer)
+    {
+        Session session = sessionFactory.openSession();
+        session.saveOrUpdate(trainer);
+        Participant participant = trainer.getParticipant();
+        createAndAddHistoryRecord(
+                messageSource.getMessage("key.trainerAdded",
+                        new Object[]{participant.getId(),
+                                participant.getName()},
+                        null),
+                Util.getCurrentUser().getEmail(),
+                trainer,
+                session);
+        session.flush();
+        session.close();
+        return trainer;
+    }
+
+    public Trainer getTrainer (Integer trainerId)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(Trainer.class);
+        criteria.add(Restrictions.eq("id", trainerId));
+        List results = criteria.list();
+        Trainer trainer = null;
+
+        if (results != null || !results.isEmpty()) {
+            trainer = (Trainer) results.get(0);
+        }
+        session.close();
+        return trainer;
+    }
+
+    public List<TrainerCourse> getTrainerCourses (Integer trainerId)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(TrainerCourse.class);
+        criteria.add(Restrictions.eq("trainer.id", trainerId));
+        List<TrainerCourse> results = criteria.list();
+
+        session.close();
+        return results;
+    }
+
+    public TrainerCourse addTrainerCourse (TrainerCourse trainerCourse)
+    {
+        Session session = sessionFactory.openSession();
+        session.saveOrUpdate(trainerCourse);
+        Trainer trainer = trainerCourse.getTrainer();
+        createAndAddHistoryRecord(
+                messageSource.getMessage("key.trainerCourseAdded",
+                        new Object[]{trainer.getParticipant().getName(),
+                                trainerCourse.getCourseType().getShortName()},
+                        null),
+                Util.getCurrentUser().getEmail(),
+                trainer,
+                session);
+        session.flush();
+        session.close();
+        return trainerCourse;
     }
 
     public ParticipantCourse addParticipantCourse (ParticipantCourseForm participantCourseForm)
@@ -917,6 +982,53 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
         criteria.add(Restrictions.eq("participant.id", participantId));
         List<ParticipantCourse> results = criteria.list();
+
+        session.close();
+        return results;
+    }
+
+    public List<Trainer> listTrainers (TrainerCriteria trainerCriteria)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(Trainer.class);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.add(Restrictions.eq("active", true));
+
+
+        if (trainerCriteria.getParticipantId() != null) {
+            criteria.add(Restrictions.eq("participant.id", trainerCriteria.getParticipantId()));
+            List<Trainer> results = criteria.list();
+
+            session.close();
+            return results;
+        }
+
+        if (!Util.nullOrEmptyOrBlank(trainerCriteria.getName())) {
+            criteria.add(Restrictions.ilike("participant.name", trainerCriteria.getName(), MatchMode.ANYWHERE));
+        }
+
+        if (!Util.nullOrEmptyOrBlank(trainerCriteria.getEmail())) {
+            criteria.add(Restrictions.ilike("participant.email", trainerCriteria.getEmail(), MatchMode.ANYWHERE));
+        }
+
+        if (!Util.nullOrEmptyOrBlank(trainerCriteria.getMobile())) {
+            criteria.add(Restrictions.like("participant.mobile", "%" + trainerCriteria.getMobile() + "%"));
+        }
+
+        if (trainerCriteria.getFoundationId() != null) {
+            criteria.createAlias("courses", "courses");
+            Integer foundationId = trainerCriteria.getFoundationId();
+            criteria.add(Restrictions.eq("courses.foundation.id", foundationId));
+        }
+
+        if (trainerCriteria.getCourseTypeId() != null) {
+            if (criteria.getAlias() != null && !criteria.getAlias().equals("courses")) {
+                criteria.createAlias("courses", "courses");
+            }
+            criteria.add(Restrictions.eq("courses.courseType.id", trainerCriteria.getCourseTypeId()));
+        }
+
+        List<Trainer> results = criteria.list();
 
         session.close();
         return results;

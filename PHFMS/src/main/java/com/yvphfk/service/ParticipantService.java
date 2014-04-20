@@ -6,6 +6,7 @@ package com.yvphfk.service;
 
 import com.yvphfk.model.ParticipantCourseForm;
 import com.yvphfk.model.ParticipantCriteria;
+import com.yvphfk.model.TrainerCriteria;
 import com.yvphfk.model.form.Event;
 import com.yvphfk.model.form.EventPayment;
 import com.yvphfk.model.form.EventRegistration;
@@ -17,6 +18,8 @@ import com.yvphfk.model.form.ParticipantSeat;
 import com.yvphfk.model.PaymentCriteria;
 import com.yvphfk.model.RegisteredParticipant;
 import com.yvphfk.model.RegistrationCriteria;
+import com.yvphfk.model.form.Trainer;
+import com.yvphfk.model.form.TrainerCourse;
 
 import java.util.List;
 
@@ -46,7 +49,7 @@ public interface ParticipantService
                                     Participant participantToReplace,
                                     HistoryRecord record);
 
-    public void addParticipantCourse (ParticipantCourseForm participantCourseForm);
+    public ParticipantCourse addParticipantCourse (ParticipantCourseForm participantCourseForm);
 
     public List<ParticipantSeat> getAllSeats (Event event);
 
@@ -55,5 +58,15 @@ public interface ParticipantService
     public List<ParticipantCourse> getCourses (Integer participantId);
 
     public Participant saveOrUpdateParticipant (Participant participant);
+
+    public Trainer addTrainer (Trainer trainer);
+
+    public Trainer getTrainer (Integer trainerId);
+
+    public List<TrainerCourse> getTrainerCourses (Integer trainerId);
+
+    public TrainerCourse addTrainerCourse(TrainerCourse trainerCourse);
+
+    public List<Trainer> listTrainers (TrainerCriteria trainerCriteria);
 
 }

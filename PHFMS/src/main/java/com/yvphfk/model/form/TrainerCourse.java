@@ -7,14 +7,17 @@ package com.yvphfk.model.form;
 
 import org.hibernate.annotations.Immutable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Date;
 
 @Entity
@@ -30,7 +33,7 @@ public class TrainerCourse extends BaseForm
     @GeneratedValue
     private Integer id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "trainer")
     private Trainer trainer;
 
@@ -62,6 +65,15 @@ public class TrainerCourse extends BaseForm
 
     @Column(name = "ACTIVE")
     private boolean active;
+
+    @Transient
+    private Integer trainerId;
+
+    @Transient
+    private Integer courseTypeId;
+
+    @Transient
+    private Integer foundationId;
 
     @Override
     public Integer getId ()
@@ -178,5 +190,35 @@ public class TrainerCourse extends BaseForm
     public void setActive (boolean active)
     {
         this.active = active;
+    }
+
+    public Integer getTrainerId ()
+    {
+        return trainerId;
+    }
+
+    public void setTrainerId (Integer trainerId)
+    {
+        this.trainerId = trainerId;
+    }
+
+    public Integer getCourseTypeId ()
+    {
+        return courseTypeId;
+    }
+
+    public void setCourseTypeId (Integer courseTypeId)
+    {
+        this.courseTypeId = courseTypeId;
+    }
+
+    public Integer getFoundationId ()
+    {
+        return foundationId;
+    }
+
+    public void setFoundationId (Integer foundationId)
+    {
+        this.foundationId = foundationId;
     }
 }

@@ -4,7 +4,7 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mytags"%>
 
 <div class="<%= request.getParameter("class")%>">
-<div class="formtitle">Participant</div>
+<div class="formtitle"><%= request.getParameter("title")%></div>
 <div class="formbody">
 <table align="center" >
 	<tr valign="top">

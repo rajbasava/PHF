@@ -11,9 +11,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "phk_trainer")
@@ -30,6 +32,9 @@ public class Trainer extends BaseForm
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "participant")
     private Participant participant;
+
+    @OneToMany(mappedBy = "trainer")
+    private Set<TrainerCourse> courses;
 
     @Column(name = "PREPAREDBY", updatable = false)
     private String preparedBy;

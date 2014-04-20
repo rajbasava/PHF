@@ -4,20 +4,23 @@
 */
 package com.yvphfk.service;
 
+import com.yvphfk.model.Login;
 import com.yvphfk.model.ParticipantCourseForm;
+import com.yvphfk.model.ParticipantCriteria;
+import com.yvphfk.model.PaymentCriteria;
+import com.yvphfk.model.RegisteredParticipant;
+import com.yvphfk.model.RegistrationCriteria;
+import com.yvphfk.model.TrainerCriteria;
 import com.yvphfk.model.dao.ParticipantDAO;
 import com.yvphfk.model.form.Event;
 import com.yvphfk.model.form.EventPayment;
 import com.yvphfk.model.form.EventRegistration;
 import com.yvphfk.model.form.HistoryRecord;
-import com.yvphfk.model.Login;
 import com.yvphfk.model.form.Participant;
-import com.yvphfk.model.ParticipantCriteria;
 import com.yvphfk.model.form.ParticipantCourse;
 import com.yvphfk.model.form.ParticipantSeat;
-import com.yvphfk.model.PaymentCriteria;
-import com.yvphfk.model.RegisteredParticipant;
-import com.yvphfk.model.RegistrationCriteria;
+import com.yvphfk.model.form.Trainer;
+import com.yvphfk.model.form.TrainerCourse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,9 +102,9 @@ public class ParticipantServiceImpl implements ParticipantService
     }
 
     @Transactional
-    public void addParticipantCourse (ParticipantCourseForm participantCourseForm)
+    public ParticipantCourse addParticipantCourse (ParticipantCourseForm participantCourseForm)
     {
-        participantDAO.addParticipantCourse(participantCourseForm);
+        return participantDAO.addParticipantCourse(participantCourseForm);
     }
 
     @Transactional
@@ -125,5 +128,30 @@ public class ParticipantServiceImpl implements ParticipantService
     public Participant saveOrUpdateParticipant (Participant participant)
     {
         return participantDAO.saveOrUpdateParticipant(participant);
+    }
+
+    public Trainer addTrainer (Trainer trainer)
+    {
+        return participantDAO.addTrainer(trainer);
+    }
+
+    public Trainer getTrainer (Integer trainerId)
+    {
+        return participantDAO.getTrainer(trainerId);
+    }
+
+    public List<TrainerCourse> getTrainerCourses (Integer trainerId)
+    {
+        return participantDAO.getTrainerCourses(trainerId);
+    }
+
+    public TrainerCourse addTrainerCourse(TrainerCourse trainerCourse)
+    {
+        return participantDAO.addTrainerCourse(trainerCourse);
+    }
+
+    public List<Trainer> listTrainers (TrainerCriteria trainerCriteria)
+    {
+        return participantDAO.listTrainers(trainerCriteria);
     }
 }

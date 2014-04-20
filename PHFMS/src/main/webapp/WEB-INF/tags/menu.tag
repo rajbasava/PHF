@@ -108,6 +108,7 @@
                          <ul>
                            <li><a href="volunteer.htm">Volunteers</a></li>
                            <li><a href="showManageEvents.htm">Events</a></li>
+                           <li><a href="showManageTrainers.htm">Trainers</a></li>
                            <li><a href="referenceGroup.htm">Reference Groups</a></li>
                          </ul>
                     </li>

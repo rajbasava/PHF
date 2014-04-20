@@ -232,6 +232,7 @@
         <div id="tabs-1">
             <jsp:include page="participantSummary.jsp">
                 <jsp:param name="class" value="formdataTab"/>
+                <jsp:param name="title" value="Participant"/>
              </jsp:include>
         </div>
         <div id="tabs-2">
