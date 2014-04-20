@@ -7,7 +7,9 @@
 	<title>Events - Yoga Vidya Pranic Healing Foundation of Karnataka</title>
     <script type="text/javascript">
         function getTrainers(){
-            if ($("select#courseTypeId").val() == ''){
+            if ($("select#courseTypeId").val() == '' ||
+						$("select#eventType").val() == '' ||
+						    $("select#eventType").val() == '2') {
                $("select#eventFeeId").html('<option value=""> --- Select --- </option>');
             }
             else {
@@ -27,6 +29,35 @@
             }
         }
 
+        function getCourseEligibilities(){
+            if ($("select#courseTypeId").val() == '' ||
+						$("select#eventType").val() == '' ||
+						    $("select#eventType").val() == '2') {
+               $("select#eventFeeId").html('<option value=""> --- Select --- </option>');
+            }
+            else {
+                $.getJSON(
+                    "getCourseEligibilities.htm",
+                    {courseTypeId: $("select#courseTypeId").val()},
+                    function(data) {
+                        var basicOptions = '<option value="-1"> --- Select --- </option>';
+                        var len = data.length;
+						alert (len);
+                        var primaryOptions = basicOptions;
+                        var secondaryOptions = basicOptions;
+                        if (len >= 1) {
+                            primaryOptions +=  '<option value="' + data[0].id + '">' + data[0].value + '</option>';
+                        }
+                        if (len == 2) {
+                            secondaryOptions +=  '<option value="' + data[1].id + '">' + data[1].value + '</option>';
+                        }
+						$("select#primaryEligibilityId").html(primaryOptions);
+						$("select#secondaryEligibilityId").html(secondaryOptions);
+                    }
+                );
+            }
+        }
+
         $(document).ready(function(){
             $("#startDate").datepicker({ showOn: 'button', dateFormat: 'dd/mm/yy', buttonImageOnly: true, buttonImage: '<c:url value="/resources/img/calendar.gif"/>' });
             $("#endDate").datepicker({ showOn: 'button', dateFormat: 'dd/mm/yy', buttonImageOnly: true, buttonImage: '<c:url value="/resources/img/calendar.gif"/>' });
@@ -41,14 +72,14 @@
              $("select#courseTypeId").change(function()
              {
 				 getTrainers();
+				 getCourseEligibilities();
              });
 
-             $("select#courseTypeId").focus(function()
+             $("select#eventType").change(function()
              {
 				 getTrainers();
+				 getCourseEligibilities;
              });
-
-             getTrainers();
 
         });
     </script>

@@ -8,12 +8,13 @@ package com.yvphfk.web.controller;
 import com.yvphfk.common.SeatingType;
 import com.yvphfk.common.Util;
 import com.yvphfk.model.EventCriteria;
+import com.yvphfk.model.Login;
 import com.yvphfk.model.Option;
+import com.yvphfk.model.form.CourseType;
 import com.yvphfk.model.form.Event;
 import com.yvphfk.model.form.EventFee;
 import com.yvphfk.model.form.Kit;
 import com.yvphfk.model.form.LoggedInVolunteer;
-import com.yvphfk.model.Login;
 import com.yvphfk.model.form.ReferenceGroup;
 import com.yvphfk.model.form.Volunteer;
 import com.yvphfk.model.form.VolunteerKit;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -484,6 +486,36 @@ public class EventController extends CommonController
         }
         return null;
     }
+
+    @RequestMapping(value = "/getCourseEligibilities", produces = "application/json; charset=utf-8")
+    public
+    @ResponseBody
+    List<Option> getCourseEligibilities (Map<String, Object> map,
+                                         HttpServletRequest request)
+    {
+        String strCourseTypeId = request.getParameter("courseTypeId");
+        CourseType courseType = null;
+        if (!Util.nullOrEmptyOrBlank(strCourseTypeId)) {
+            courseType = eventService.getCourseType(Integer.parseInt(strCourseTypeId));
+        }
+
+        List options = new ArrayList();
+
+        if (courseType.getPrimaryEligibility() != null) {
+            options.add(
+                    new Option(courseType.getPrimaryEligibility().getId(),
+                            courseType.getPrimaryEligibility().getName()));
+        }
+
+        if (courseType.getSecondaryEligibility() != null) {
+            options.add(
+                    new Option(courseType.getSecondaryEligibility().getId(),
+                            courseType.getSecondaryEligibility().getName()));
+        }
+
+        return options;
+    }
+
 
     @RequestMapping(value = "/referenceGroup", method = RequestMethod.GET)
     public String referenceGroup (Map<String, Object> map)
