@@ -23,15 +23,13 @@
             $("#results").flexigrid({
 					colModel : [
                         {display: '<spring:message code="label.name"/>', width : 200, align: 'left'},
+                        {display: '<spring:message code="label.eventType"/>', width : 75, align: 'left'},
+                        {display: '<spring:message code="label.primaryTrainer"/>', width : 200, align: 'left'},
                         {display: '<spring:message code="label.venue"/>', width : 75, align: 'left'},
-                        {display: '<spring:message code="label.city"/>', width : 50, align: 'left'},
-                        {display: '<spring:message code="label.primaryEligibility"/>', width : 150, align: 'left'},
-                        {display: '<spring:message code="label.startDate"/>', width : 50, align: 'left'},
-                        {display: '<spring:message code="label.endDate"/>', width : 60, align: 'left'},
-                        {display: '<spring:message code="label.amountDue"/>', width : 60, align: 'left'},
-                        {display: '<spring:message code="label.seatingType"/>', width : 50, align: 'left'},
-                        {display: '<spring:message code="label.rowMetaName"/>', width : 40, align: 'left'},
-                        {display: '<spring:message code="label.seatAllocated"/>', width : 50, align: 'left'}
+                        {display: '<spring:message code="label.city"/>', width : 75, align: 'left'},
+                        {display: '<spring:message code="label.primaryEligibility"/>', width : 250, align: 'left'},
+                        {display: '<spring:message code="label.startDate"/>', width : 100, align: 'left'},
+                        {display: '<spring:message code="label.endDate"/>', width : 100, align: 'left'}
 					],
 					useRp: true,
 					rp: 10,
@@ -136,14 +134,13 @@
                                     </a>
                                 </form>
                             </td>
-                            <td width="10%"><c:out value="${event.venue}"/></td>
-                            <td width="8%"><c:out value="${event.city}"/> </td>
-                            <td width="10%"><c:out value="${event.primaryEligibility.name}"/></td>
-                            <td width="12%"><c:out value="${event.startDate}"/> </td>
-                            <td width="12%"><c:out value="${event.endDate}"/></td>
-                            <td width="8%"><c:out value="${event.seatingTypeName}"/></td>
-                            <td width="8%"><c:out value="${event.rowMetaName}"/></td>
-                            <td><c:out value="${event.seatAllocated}"/></td>
+                            <td><c:out value="${event.eventTypeName}"/></td>
+                            <td><c:out value="${event.primaryTrainer.participant.name}"/></td>
+                            <td><c:out value="${event.venue}"/></td>
+                            <td><c:out value="${event.city}"/> </td>
+                            <td><c:out value="${event.primaryEligibility.name}"/></td>
+                            <td><c:out value="${event.startDate}"/> </td>
+                            <td><c:out value="${event.endDate}"/></td>
                         </tr>
                     </c:forEach>
                 <tbody>

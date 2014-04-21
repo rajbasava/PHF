@@ -404,4 +404,9 @@ public class Event extends BaseForm
     {
         this.secondaryTrainerId = secondaryTrainerId;
     }
+
+    public String getEventTypeName ()
+    {
+        return getEventType() == 1 ? "Course" : "Workshop";
+    }
 }

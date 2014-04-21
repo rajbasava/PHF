@@ -20,6 +20,7 @@ import com.yvphfk.model.form.Volunteer;
 import com.yvphfk.model.form.VolunteerKit;
 import com.yvphfk.model.form.validator.EventValidator;
 import com.yvphfk.service.EventService;
+import com.yvphfk.service.ParticipantService;
 import com.yvphfk.service.VolunteerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,9 @@ public class EventController extends CommonController
 
     @Autowired
     private VolunteerService volunteerService;
+
+    @Autowired
+    private ParticipantService participantService;
 
     @RequestMapping("/showAddEvent")
     public String showAddEvent (Map<String, Object> map)
@@ -112,7 +116,10 @@ public class EventController extends CommonController
         Integer eventId = Integer.parseInt(strEventId);
 
         Event event = eventService.getEvent(eventId);
-        event.setPrimaryEligibilityId(event.getPrimaryEligibility().getId());
+        if (event.getPrimaryEligibility() != null) {
+            event.setPrimaryEligibilityId(event.getPrimaryEligibility().getId());
+        }
+
         if (event.getSecondaryEligibility() != null) {
             event.setSecondaryEligibilityId(event.getSecondaryEligibility().getId());
         }
@@ -138,18 +145,22 @@ public class EventController extends CommonController
                                      Map<String, Object> map,
                                      HttpServletRequest request)
     {
-        event.setPrimaryEligibility(eventService.getCourseType(event.getPrimaryEligibilityId()));
-        if (event.getSecondaryEligibilityId() != null) {
+        if (event.getPrimaryEligibilityId() != -1){
+            event.setPrimaryEligibility(eventService.getCourseType(event.getPrimaryEligibilityId()));
+        }
+        if (event.getSecondaryEligibilityId() != -1) {
             event.setSecondaryEligibility(eventService.getCourseType(event.getSecondaryEligibilityId()));
         }
 
-        if (event.getCourseTypeId() != null) {
+        if (event.getCourseTypeId() != -1) {
             event.setCourseType(eventService.getCourseType(event.getCourseTypeId()));
         }
 
-        event.setPrimaryTrainer(null); //eventService.getCourseType(event.getPrimaryTrainerId())
-        if (event.getSecondaryTrainerId() != null) {
-            event.setSecondaryEligibility(eventService.getCourseType(event.getSecondaryTrainerId()));
+        if (event.getPrimaryTrainerId() != -1) {
+            event.setPrimaryTrainer(participantService.getTrainer(event.getPrimaryTrainerId()));
+        }
+        if (event.getSecondaryTrainerId() != -1) {
+            event.setSecondaryTrainer(participantService.getTrainer(event.getSecondaryTrainerId()));
         }
 
         EventValidator val = new EventValidator();
@@ -157,12 +168,13 @@ public class EventController extends CommonController
 
         if (errors.hasErrors()) {
             map.put("errors", errors);
+            map.put("event", event);
             map.put("eventList", eventService.allEvents());
             map.put("allParticipantCourseTypes", allCourseTypes());
             map.put("allSeatingTypes", SeatingType.allSeatingTypes());
             map.put("allRowMetaNames", eventService.getAllRowMetaNames());
             map.put("eventTypeMap", getEventTypeMap());
-            return "showAddEvent.htm";
+            return "addEvent";
         }
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
         if (event.getId() == null) {

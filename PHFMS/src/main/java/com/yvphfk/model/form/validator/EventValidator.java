@@ -27,10 +27,17 @@ public class EventValidator implements Validator
         if (!(target instanceof Event)) {
             throw new IllegalArgumentException("Target should be of Event type");
         }
+        Event event = (Event) target;
+
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "event.name.empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "venue", "event.venue.empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "city", "event.city.empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "primaryEligibility", "event.primaryEligibility.empty");
+        if (event.getCourseType().getPrimaryEligibility() != null) {
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "primaryEligibility", "event.primaryEligibility.empty");
+        }
+        if (event.getCourseType().getSecondaryEligibility() != null) {
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "secondaryEligibility", "event.secondaryEligibility.empty");
+        }
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "state", "event.state.empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "startDate", "event.startDate.empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "endDate", "event.endDate.empty");

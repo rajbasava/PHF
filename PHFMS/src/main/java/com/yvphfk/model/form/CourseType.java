@@ -178,4 +178,28 @@ public class CourseType extends BaseForm
     {
         this.active = active;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CourseType that = (CourseType) o;
+
+        if (active != that.active) return false;
+        if (!id.equals(that.id)) return false;
+        if (!name.equals(that.name)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode ()
+    {
+        int result = id.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + (active ? 1 : 0);
+        return result;
+    }
 }

@@ -327,9 +327,12 @@ public class ParticipantController extends CommonController
 
         Participant participant = participantService.getParticipant(participantId);
         List<ParticipantCourse> courses = participantService.getCourses(participantId);
+        List list = participantService.getEligibleCourses(participantId);
 
         map.put("participant", participant);
         map.put("courses", courses);
+        map.put("newEvents", list.get(0));
+        map.put("reviewEvents", list.get(1));
         map.put("isEdit", isEdit);
         return "participantDetails";
     }

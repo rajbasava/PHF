@@ -69,4 +69,6 @@ public interface ParticipantService
 
     public List<Trainer> listTrainers (TrainerCriteria trainerCriteria);
 
+    public List getEligibleCourses (Integer participantId);
+
 }

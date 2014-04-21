@@ -42,7 +42,6 @@
                     function(data) {
                         var basicOptions = '<option value="-1"> --- Select --- </option>';
                         var len = data.length;
-						alert (len);
                         var primaryOptions = basicOptions;
                         var secondaryOptions = basicOptions;
                         if (len >= 1) {

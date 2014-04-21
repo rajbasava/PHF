@@ -10,6 +10,10 @@
     <mytags:menu/>
     <script type="text/javascript">
         $(document).ready(function(){
+            $("#tabs").tabs();
+            $("#tabs").css("min-height", "400px");
+            $("#tabs").css("font-size", "11px");
+            $('#tabs').tabs({ selected: 0 });
 
             $("a#addCourseToParticipant").button();
             $("a#addCourseToParticipant").css("font-size", "11px");
@@ -22,13 +26,6 @@
             $("a#addTrainer").css("font-size", "11px");
             $("a#addTrainer").click(function() {
                  $("#modifyParticipantDetails").get(0).setAttribute('action', 'addTrainer.htm');
-                 $("#modifyParticipantDetails").submit();
-            });
-
-            $("a#registerForCourse").button();
-            $("a#registerForCourse").css("font-size", "11px");
-            $("a#registerForCourse").click(function() {
-                 $("#modifyParticipantDetails").get(0).setAttribute('action', 'registerForCourse.htm');
                  $("#modifyParticipantDetails").submit();
             });
 
@@ -46,7 +43,7 @@
                         {display: '<spring:message code="label.trainer"/>', width : 300, align: 'left'},
                         {display: '<spring:message code="label.startDate"/>', width : 100, align: 'left'},
                         {display: '<spring:message code="label.endDate"/>', width : 100, align: 'left'},
-                        {display: '<spring:message code="label.foundation"/>', width : 250, align: 'left'},
+                        {display: '<spring:message code="label.foundation"/>', width : 150, align: 'left'},
                         {display: '<spring:message code="label.city"/>', width : 80, align: 'left'}
                     ],
                     useRp: true,
@@ -54,69 +51,183 @@
                     showTableToggleBtn: false,
                     resizable: false,
                     height: 175,
-                    width: 1325,
+                    width: 1290,
                     singleSelect: true
             });
+
+            $("#newEvents").flexigrid({
+					colModel : [
+                        {display: '<spring:message code="label.name"/>', width : 200, align: 'left'},
+                        {display: '<spring:message code="label.venue"/>', width : 75, align: 'left'},
+                        {display: '<spring:message code="label.eventType"/>', width : 75, align: 'left'},
+                        {display: '<spring:message code="label.primaryTrainer"/>', width : 200, align: 'left'},
+                        {display: '<spring:message code="label.city"/>', width : 100, align: 'left'},
+                        {display: '<spring:message code="label.primaryEligibility"/>', width : 200, align: 'left'},
+                        {display: '<spring:message code="label.startDate"/>', width : 100, align: 'left'},
+                        {display: '<spring:message code="label.endDate"/>', width : 100, align: 'left'}
+					],
+					useRp: true,
+					rp: 10,
+					showTableToggleBtn: false,
+					resizable: false,
+					height: 150,
+					width: 1290,
+					singleSelect: true
+			});
+
+            $("#reviewEvents").flexigrid({
+					colModel : [
+                        {display: '<spring:message code="label.name"/>', width : 200, align: 'left'},
+                        {display: '<spring:message code="label.venue"/>', width : 75, align: 'left'},
+                        {display: '<spring:message code="label.eventType"/>', width : 75, align: 'left'},
+                        {display: '<spring:message code="label.primaryTrainer"/>', width : 200, align: 'left'},
+                        {display: '<spring:message code="label.city"/>', width : 100, align: 'left'},
+                        {display: '<spring:message code="label.primaryEligibility"/>', width : 200, align: 'left'},
+                        {display: '<spring:message code="label.startDate"/>', width : 100, align: 'left'},
+                        {display: '<spring:message code="label.endDate"/>', width : 100, align: 'left'}
+					],
+					useRp: true,
+					rp: 10,
+					showTableToggleBtn: false,
+					resizable: false,
+					height: 150,
+					width: 1290,
+					singleSelect: true
+			});
         });
     </script>
 </head>
 <body>
-
-<c:choose>
-    <c:when test="${isEdit}">
-        <jsp:include page="participant.jsp"/>
-    </c:when>
-    <c:otherwise>
-        <jsp:include page="participantSummary.jsp">
-            <jsp:param name="class" value="formdata"/>
-            <jsp:param name="title" value="Participant"/>
-        </jsp:include>
-    </c:otherwise>
-</c:choose>
-
-<c:if  test="${!empty courses}">
-<table width="100%">
-    <tr style="background-color:#E8E8E8;">
-        <td>Courses</td>
-    </tr>
-    <tr>
-        <td>
-            <table id="results">
-                <tbody>
-                    <c:forEach items="${courses}" var="participantCourse">
-                        <tr>
-                            <td><c:out value="${participantCourse.participant.name}"/> </td>
-                            <td><c:out value="${participantCourse.courseType.shortName}"/></td>
-                            <td><c:out value="${participantCourse.primaryTrainer.participant.Name}"/></td>
-                            <td><c:out value="${participantCourse.startDate}"/> </td>
-                            <td><c:out value="${participantCourse.endDate}"/></td>
-                            <td><c:out value="${participantCourse.foundation.shortName}"/></td>
-                            <td><c:out value="${participantCourse.city}"/></td>
-                        </tr>
-                    </c:forEach>
-                <tbody>
-            </table>
-        </td>
-    </tr>
+<table width="100%" cellpadding="1" cellspacing="1">
+    <tr height="20px"><td>&nbsp;</td></tr>
 </table>
-</c:if>
+<div id="tabs">
+    <ul>
+        <li><a href="#tabs-1">Courses For Registration</a></li>
+        <li><a href="#tabs-2">Participant Courses</a></li>
+    </ul>
+    <div id="tabs-1">
+        <c:choose>
+            <c:when test="${isEdit}">
+                <jsp:include page="participant.jsp"/>
+            </c:when>
+            <c:otherwise>
+                <jsp:include page="participantSummary.jsp">
+                    <jsp:param name="class" value="formdatatab"/>
+                    <jsp:param name="title" value="Participant"/>
+                </jsp:include>
+            </c:otherwise>
+        </c:choose>
 
-<div>
-    <form id="modifyParticipantDetails" method="post" action="">
-        <input type="hidden" name="participantId" value="<c:out value="${participant.id}"/>" />
-        <input type="hidden" name="isEdit" value="true" />
-        <table width="100%" >
-            <tr height="10px"><td>&nbsp;</td></tr>
+        <c:if  test="${!empty courses}">
+        <table width="100%">
             <tr style="background-color:#E8E8E8;">
-                <td align="center" cellpadding="2px">
-                    <a id="addCourseToParticipant" href="#">Add Course</a>
-                    <a id="addTrainer" href="#">Add Trainer</a>
-                    <a id="registerForCourse" href="#">Register</a>
-                    <a id="editParticipant" href="#">Edit</a>
+                <td>Courses</td>
+            </tr>
+            <tr>
+                <td>
+                    <table id="results">
+                        <tbody>
+                            <c:forEach items="${courses}" var="participantCourse">
+                                <tr>
+                                    <td><c:out value="${participantCourse.participant.name}"/> </td>
+                                    <td><c:out value="${participantCourse.courseType.shortName}"/></td>
+                                    <td><c:out value="${participantCourse.primaryTrainer.participant.Name}"/></td>
+                                    <td><c:out value="${participantCourse.startDate}"/> </td>
+                                    <td><c:out value="${participantCourse.endDate}"/></td>
+                                    <td><c:out value="${participantCourse.foundation.shortName}"/></td>
+                                    <td><c:out value="${participantCourse.city}"/></td>
+                                </tr>
+                            </c:forEach>
+                        <tbody>
+                    </table>
                 </td>
             </tr>
         </table>
-    </form>
+        </c:if>
+
+        <div>
+            <form id="modifyParticipantDetails" method="post" action="">
+                <input type="hidden" name="participantId" value="<c:out value="${participant.id}"/>" />
+                <input type="hidden" name="isEdit" value="true" />
+                <table width="100%" >
+                    <tr height="10px"><td>&nbsp;</td></tr>
+                    <tr style="background-color:#E8E8E8;">
+                        <td align="center" cellpadding="2px">
+                            <a id="addCourseToParticipant" href="#">Add Course</a>
+                            <a id="addTrainer" href="#">Add Trainer</a>
+                            <a id="editParticipant" href="#">Edit</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <div id="tabs-2">
+        <table width="100%" cellpadding="1" cellspacing="1">
+            <tr height="10px"><td>&nbsp;</td></tr>
+        </table>
+        <c:if  test="${!empty newEvents}">
+        <table width="100%">
+            <tr style="background-color:#E8E8E8;">
+                <td>New Courses For Registration</td>
+            </tr>
+            <tr>
+                <td>
+                    <table id="newEvents">
+                        <tbody>
+                            <c:forEach items="${newEvents}" var="newEvent">
+                                <tr>
+                                    <td><c:out value="${newEvent.name}"/></td>
+                                    <td><c:out value="${newEvent.venue}"/></td>
+                                    <td><c:out value="${newEvent.eventTypeName}"/></td>
+                                    <td><c:out value="${newEvent.primaryTrainer.participant.name}"/></td>
+                                    <td><c:out value="${newEvent.city}"/> </td>
+                                    <td><c:out value="${newEvent.primaryEligibility.name}"/></td>
+                                    <td><c:out value="${newEvent.startDate}"/> </td>
+                                    <td><c:out value="${newEvent.endDate}"/></td>
+                                </tr>
+                            </c:forEach>
+                        <tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        </c:if>
+
+        <table width="100%" cellpadding="1" cellspacing="1">
+            <tr height="10px"><td>&nbsp;</td></tr>
+        </table>
+
+        <c:if  test="${!empty reviewEvents}">
+        <table width="100%">
+            <tr style="background-color:#E8E8E8;">
+                <td>Courses For Review</td>
+            </tr>
+            <tr>
+                <td>
+                    <table id="reviewEvents">
+                        <tbody>
+                            <c:forEach items="${reviewEvents}" var="reviewEvent">
+                                <tr>
+                                    <td><c:out value="${reviewEvent.name}"/></td>
+                                    <td><c:out value="${reviewEvent.venue}"/></td>
+                                    <td><c:out value="${reviewEvent.eventTypeName}"/></td>
+                                    <td><c:out value="${reviewEvent.primaryTrainer.participant.name}"/></td>
+                                    <td><c:out value="${reviewEvent.city}"/> </td>
+                                    <td><c:out value="${reviewEvent.primaryEligibility.name}"/></td>
+                                    <td><c:out value="${reviewEvent.startDate}"/> </td>
+                                    <td><c:out value="${reviewEvent.endDate}"/></td>
+                                </tr>
+                            </c:forEach>
+                        <tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        </c:if>
+    </div>
 </div>
 
 <mytags:footer/>
