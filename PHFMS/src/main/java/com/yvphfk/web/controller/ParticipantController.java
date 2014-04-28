@@ -292,6 +292,7 @@ public class ParticipantController extends CommonController
         map.put("showParticipantDetails", Util.nullOrEmptyOrBlank(strParticipantId));
         map.put("allParticipantCourseTypes", allCourseTypes());
         map.put("allFoundations", allFoundations());
+        map.put("allTrainers", participantService.listTrainers(new TrainerCriteria()));
         return "addParticipantCourse";
     }
 
@@ -328,12 +329,14 @@ public class ParticipantController extends CommonController
         Participant participant = participantService.getParticipant(participantId);
         List<ParticipantCourse> courses = participantService.getCourses(participantId);
         List list = participantService.getEligibleCourses(participantId);
+        Trainer trainer = participantService.getTrainer(participant.getId());
 
         map.put("participant", participant);
         map.put("courses", courses);
         map.put("newEvents", list.get(0));
         map.put("reviewEvents", list.get(1));
         map.put("isEdit", isEdit);
+        map.put("isTrainer", trainer == null ? true : false);
         return "participantDetails";
     }
 

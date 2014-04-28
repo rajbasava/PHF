@@ -137,11 +137,21 @@
                             </tr>
                             <tr>
                                 <td width="40%"><form:label path="participantCourse.primaryTrainerId">Primary Trainer</form:label></td>
-                                <td><form:input path="participantCourse.primaryTrainerId" size="30"/></td>
+                                <td>
+                                    <form:select path="participantCourse.primaryTrainerId">
+                                        <form:option value="-1" label="--- Select ---"/>
+                                        <form:options items="${allTrainers}" itemValue="id" itemLabel="participant.name"/>
+                                    </form:select>
+                                </td>
                             </tr>
                             <tr>
                                 <td width="40%"><form:label path="participantCourse.secondaryTrainerId">Secondary Trainer</form:label></td>
-                                <td><form:input path="participantCourse.secondaryTrainerId" size="30"/></td>
+                                <td>
+                                    <form:select path="participantCourse.secondaryTrainerId">
+                                        <form:option value="-1" label="--- Select ---"/>
+                                        <form:options items="${allTrainers}" itemValue="id" itemLabel="participant.name"/>
+                                    </form:select>
+                                </td>
                             </tr>
                         </table>
                     </td>

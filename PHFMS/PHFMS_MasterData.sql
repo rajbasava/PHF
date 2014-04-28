@@ -1,7 +1,4 @@
 
-INSERT INTO phk_volunteer(name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated)
-VALUES('Admin',   'admin@yvphk.com',   'admin',   '9999999999',   'admin',   'admin',   'system',   now(),   now());
-
 Insert into phk_foundation (name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('Yoga Vidya Pranic Healing Foundation Calicut','YVPHF Calicut','Calicut','Kerala','India','system', now(), now(), '1');
 Insert into phk_foundation (name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('Yoga Vidya Pranic Healing Foundation Cochin','YVPHF Cochin','Cochin','Kerala','India','system', now(), now(), '1');
 Insert into phk_foundation (name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('Yoga Vidya Pranic Healing Foundation Trust Mumbai','YVPHFT Mumbai','Mumbai','Maharashtra','India','system', now(), now(), '1');
@@ -35,13 +32,32 @@ Insert into phk_foundation (name,shortname,city,state,country,preparedby,timecre
 Insert into phk_foundation (name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('MCKS International Arhatic Yoga Ashram','MCKS IAY Ashram','Pune','Pune','India','system', now(), now(), '1');
 
 
-INSERT INTO phk_coursetype (name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values ('Basic Pranic Healing', 'Basic',null, null, 1,'','system', now(), now(), '1');
-INSERT INTO phk_coursetype (name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values ('Advanced Pranic Healing', 'Advanced',1, null, 1,'','system', now(), now(), '1');
-INSERT INTO phk_coursetype (name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values ('Pranic Psychotherapy', 'Psychotherapy',2, null, 1,'','system', now(), now(), '1');
-INSERT INTO phk_coursetype (name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values ('Achieving Oneness With Higher Soul', 'Higher Soul',null, null, 1,'','system', now(), now(), '1');
-INSERT INTO phk_coursetype (name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values ('Arhatic Yoga Preparation', 'Arhatic Prep',3, 4, 1,'','system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (100,'Basic Pranic Healing', 'Basic',null, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (200,'Advanced Pranic Healing', 'Advanced',100, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (300,'Pranic Psychotherapy', 'Psychotherapy',200, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (400,'Achieving Oneness With Higher Soul', 'Higher Soul',null, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (500,'Arhatic Yoga Preparation', 'Arhatic Prep',300, 400, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (310,'Pranic Crystal Healing', 'Crystal Healing',300, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (320,'Pranic Self Defence', 'Self Defence',300, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (315,'Pranic Face Lift And Body Sculpting', 'Face And Body Sculpting',300, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (510,'Kriyashakti', 'Kriyashakti',500, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (520,'Teachers Training Course', 'TTC',500, null, 1,null,'system', now(), now(), '1');
 
 
 
+INSERT INTO phk_volunteer(name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated) VALUES('Admin',   'admin@yvphfk.com',   'admin',   '9999999999',   'admin',   'admin',   'system',   now(),   now());
 
+Insert into phk_participant (id,name,mobile,home,email,vip,vipdesc,address,city,state,country,zipcode,preparedby,timecreated,timeupdated,active) values (1000,'Master Choa Kok Sui','9999999999','9999999999','mcks@pranichealing.com','1','Grand Master',null,null,null,null,null,'system@yvphfk.com', now(), now(), 1);
 
+Insert into phk_trainer (id,participant,preparedby,timecreated,timeupdated,active) values (1000,1000,'system@yvphfk.com', now(), now(), 1);
+
+Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1000,1000,100,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
+Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1001,1000,200,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
+Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1002,1000,300,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
+Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1003,1000,400,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
+Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1004,1000,500,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
+Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1005,1000,310,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
+Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1006,1000,520,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
+Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1007,1000,510,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
+Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1008,1000,320,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
+Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1009,1000,315,null,0,null,null,'system@yvphfk.com', now(), now(), 1);

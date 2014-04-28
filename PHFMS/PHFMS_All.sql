@@ -237,8 +237,8 @@ CREATE TABLE phk_volkit (
 
 CREATE TABLE phk_coursetype (
 	id INT PRIMARY KEY auto_increment,
-	name VARCHAR(50),
-	shortName VARCHAR(15),
+	name VARCHAR(100),
+	shortName VARCHAR(25),
     primaryeligibility int,
     secondaryeligibility int,
 	version int,

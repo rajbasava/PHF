@@ -32,11 +32,11 @@
                 </tr>
 			    <tr>
                     <td>Primary Trainer</td>
-                    <td><c:out value="${event.primaryTrainer.name}"/></td>
+                    <td><c:out value="${event.primaryTrainer.participant.name}"/></td>
                 </tr>
 			    <tr>
                     <td>Secondary Trainer</td>
-                    <td><c:out value="${event.secondaryTrainer.name}"/></td>
+                    <td><c:out value="${event.secondaryTrainer.participant.name}"/></td>
                 </tr>
             </table>
         </td>

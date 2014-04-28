@@ -141,7 +141,7 @@
                     <td>
                         <form:select path="primaryTrainerId">
                             <form:option value="-1" label="--- Select ---"/>
-                            <form:options items="${allTrainers}" itemValue="id" itemLabel="value"/>
+                            <form:options items="${allTrainers}"/>
                         </form:select>
                     </td>
                 </tr>
@@ -150,7 +150,7 @@
                     <td>
                         <form:select path="secondaryTrainerId">
                             <form:option value="-1" label="--- Select ---"/>
-                            <form:options items="${allTrainers}" itemValue="id" itemLabel="value"/>
+                            <form:options items="${allTrainers}"/>
                         </form:select>
                     </td>
                 </tr>
