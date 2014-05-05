@@ -63,8 +63,9 @@
                         {display: '<spring:message code="label.primaryTrainer"/>', width : 200, align: 'left'},
                         {display: '<spring:message code="label.city"/>', width : 100, align: 'left'},
                         {display: '<spring:message code="label.primaryEligibility"/>', width : 200, align: 'left'},
-                        {display: '<spring:message code="label.startDate"/>', width : 100, align: 'left'},
-                        {display: '<spring:message code="label.endDate"/>', width : 100, align: 'left'}
+                        {display: '<spring:message code="label.startDate"/>', width : 150, align: 'left'},
+                        {display: '<spring:message code="label.endDate"/>', width : 100, align: 'left'},
+                        {display: 'Action', width : 100, align: 'left'}
 					],
 					useRp: true,
 					rp: 10,
@@ -83,8 +84,30 @@
                         {display: '<spring:message code="label.primaryTrainer"/>', width : 200, align: 'left'},
                         {display: '<spring:message code="label.city"/>', width : 100, align: 'left'},
                         {display: '<spring:message code="label.primaryEligibility"/>', width : 200, align: 'left'},
-                        {display: '<spring:message code="label.startDate"/>', width : 100, align: 'left'},
-                        {display: '<spring:message code="label.endDate"/>', width : 100, align: 'left'}
+                        {display: '<spring:message code="label.startDate"/>', width : 150, align: 'left'},
+                        {display: '<spring:message code="label.endDate"/>', width : 100, align: 'left'},
+                        {display: 'Action', width : 100, align: 'left'}
+					],
+					useRp: true,
+					rp: 10,
+					showTableToggleBtn: false,
+					resizable: false,
+					height: 150,
+					width: 1290,
+					singleSelect: true
+			});
+
+            $("#registrations").flexigrid({
+					colModel : [
+                        {display: '<spring:message code="label.name"/>', width : 200, align: 'left'},
+                        {display: '<spring:message code="label.venue"/>', width : 75, align: 'left'},
+                        {display: '<spring:message code="label.eventType"/>', width : 75, align: 'left'},
+                        {display: '<spring:message code="label.primaryTrainer"/>', width : 200, align: 'left'},
+                        {display: '<spring:message code="label.city"/>', width : 100, align: 'left'},
+                        {display: '<spring:message code="label.primaryEligibility"/>', width : 200, align: 'left'},
+                        {display: '<spring:message code="label.startDate"/>', width : 150, align: 'left'},
+                        {display: '<spring:message code="label.endDate"/>', width : 100, align: 'left'},
+                        {display: 'Action', width : 100, align: 'left'}
 					],
 					useRp: true,
 					rp: 10,
@@ -107,9 +130,46 @@
         <li><a href="#tabs-2">Participant Courses</a></li>
     </ul>
     <div id="tabs-1">
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("#startDate").datepicker({ showOn: 'button', dateFormat: 'dd/mm/yy', buttonImageOnly: true, buttonImage: '<c:url value="/resources/img/calendar.gif"/>' });
+                $("#endDate").datepicker({ showOn: 'button', dateFormat: 'dd/mm/yy', buttonImageOnly: true, buttonImage: '<c:url value="/resources/img/calendar.gif"/>' });
+
+                $("a#submit").button();
+                $("a#submit").css("font-size", "11px");
+                $("a#submit").click(function() {
+                     $("#participant").get(0).setAttribute('action', 'updateParticipant.htm');
+                     $("#participant").submit();
+                });
+
+            });
+        </script>
         <c:choose>
             <c:when test="${isEdit}">
-                <jsp:include page="participant.jsp"/>
+                <div class="formdatatab">
+                    <div class="formtitle">Participant</div>
+                    <div class="formbody">
+                        <form:form method="post" action="" commandName="participant">
+                            <form:errors path="*" cssClass="errorblock" element="div" />
+                            <form:hidden path="id"/>
+                            <c:set var="nested" value="false" scope="request"/>
+                            <jsp:include page="participant.jsp">
+                                <jsp:param name="nested" value="false"/>
+                            </jsp:include>
+                        </form:form>
+                    </div>
+                    <div class="formfooter">
+                        <table width="100%">
+                            <tr>
+                                <td align="right">
+                                    <div id="button">
+                                        <a id="submit" href="#">Submit</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </c:when>
             <c:otherwise>
                 <jsp:include page="participantSummary.jsp">
@@ -191,6 +251,16 @@
                                     <td><c:out value="${newEvent.primaryEligibility.name}"/></td>
                                     <td><c:out value="${newEvent.startDate}"/> </td>
                                     <td><c:out value="${newEvent.endDate}"/></td>
+                                    <td class="YLink">
+                                        <form id="openReg<c:out value="${participant.id}"/>For<c:out value="${newEvent.id}"/>" method="post" action="register.htm">
+                                            <input type="hidden" name="participantId" value="<c:out value="${participant.id}"/>" />
+                                            <input type="hidden" name="eventId" value="<c:out value="${newEvent.id}"/>" />
+                                            <input type="hidden" name="isReview" value="false" />
+                                            <a href="#" onclick="document.getElementById('openReg<c:out value="${participant.id}"/>For<c:out value="${newEvent.id}"/>').submit();">
+                                                Register
+                                            </a>
+                                        </form>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         <tbody>
@@ -223,6 +293,56 @@
                                     <td><c:out value="${reviewEvent.primaryEligibility.name}"/></td>
                                     <td><c:out value="${reviewEvent.startDate}"/> </td>
                                     <td><c:out value="${reviewEvent.endDate}"/></td>
+                                    <td class="YLink">
+                                        <form id="openReg<c:out value="${participant.id}"/>For<c:out value="${reviewEvent.id}"/>" method="post" action="register.htm">
+                                            <input type="hidden" name="participantId" value="<c:out value="${participant.id}"/>" />
+                                            <input type="hidden" name="eventId" value="<c:out value="${reviewEvent.id}"/>" />
+                                            <input type="hidden" name="isReview" value="true" />
+                                            <a href="#" onclick="document.getElementById('openReg<c:out value="${participant.id}"/>For<c:out value="${reviewEvent.id}"/>').submit();">
+                                                Open
+                                            </a>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        <tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        </c:if>
+
+        <table width="100%" cellpadding="1" cellspacing="1">
+            <tr height="10px"><td>&nbsp;</td></tr>
+        </table>
+
+        <c:if  test="${!empty registrations}">
+        <table width="100%">
+            <tr style="background-color:#E8E8E8;">
+                <td>Registered Events</td>
+            </tr>
+            <tr>
+                <td>
+                    <table id="registrations">
+                        <tbody>
+                            <c:forEach items="${registrations}" var="registration">
+                                <tr>
+                                    <td><c:out value="${registration.event.name}"/></td>
+                                    <td><c:out value="${registration.event.venue}"/></td>
+                                    <td><c:out value="${registration.event.eventTypeName}"/></td>
+                                    <td><c:out value="${registration.event.primaryTrainer.participant.name}"/></td>
+                                    <td><c:out value="${registration.event.city}"/> </td>
+                                    <td><c:out value="${registration.event.primaryEligibility.name}"/></td>
+                                    <td><c:out value="${registration.event.startDate}"/> </td>
+                                    <td><c:out value="${registration.event.endDate}"/></td>
+                                    <td class="YLink">
+                                        <form id="updatePart<c:out value="${registration.id}"/>" method="post" action="updateRegistration.htm">
+                                            <input type="hidden" name="registrationId" value="<c:out value="${registration.id}"/>" />
+                                            <a href="#" onclick="document.getElementById('updatePart<c:out value="${registration.id}"/>').submit();">
+                                                Open
+                                            </a>
+                                        </form>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         <tbody>

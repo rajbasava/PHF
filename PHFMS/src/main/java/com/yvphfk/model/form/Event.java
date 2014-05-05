@@ -409,4 +409,23 @@ public class Event extends BaseForm
     {
         return getEventType() == 1 ? "Course" : "Workshop";
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Event event = (Event) o;
+
+        if (!id.equals(event.id)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode ()
+    {
+        return id.hashCode();
+    }
 }

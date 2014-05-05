@@ -10,6 +10,7 @@ import com.yvphfk.model.Option;
 import com.yvphfk.model.ParticipantCourseForm;
 import com.yvphfk.model.ParticipantCriteria;
 import com.yvphfk.model.TrainerCriteria;
+import com.yvphfk.model.form.EventRegistration;
 import com.yvphfk.model.form.Participant;
 import com.yvphfk.model.form.ParticipantCourse;
 import com.yvphfk.model.form.Trainer;
@@ -329,12 +330,14 @@ public class ParticipantController extends CommonController
         Participant participant = participantService.getParticipant(participantId);
         List<ParticipantCourse> courses = participantService.getCourses(participantId);
         List list = participantService.getEligibleCourses(participantId);
+        List<EventRegistration> registrations = participantService.getRegisteredCourses(participantId);
         Trainer trainer = participantService.getTrainer(participant.getId());
 
         map.put("participant", participant);
         map.put("courses", courses);
         map.put("newEvents", list.get(0));
         map.put("reviewEvents", list.get(1));
+        map.put("registrations", registrations);
         map.put("isEdit", isEdit);
         map.put("isTrainer", trainer == null ? true : false);
         return "participantDetails";

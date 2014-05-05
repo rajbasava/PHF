@@ -166,12 +166,23 @@ public class ParticipantServiceImpl implements ParticipantService
         List results = new ArrayList();
         List<Event> reviewCourses = new ArrayList<Event>();
         List<Event> newCourses = new ArrayList<Event>();
+        List<Event> registeredEvents = new ArrayList<Event>();
 
         List<CourseType> courseTypes = getCourseTypes(participantId);
         List<Event> events = eventDAO.allEvents();
+        List<EventRegistration> registrations = getRegisteredCourses(participantId);
+
+        for (EventRegistration registration: registrations) {
+            registeredEvents.add(registration.getEvent());
+        }
 
         for (Event event : events) {
-            if (courseTypes.contains(event.getCourseType())) {
+            if (registeredEvents.contains(event)) {
+                continue;
+            }
+
+            if (Event.EventTypeCourse.equals(event.getEventType())
+                    && courseTypes.contains(event.getCourseType())) {
                 reviewCourses.add(event);
             }
             else if (courseTypes.contains(event.getPrimaryEligibility()) &&
@@ -185,6 +196,17 @@ public class ParticipantServiceImpl implements ParticipantService
         results.add(reviewCourses);
 
         return results;
+    }
+
+    public List<EventRegistration> getRegisteredCourses (Integer participantId)
+    {
+        List<Event> events = new ArrayList<Event>();
+        RegistrationCriteria criteria = new RegistrationCriteria();
+        criteria.setParticipantId(participantId);
+
+        List<EventRegistration> registrations = participantDAO.listRegistrations(criteria);
+
+        return registrations;
     }
 
     private List<CourseType> getCourseTypes (Integer participantId)

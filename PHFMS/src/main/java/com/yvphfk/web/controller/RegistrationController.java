@@ -50,20 +50,37 @@ public class RegistrationController extends CommonController
     }
 
     @RequestMapping("/register")
-    public String newParticipant (Map<String, Object> map)
+    public String newParticipant (Map<String, Object> map, HttpServletRequest request)
     {
+        String strParticipantId = request.getParameter("participantId");
+        String strEventId = request.getParameter("eventId");
+        Event event = null;
+        Participant participant = new Participant();
+        boolean newbie = true;
+        if (!Util.nullOrEmptyOrBlank(strParticipantId) && !Util.nullOrEmptyOrBlank(strEventId)) {
+            participant = participantService.getParticipant(Integer.parseInt(strParticipantId));
+            event = eventService.getEvent(Integer.parseInt(strEventId));
+            newbie = false;
+        }
+
         RegisteredParticipant registeredParticipant = new RegisteredParticipant();
-        Event defEvent = getDefaultEvent();
-        if (defEvent != null) {
-            registeredParticipant.setEventId(getDefaultEvent().getId());
+        if (event != null) {
+            registeredParticipant.setEventId(event.getId());
+        }
+
+        if (participant != null) {
+            registeredParticipant.setParticipant(participant);
         }
         registeredParticipant.setAction(RegisteredParticipant.ActionRegister);
+        registeredParticipant.setNewbie(newbie);
+        map.put("participant", participant);
         map.put("registeredParticipant", registeredParticipant);
         map.put("allParticipantCourseTypes", allCourseTypes());
         map.put("allPaymentModes", PaymentMode.allPaymentModes());
         map.put("allFoundations", allFoundations());
         map.put("allEvents", getAllEventMap(eventService.allEvents()));
         map.put("allReferenceGroups", getAllReferenceGroups(eventService.listReferenceGroups()));
+        map.put("newbie", newbie);
         return "register";
     }
 
@@ -118,11 +135,17 @@ public class RegistrationController extends CommonController
                 eventService.getFoundation(eventRegistration.getFoundationId()));
         eventRegistration.setEventFee(
                 eventService.getEventFee(registeredParticipant.getEventFeeId()));
+        Participant participant = null;
+        if (registeredParticipant.getParticipant().getId() != null) {
+            participant = participantService.getParticipant(registeredParticipant.getParticipant().getId());
+            registeredParticipant.setParticipant(participant);
+        }
 
         RegistrationValidator validator = new RegistrationValidator();
         validator.validate(registeredParticipant, errors);
 
         if (errors.hasErrors()) {
+            map.put("participant", registeredParticipant.getParticipant());
             map.put("allParticipantCourseTypes", allCourseTypes());
             map.put("allPaymentModes", PaymentMode.allPaymentModes());
             map.put("allFoundations", allFoundations());
@@ -194,7 +217,11 @@ public class RegistrationController extends CommonController
         if (!Util.nullOrEmptyOrBlank(strRegistrationId)) {
             Integer registrationId = Integer.parseInt(strRegistrationId);
             EventRegistration registration = participantService.getEventRegistration(registrationId);
-            registration.setCourseTypeId(registration.getCourseType().getId());
+
+            if (registration.getCourseType() != null) {
+                registration.setCourseTypeId(registration.getCourseType().getId());
+            }
+
             registration.setFoundationId(registration.getFoundation().getId());
             RegisteredParticipant registeredParticipant = new RegisteredParticipant();
             registeredParticipant.setRegistration(registration);

@@ -34,6 +34,7 @@ public class RegisteredParticipant implements Serializable, Importable
     private Integer eventId;
     private Integer eventFeeId;
     private String status;
+    private boolean newbie;
     private EventPayment impPayment;  // need to merge currentPayment, impPayment, payment,allpayments
 
 
@@ -229,5 +230,15 @@ public class RegisteredParticipant implements Serializable, Importable
         calendar.add(Calendar.DATE, 2);
         Date validToShow = calendar.getTime();
         return validToShow.after(getRegistration().getEvent().getStartDate());
+    }
+
+    public boolean isNewbie ()
+    {
+        return newbie;
+    }
+
+    public void setNewbie (boolean newbie)
+    {
+        this.newbie = newbie;
     }
 }

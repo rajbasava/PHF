@@ -73,90 +73,38 @@
 
         });
     </script>
-    <style>
-	.error {
-		color: #ff0000;
-	}
- 
-	.errorblock {
-		color: #000;
-		background-color: #ffEEEE;
-		border: 3px solid #ff0000;
-		padding: 8px;
-		margin: 16px;
-	}
-	</style>
 </head>
 <body>
-<table width="100%" cellpadding="1" cellspacing="1">
-    <tr>
-        <td align="center" style="font-size:18px">
-            User Registration Details
-        </td>
-    </tr>
-    <tr><td>&nbsp;</td></tr>
-</table>
 <form:form method="post" action="addRegistration.htm" commandName="registeredParticipant">
 <form:errors path="*" cssClass="errorblock" element="div" />
 <table align="center" cellspacing="2" cellspacing="2" width="80%">
     <form:hidden path="participant.id" />
     <form:hidden path="registration.id" />
+    <form:hidden path="newbie"/>
+    <tr><td>&nbsp;</td></tr>
     <tr>
         <td>
             <table width="100%" cellpadding="1" cellspacing="1">
-                <tr style="background-color:#E8E8E8;">
-                    <td align="left"><b>Contact Details:</b></td>
+                <tr style="background-color:#E8E8E8;font-size:18px">
+                    <td align="left"><b>Registration Details:</b></td>
                 </tr>
             </table>
         </td>
     </tr>
     <tr>
         <td>
-            <table width="100%" cellpadding="1" cellspacing="1">
-                <tr>
-                    <td width="60%">
-                        <table width="100%" cellpadding="1" cellspacing="1">
-                            <tr>
-                                <td width="30%"><form:label path="participant.name"><spring:message code="label.name"/></form:label></td>
-                                <td><form:input path="participant.name" size="50"/></td>
-                            </tr>
-                            <tr>
-                                <td width="30%"><form:label path="participant.email"><spring:message code="label.email"/></form:label></td>
-                                <td><form:input path="participant.email" /></td>
-                            </tr>
-                            <tr>
-                                <td width="30%"><form:label path="registration.foundationId"><spring:message code="label.foundation"/></form:label></td>
-                                <td>
-                                    <form:select path="registration.foundationId" cssClass="drop-select">
-                                        <form:option value="" label="--- Select ---"/>
-                                        <form:options items="${allFoundations}" />
-                                    </form:select>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td>
-                        <table width="100%" cellpadding="1" cellspacing="1">
-                            <tr>
-                                <td width="30%"><form:label path="participant.mobile"><spring:message code="label.mobile"/></form:label></td>
-                                <td><form:input path="participant.mobile" /></td>
-                            </tr>
-                            <tr>
-                                <td width="30%"><form:label path="participant.home"><spring:message code="label.home"/></form:label></td>
-                                <td><form:input path="participant.home" /></td>
-                            </tr>
-                            <tr>
-                                <td width="30%"><form:label path="participant.vip"><spring:message code="label.vip"/></form:label></td>
-                                <td><form:checkbox path="participant.vip"/></td>
-                            </tr>
-                            <tr>
-                                <td width="30%"><form:label path="participant.vipDesc"><spring:message code="label.vipDesc"/></form:label></td>
-                                <td><form:input path="participant.vipDesc"/></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
+            <c:choose>
+                <c:when test="${newbie}">
+                    <c:set var="nested" value="true" scope="request"/>
+                    <jsp:include page="participant.jsp"/>
+                </c:when>
+                <c:otherwise>
+                    <jsp:include page="participantSummary.jsp">
+                        <jsp:param name="class" value="formdata"/>
+                        <jsp:param name="title" value="Participant"/>
+                    </jsp:include>
+                </c:otherwise>
+            </c:choose>
         </td>
     </tr>
     <tr>
@@ -197,8 +145,13 @@
                                 <td><form:checkbox path="registration.review"/></td>
                             </tr>
                             <tr>
-                                <td width="30%"><form:label path="registration.application"><spring:message code="label.application"/></form:label></td>
-                                <td><form:checkbox path="registration.application"/></td>
+                                <td width="30%"><form:label path="registration.foundationId"><spring:message code="label.foundation"/></form:label></td>
+                                <td>
+                                    <form:select path="registration.foundationId">
+                                        <form:option value="" label="--- Select ---"/>
+                                        <form:options items="${allFoundations}" />
+                                    </form:select>
+                                </td>
                             </tr>
                         </table>
                     </td>
@@ -225,10 +178,6 @@
                             <tr>
                                 <td width="30%"><form:label path="registration.amountPayable"><spring:message code="label.amountPayable"/></form:label></td>
                                 <td><form:input path="registration.amountPayable"/></td>
-                            </tr>
-                            <tr>
-                                <td width="30%"><form:label path="registration.certificates"><spring:message code="label.certificates"/></form:label></td>
-                                <td><form:checkbox path="registration.certificates"/></td>
                             </tr>
                         </table>
                     </td>

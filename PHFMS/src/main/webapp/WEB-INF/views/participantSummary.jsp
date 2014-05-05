@@ -6,9 +6,9 @@
 <div class="<%= request.getParameter("class")%>">
 <div class="formtitle"><%= request.getParameter("title")%></div>
 <div class="formbody">
-<table align="center" >
+<table align="center" width="100%">
 	<tr valign="top">
-		<td>
+		<td width="60%">
 			<table>
 			    <tr>
                     <td><spring:message code="label.name"/></td>
@@ -28,7 +28,6 @@
                 </tr>
             </table>
         </td>
-        <td width="30px">&nbsp;</td>
         <td>
             <table>
                 <tr>

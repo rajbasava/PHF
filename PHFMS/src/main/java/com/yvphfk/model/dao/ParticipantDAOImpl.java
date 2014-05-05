@@ -102,7 +102,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         List results = criteria.list();
         Trainer trainer = null;
 
-        if (results != null || !results.isEmpty()) {
+        if (results != null && !results.isEmpty()) {
             trainer = (Trainer) results.get(0);
         }
         session.close();
@@ -166,21 +166,29 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
     public EventRegistration registerParticipant (RegisteredParticipant registeredParticipant, Login login)
     {
         Participant participant = registeredParticipant.getParticipant();
+        EventRegistration registration = registeredParticipant.getRegistration();
+
+        boolean partNoSave = false;
+        if (participant.getId() != null) {
+            participant = getParticipant(participant.getId());
+            registration.setParticipant(participant);
+            partNoSave = true;
+        }
+
         List<HistoryRecord> records = registeredParticipant.getAllHistoryRecords();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        EventRegistration registration = registeredParticipant.getRegistration();
 
         if (RegisteredParticipant.ActionRegister.equals(registeredParticipant.getAction())) {
 
             CourseType courseType = registeredParticipant.getRegistration().getCourseType();
             Event event = registeredParticipant.getRegistration().getEvent();
-            if (courseType == null || event == null) {
-                return null;
-            }
+
             //todo check the uniqueness of the participant before adding.
-            saveOrUpdateParticipant(participant);
-            registration.setParticipant(participant);
+            if (!partNoSave) {
+                participant = saveOrUpdateParticipant(participant);
+                registration.setParticipant(participant);
+            }
 
             if (Util.nullOrEmptyOrBlank(registration.getStatus())) {
                 registration.setStatus(EventRegistration.StatusRegistered);
@@ -208,7 +216,6 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         }
         else if (RegisteredParticipant.ActionUpdate.equals(registeredParticipant.getAction())) {
             //  todo update changes properties of registration objects to comments
-            participant = getParticipant(participant.getId());
             registration.setParticipant(participant);
             HistoryRecord record =
                     createHistoryRecord(
@@ -654,6 +661,10 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         criteria.createAlias("participant", "participant");
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         criteria.add(Restrictions.eq("active", true));
+
+        if (registrationCriteria.getParticipantId() != null) {
+            criteria.add(Restrictions.eq("participant.id", registrationCriteria.getParticipantId()));
+        }
 
         if (registrationCriteria.isConsolidated()) {
             criteria.setFetchMode("payments", FetchMode.EAGER);

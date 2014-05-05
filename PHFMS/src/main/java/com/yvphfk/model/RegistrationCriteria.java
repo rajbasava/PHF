@@ -11,6 +11,7 @@ import java.util.Date;
 
 public class RegistrationCriteria implements Serializable
 {
+    private Integer participantId;
     private String name;
     private String mobile;
     private String email;
@@ -27,6 +28,16 @@ public class RegistrationCriteria implements Serializable
     private Date fromRegistrationDate;
     private Date toRegistrationDate;
     private String status = EventRegistration.StatusRegistered;
+
+    public Integer getParticipantId ()
+    {
+        return participantId;
+    }
+
+    public void setParticipantId (Integer participantId)
+    {
+        this.participantId = participantId;
+    }
 
     public String getName ()
     {

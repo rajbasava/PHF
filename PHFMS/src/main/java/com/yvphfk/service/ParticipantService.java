@@ -71,4 +71,6 @@ public interface ParticipantService
 
     public List getEligibleCourses (Integer participantId);
 
+    public List<EventRegistration> getRegisteredCourses (Integer participantId);
+
 }
