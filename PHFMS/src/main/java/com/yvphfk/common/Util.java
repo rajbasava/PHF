@@ -17,6 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.StringTokenizer;
 
 public class Util
@@ -194,5 +198,30 @@ public class Util
         }
 
         return obj;
+    }
+
+    public static Date add (Date d, int dateField, int count)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setLenient(false);
+        calendar.setTime(d);
+        calendar.add(dateField, count);
+        return calendar.getTime();
+    }
+
+    public static Date getDateWithoutTime (Date d)
+    {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        format.setLenient(false);
+        String strDate = format.format(d);
+        Date result = null;
+
+        try {
+            result = format.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

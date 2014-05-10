@@ -4,6 +4,7 @@
 
 <hibernate-configuration>
     <session-factory>
+        <property name="hibernate.jdbc.batch_size">50</property>
         <mapping class="com.yvphfk.model.form.HistoryRecord"/>
         <mapping class="com.yvphfk.model.form.Participant"/>
         <mapping class="com.yvphfk.model.form.Volunteer"/>

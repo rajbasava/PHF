@@ -54,16 +54,22 @@ public class RegistrationController extends CommonController
     {
         String strParticipantId = request.getParameter("participantId");
         String strEventId = request.getParameter("eventId");
+        String strReview = request.getParameter("review");
         Event event = null;
+        boolean review = false;
         Participant participant = new Participant();
         boolean newbie = true;
-        if (!Util.nullOrEmptyOrBlank(strParticipantId) && !Util.nullOrEmptyOrBlank(strEventId)) {
+        if (!Util.nullOrEmptyOrBlank(strParticipantId) &&
+                !Util.nullOrEmptyOrBlank(strEventId) &&
+                !Util.nullOrEmptyOrBlank(strReview)) {
             participant = participantService.getParticipant(Integer.parseInt(strParticipantId));
             event = eventService.getEvent(Integer.parseInt(strEventId));
+            review = Boolean.parseBoolean(strReview);
             newbie = false;
         }
 
         RegisteredParticipant registeredParticipant = new RegisteredParticipant();
+        registeredParticipant.getRegistration().setReview(review);
         if (event != null) {
             registeredParticipant.setEventId(event.getId());
         }
@@ -205,7 +211,7 @@ public class RegistrationController extends CommonController
             map.put("allPaymentModes", PaymentMode.allPaymentModes());
             map.put("allFoundations", allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));
-            map.put("allEventFees", getAllEventFees(registeredParticipant.getEventId()));
+            map.put("allEventFees", getAllEventFees(registeredParticipant.getEventId(), null));
             map.put("allReferenceGroups", getAllReferenceGroups(eventService.listReferenceGroups()));
             return "registerTab";
         }

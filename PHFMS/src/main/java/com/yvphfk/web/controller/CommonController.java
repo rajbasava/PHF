@@ -94,9 +94,9 @@ public class CommonController
         return null;
     }
 
-    protected List<Option> getAllEventFees (Integer eventId)
+    protected List<Option> getAllEventFees (Integer eventId, Boolean review)
     {
-        List<EventFee> eventFeeList = eventService.getEventFees(eventId);
+        List<EventFee> eventFeeList = eventService.getEventFees(eventId, review);
         ArrayList<Option> options = new ArrayList<Option>();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         for (EventFee eventFee : eventFeeList) {

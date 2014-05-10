@@ -154,6 +154,15 @@
                         </form:select>
                     </td>
                 </tr>
+			    <tr>
+                    <td><form:label path="foundationId">Foundation</form:label></td>
+                    <td>
+                        <form:select path="foundationId">
+                            <form:option value="-1" label="--- Select ---"/>
+                            <form:options items="${allFoundations}"/>
+                        </form:select>
+                    </td>
+                </tr>
             </table>
         </td>
         <td>&nbsp;</td>

@@ -67,6 +67,10 @@ public class Event extends BaseForm
     @JoinColumn(name = "coursetype")
     private CourseType courseType;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "foundation")
+    private PHFoundation foundation;
+
     @Column(name = "eventtype")
     private Integer eventType;
 
@@ -117,6 +121,9 @@ public class Event extends BaseForm
 
     @Transient
     private Integer secondaryTrainerId;
+
+    @Transient
+    private Integer foundationId;
 
 
     public Integer getId ()
@@ -408,6 +415,26 @@ public class Event extends BaseForm
     public String getEventTypeName ()
     {
         return getEventType() == 1 ? "Course" : "Workshop";
+    }
+
+    public PHFoundation getFoundation ()
+    {
+        return foundation;
+    }
+
+    public void setFoundation (PHFoundation foundation)
+    {
+        this.foundation = foundation;
+    }
+
+    public Integer getFoundationId ()
+    {
+        return foundationId;
+    }
+
+    public void setFoundationId (Integer foundationId)
+    {
+        this.foundationId = foundationId;
     }
 
     @Override

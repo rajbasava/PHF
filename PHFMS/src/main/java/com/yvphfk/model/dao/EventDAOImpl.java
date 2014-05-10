@@ -195,6 +195,12 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
     @Override
     public List<EventFee> getEventFees (Integer eventId)
     {
+        return getEventFees(eventId, null);
+    }
+
+    @Override
+    public List<EventFee> getEventFees (Integer eventId, Boolean review)
+    {
         if (eventId == null) {
             return null;
         }
@@ -204,8 +210,14 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
 
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(EventFee.class);
+
         criteria.add(Restrictions.eq("event", event));
         criteria.add(Restrictions.eq("active", true));
+
+        if (review != null) {
+            criteria.add(Restrictions.eq("review", review.booleanValue()));
+        }
+
         criteria.add(Restrictions.ge("cutOffDate", new Date()));
         criteria.addOrder(Order.asc("timeCreated"));
         List<EventFee> eventFees = criteria.list();

@@ -34,6 +34,8 @@ public interface EventDAO extends CommonDAO
 
     public List<EventFee> getEventFees (Integer eventId);
 
+    public List<EventFee> getEventFees (Integer eventId, Boolean review);
+
     public void removeEventFee (Integer eventFeeId);
 
     public EventFee getEventFee (Integer eventFeeId);

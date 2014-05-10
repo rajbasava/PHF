@@ -56,6 +56,7 @@ public class EventController extends CommonController
         map.put("allSeatingTypes", SeatingType.allSeatingTypes());
         map.put("allRowMetaNames", eventService.getAllRowMetaNames());
         map.put("eventTypeMap", getEventTypeMap());
+        map.put("allFoundations", allFoundations());
         return "addEvent";
     }
 
@@ -480,10 +481,18 @@ public class EventController extends CommonController
     List<Option> eventFees (HttpServletRequest request)
     {
         String strEventId = request.getParameter("eventId");
+        String strReview= request.getParameter("review");
+        boolean review = false;
+        Integer eventId = null;
         if (!Util.nullOrEmptyOrBlank(strEventId)) {
-            return getAllEventFees(Integer.parseInt(strEventId));
+            eventId = Integer.parseInt(strEventId);
         }
-        return null;
+
+        if (!Util.nullOrEmptyOrBlank(strReview)) {
+            review = Boolean.parseBoolean(strReview);
+        }
+
+        return getAllEventFees(eventId, review);
     }
 
     @RequestMapping(value = "/fetchEventFee", produces = "application/json; charset=utf-8")

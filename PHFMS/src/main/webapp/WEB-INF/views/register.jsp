@@ -17,7 +17,8 @@
             else {
                 $.getJSON(
                     "getAllEventFees.htm",
-                    {eventId: $("select#eventId").val()},
+                    {eventId: $("select#eventId").val(),
+                     review: $("#registeredParticipant input[name='registration.review']").is(':checked')},
                     function(data) {
                         var options = '<option value="-1"> --- Select --- </option>';
                         var len = data.length;
@@ -52,7 +53,7 @@
                 getEventFees();
             });
 
-            $("select#eventId").focus(function()
+            $("#registeredParticipant input[name='registration.review']").change(function()
             {
                 getEventFees();
             });

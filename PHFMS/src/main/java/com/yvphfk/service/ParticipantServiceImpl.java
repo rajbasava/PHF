@@ -4,6 +4,7 @@
 */
 package com.yvphfk.service;
 
+import com.yvphfk.common.Util;
 import com.yvphfk.model.Login;
 import com.yvphfk.model.ParticipantCourseForm;
 import com.yvphfk.model.ParticipantCriteria;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -177,6 +179,12 @@ public class ParticipantServiceImpl implements ParticipantService
         }
 
         for (Event event : events) {
+
+            Date now = Util.getDateWithoutTime(new Date());
+            if (now.compareTo(event.getStartDate()) > 0) {
+                continue;
+            }
+
             if (registeredEvents.contains(event)) {
                 continue;
             }
@@ -185,9 +193,10 @@ public class ParticipantServiceImpl implements ParticipantService
                     && courseTypes.contains(event.getCourseType())) {
                 reviewCourses.add(event);
             }
-            else if (courseTypes.contains(event.getPrimaryEligibility()) &&
-                    (event.getSecondaryEligibility() == null ||
-                            courseTypes.contains(event.getSecondaryEligibility()))) {
+            else if ((courseTypes.isEmpty() && event.getPrimaryEligibility() == null) ||
+                    (courseTypes.contains(event.getPrimaryEligibility()) &&
+                            (event.getSecondaryEligibility() == null ||
+                            courseTypes.contains(event.getSecondaryEligibility())))) {
                 newCourses.add(event);
             }
         }

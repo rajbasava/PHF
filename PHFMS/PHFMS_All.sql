@@ -29,6 +29,7 @@ CREATE TABLE phk_event (
     secondaryeligibility int,
     primarytrainer int,
     secondarytrainer int,
+    foundation int,
 	startdate TIMESTAMP null,
 	enddate TIMESTAMP null,
 	isseatperlvl VARCHAR(1),

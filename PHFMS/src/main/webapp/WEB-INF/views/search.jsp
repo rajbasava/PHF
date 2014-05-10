@@ -73,20 +73,20 @@
 		<td>
 			<table>
 				<tr>
-					<td style="height:34px;"><form:label path="name"><spring:message code="label.name"/></form:label></td>
-					<td style="height:34px;"><form:input path="name" /></td>
+					<td ><form:label path="name"><spring:message code="label.name"/></form:label></td>
+					<td ><form:input path="name" /></td>
 				</tr>
 				<tr>
-					<td style="height:34px;"><form:label path="email"><spring:message code="label.email"/></form:label></td>
-					<td style="height:34px;"><form:input path="email" /></td>
+					<td ><form:label path="email"><spring:message code="label.email"/></form:label></td>
+					<td ><form:input path="email" /></td>
 				</tr>
 				<tr>
-					<td style="height:34px;"><form:label path="mobile"><spring:message code="label.mobile"/></form:label></td>
-					<td style="height:34px;"><form:input path="mobile" /></td>
+					<td ><form:label path="mobile"><spring:message code="label.mobile"/></form:label></td>
+					<td ><form:input path="mobile" /></td>
 				</tr>
 				<tr>
-					<td style="height:34px;"><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
-					<td style="height:34px;">
+					<td ><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
+					<td >
 						<form:select path="eventId">
 							<form:option value="" label="--- Select ---"/>
 							<form:options items="${allEvents}" />
@@ -94,16 +94,16 @@
 					</td>
 				</tr>
 				<tr>
-					<td style="height:34px;"><form:label path="foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
-					<td style="height:34px;">
+					<td ><form:label path="foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
+					<td >
 						<form:radiobutton path="foodCoupon" value="true"/>True &nbsp;
 						<form:radiobutton path="foodCoupon" value="false"/>False &nbsp;
 						<form:radiobutton path="foodCoupon" value=""/>Both
 					</td>
 				</tr>
 				<tr>
-					<td style="height:34px;"><spring:message code="label.registrationDate"/></td>
-					<td style="height:34px;">
+					<td ><spring:message code="label.registrationDate"/></td>
+					<td >
 						<table width="100%">
 							<tr>
 								<td>From: </td><td><form:input path="fromRegistrationDate"/></td>
@@ -119,36 +119,36 @@
 		<td>
 			<table>
 				<tr>
-					<td style="height:34px;"><form:label path="foundation"><spring:message code="label.foundation"/></form:label></td>
-					<td style="height:34px;">
+					<td ><form:label path="foundation"><spring:message code="label.foundation"/></form:label></td>
+					<td >
 						<form:select path="foundation">
 						<form:option value="" label="--- Select ---"/>
 						<form:options items="${allFoundations}" />
 						</form:select>
 					</td>
 				</tr>
-					<td style="height:34px;"><form:label path="courseTypeId"><spring:message code="label.courseType"/></form:label></td>
-					<td style="height:34px;">
+					<td ><form:label path="courseTypeId"><spring:message code="label.courseType"/></form:label></td>
+					<td >
 						<form:select path="courseTypeId">
 							<form:option value="" label="--- Select ---"/>
 							<form:options items="${allParticipantCourseTypes}" />
 						</form:select>
 					</td>
 				<tr>
-					<td style="height:34px;"><form:label path="vip"><spring:message code="label.vip"/></form:label></td>
-					<td style="height:34px;"><form:checkbox path="vip"/></td>
+					<td ><form:label path="vip"><spring:message code="label.vip"/></form:label></td>
+					<td ><form:checkbox path="vip"/></td>
 				</tr>
 				<tr>
-					<td style="height:34px;"><form:label path="eventKit"><spring:message code="label.eventKit"/></form:label></td>
-					<td style="height:34px;">
+					<td ><form:label path="eventKit"><spring:message code="label.eventKit"/></form:label></td>
+					<td >
 						<form:radiobutton path="eventKit" value="true"/>True &nbsp;
 						<form:radiobutton path="eventKit" value="false"/>False &nbsp;
 						<form:radiobutton path="eventKit" value=""/>Both
 					</td>
 				</tr>
                 <tr>
-                    <td style="height:34px;"><form:label path="status"><spring:message code="label.status"/></form:label></td>
-                    <td style="height:34px;">
+                    <td ><form:label path="status"><spring:message code="label.status"/></form:label></td>
+                    <td >
                         <form:select path="status">
                             <form:option value="" label="--- Select ---"/>
                             <form:options items="${allStatuses}" />
@@ -156,8 +156,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="height:34px;"><form:label path="reference"><spring:message code="label.reference"/></form:label></td>
-                    <td style="height:34px;">
+                    <td ><form:label path="reference"><spring:message code="label.reference"/></form:label></td>
+                    <td >
                         <form:select path="reference">
                             <form:option value="" label="--- Select ---"/>
                             <form:options items="${allReferenceGroups}" />

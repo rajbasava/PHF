@@ -22,6 +22,7 @@ import com.yvphfk.model.RegistrationForm;
 import com.yvphfk.model.form.Trainer;
 import com.yvphfk.model.form.TrainerCourse;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ParticipantDAO extends CommonDAO
@@ -79,5 +80,7 @@ public interface ParticipantDAO extends CommonDAO
     public TrainerCourse addTrainerCourse(TrainerCourse trainerCourse);
 
     public List<Trainer> listTrainers (TrainerCriteria trainerCriteria);
+
+    public List<EventRegistration> allAttendedRegistrationsTill (Date tillDate);
 
 }

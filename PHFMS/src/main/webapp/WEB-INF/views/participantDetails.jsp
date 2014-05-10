@@ -126,8 +126,9 @@
 </table>
 <div id="tabs">
     <ul>
-        <li><a href="#tabs-1">Courses For Registration</a></li>
-        <li><a href="#tabs-2">Participant Courses</a></li>
+        <li><a href="#tabs-1">Participant Details</a></li>
+        <li><a href="#tabs-2">Available Courses</a></li>
+        <li><a href="#tabs-3">Registered Courses</a></li>
     </ul>
     <div id="tabs-1">
         <script type="text/javascript">
@@ -179,7 +180,7 @@
             </c:otherwise>
         </c:choose>
 
-        <c:if  test="${!empty courses}">
+
         <table width="100%">
             <tr style="background-color:#E8E8E8;">
                 <td>Courses</td>
@@ -188,23 +189,25 @@
                 <td>
                     <table id="results">
                         <tbody>
+                            <c:if test="${!empty courses}">
                             <c:forEach items="${courses}" var="participantCourse">
                                 <tr>
                                     <td><c:out value="${participantCourse.participant.name}"/> </td>
                                     <td><c:out value="${participantCourse.courseType.shortName}"/></td>
-                                    <td><c:out value="${participantCourse.primaryTrainer.participant.Name}"/></td>
+                                    <td><c:out value="${participantCourse.primaryTrainer.participant.name}"/></td>
                                     <td><c:out value="${participantCourse.startDate}"/> </td>
                                     <td><c:out value="${participantCourse.endDate}"/></td>
                                     <td><c:out value="${participantCourse.foundation.shortName}"/></td>
                                     <td><c:out value="${participantCourse.city}"/></td>
                                 </tr>
                             </c:forEach>
+                            </c:if>
                         <tbody>
                     </table>
                 </td>
             </tr>
         </table>
-        </c:if>
+
 
         <div>
             <form id="modifyParticipantDetails" method="post" action="">
@@ -232,7 +235,7 @@
         <table width="100%" cellpadding="1" cellspacing="1">
             <tr height="10px"><td>&nbsp;</td></tr>
         </table>
-        <c:if  test="${!empty newEvents}">
+
         <table width="100%">
             <tr style="background-color:#E8E8E8;">
                 <td>New Courses For Registration</td>
@@ -241,6 +244,7 @@
                 <td>
                     <table id="newEvents">
                         <tbody>
+                            <c:if  test="${!empty newEvents}">
                             <c:forEach items="${newEvents}" var="newEvent">
                                 <tr>
                                     <td><c:out value="${newEvent.name}"/></td>
@@ -255,7 +259,7 @@
                                         <form id="openReg<c:out value="${participant.id}"/>For<c:out value="${newEvent.id}"/>" method="post" action="register.htm">
                                             <input type="hidden" name="participantId" value="<c:out value="${participant.id}"/>" />
                                             <input type="hidden" name="eventId" value="<c:out value="${newEvent.id}"/>" />
-                                            <input type="hidden" name="isReview" value="false" />
+                                            <input type="hidden" name="review" value="false" />
                                             <a href="#" onclick="document.getElementById('openReg<c:out value="${participant.id}"/>For<c:out value="${newEvent.id}"/>').submit();">
                                                 Register
                                             </a>
@@ -263,18 +267,17 @@
                                     </td>
                                 </tr>
                             </c:forEach>
+                            </c:if>
                         <tbody>
                     </table>
                 </td>
             </tr>
         </table>
-        </c:if>
 
         <table width="100%" cellpadding="1" cellspacing="1">
             <tr height="10px"><td>&nbsp;</td></tr>
         </table>
 
-        <c:if  test="${!empty reviewEvents}">
         <table width="100%">
             <tr style="background-color:#E8E8E8;">
                 <td>Courses For Review</td>
@@ -283,6 +286,7 @@
                 <td>
                     <table id="reviewEvents">
                         <tbody>
+                            <c:if  test="${!empty reviewEvents}">
                             <c:forEach items="${reviewEvents}" var="reviewEvent">
                                 <tr>
                                     <td><c:out value="${reviewEvent.name}"/></td>
@@ -297,26 +301,27 @@
                                         <form id="openReg<c:out value="${participant.id}"/>For<c:out value="${reviewEvent.id}"/>" method="post" action="register.htm">
                                             <input type="hidden" name="participantId" value="<c:out value="${participant.id}"/>" />
                                             <input type="hidden" name="eventId" value="<c:out value="${reviewEvent.id}"/>" />
-                                            <input type="hidden" name="isReview" value="true" />
+                                            <input type="hidden" name="review" value="true" />
                                             <a href="#" onclick="document.getElementById('openReg<c:out value="${participant.id}"/>For<c:out value="${reviewEvent.id}"/>').submit();">
-                                                Open
+                                                Review
                                             </a>
                                         </form>
                                     </td>
                                 </tr>
                             </c:forEach>
+                            </c:if>
                         <tbody>
                     </table>
                 </td>
             </tr>
         </table>
-        </c:if>
+    </div>
 
+    <div id="tabs-3">
         <table width="100%" cellpadding="1" cellspacing="1">
             <tr height="10px"><td>&nbsp;</td></tr>
         </table>
 
-        <c:if  test="${!empty registrations}">
         <table width="100%">
             <tr style="background-color:#E8E8E8;">
                 <td>Registered Events</td>
@@ -325,6 +330,7 @@
                 <td>
                     <table id="registrations">
                         <tbody>
+                            <c:if  test="${!empty registrations}">
                             <c:forEach items="${registrations}" var="registration">
                                 <tr>
                                     <td><c:out value="${registration.event.name}"/></td>
@@ -345,12 +351,12 @@
                                     </td>
                                 </tr>
                             </c:forEach>
+                            </c:if>
                         <tbody>
                     </table>
                 </td>
             </tr>
         </table>
-        </c:if>
     </div>
 </div>
 

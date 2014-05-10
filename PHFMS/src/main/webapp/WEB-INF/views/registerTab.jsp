@@ -151,7 +151,8 @@
                         {display: '<spring:message code="label.pdcNotClear"/>', width : 75, align: 'left'},
                         {display: '<spring:message code="label.pdc"/>', width : 75, align: 'left'},
                         {display: '<spring:message code="label.pdcDate"/>', width : 100, align: 'left'},
-                        {display: '<spring:message code="label.remarks"/>', width : 300, align: 'left'}
+                        {display: '<spring:message code="label.remarks"/>', width : 250, align: 'left'},
+                        {display: 'Action', width : 70, align: 'left'}
                     ],
                     useRp: true,
                     rp: 10,
@@ -194,24 +195,6 @@
 	</style>
 </head>
 <body>
-<form:form method="post" action="addRegistration.htm" commandName="registeredParticipant">
-<form:errors path="*" cssClass="errorblock" element="div"/>
-
-	<%-- Start : common variables that can be used to control access at field level.  Can be considered to be moved a level up. --%>
-	<c:if test="${user.access.regVolunteer}" var="isRegVolunteer"/>
-	<c:if test="${user.access.infoVolunteer}" var="isInfoVolunteer"/>
-	<c:if test="${user.access.spotRegVolunteer}" var="isSpotRegVolunteer"/>
-	<c:if test="${user.access.admin}" var="isAdmin"/>
-	<%-- End --%>
-
-    <form:hidden path="action"/>
-    <form:hidden path="participant.id"/>
-    <form:hidden path="registration.id"/>
-    <form:hidden path="registration.status"/>
-    <form:hidden path="registration.localEventKitStatus"/>
-    <form:hidden path="registration.refOrder"/>
-    <form:hidden path="registration.totalAmountPaid"/>
-    <input id="access" name="access" type="hidden" value="<c:out value="${isInfoVolunteer || isRegVolunteer}"/>"/>
     <table width="100%" cellpadding="1" cellspacing="1">
         <tr>
             <td align="left" style="font-size:18px">
@@ -236,6 +219,24 @@
              </jsp:include>
         </div>
         <div id="tabs-2">
+        <form:form method="post" action="addRegistration.htm" commandName="registeredParticipant">
+        <form:errors path="*" cssClass="errorblock" element="div"/>
+
+            <%-- Start : common variables that can be used to control access at field level.  Can be considered to be moved a level up. --%>
+            <c:if test="${user.access.regVolunteer}" var="isRegVolunteer"/>
+            <c:if test="${user.access.infoVolunteer}" var="isInfoVolunteer"/>
+            <c:if test="${user.access.spotRegVolunteer}" var="isSpotRegVolunteer"/>
+            <c:if test="${user.access.admin}" var="isAdmin"/>
+            <%-- End --%>
+
+            <form:hidden path="action"/>
+            <form:hidden path="participant.id"/>
+            <form:hidden path="registration.id"/>
+            <form:hidden path="registration.status"/>
+            <form:hidden path="registration.localEventKitStatus"/>
+            <form:hidden path="registration.refOrder"/>
+            <form:hidden path="registration.totalAmountPaid"/>
+            <input id="access" name="access" type="hidden" value="<c:out value="${isInfoVolunteer || isRegVolunteer}"/>"/>
 			<table width="80%" cellspacing="1" cellpadding="1">
 				<tr>
 					<td>
@@ -269,13 +270,13 @@
                                 	<c:choose>
 										<c:when test="${isInfoVolunteer || isRegVolunteer}">
 		                                    <form:select path="registration.courseTypeId" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
-		                                        <form:option value="NONE" label="--- Select ---"/>
+		                                        <form:option value="-1" label="--- Select ---"/>
 		                                        <form:options items="${allCourseTypes}" />
 		                                    </form:select>										
 										</c:when>
 										<c:otherwise>
 		                                    <form:select path="registration.courseTypeId">
-		                                        <form:option value="NONE" label="--- Select ---"/>
+		                                        <form:option value="-1" label="--- Select ---"/>
 		                                        <form:options items="${allCourseTypes}" />
 		                                    </form:select>										
 										</c:otherwise>
@@ -397,6 +398,33 @@
 					</td>		
 				</tr>
 			</table>
+            <div id="button">
+                <table width="100%" cellpadding="2" cellspacing="2">
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr style="background-color:#DFDFDF;">
+                        <td align="center">
+                            <c:choose>
+                                <c:when test="${user.access.admin}" >
+                                    <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
+                                </c:when>
+                                <c:when test="${!registeredParticipant.registration.eventKit}" >
+                                    <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
+                                </c:when>
+                            </c:choose>
+                            <c:if test="${isAdmin}" >
+                                <a id="cancelRegistration" href="#">Cancel Registration</a>
+                                <a id="onHoldRegistration" href="#">On Hold</a>
+                                <a id="changeToRegistered" href="#">Change To Registered</a>
+                                <a id="replaceRegistration" href="#">Replace</a>
+                            </c:if>
+                            <a id="back" href="#">Back</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </form:form>
         </div>
         <div id="tabs-3">
             <table width="100%">
@@ -420,6 +448,15 @@
                                             <td><c:out value="${payment.pdc}"/></td>
                                             <td><c:out value="${payment.pdcDate}"/></td>
                                             <td><c:out value="${payment.remarks}"/></td>
+                                            <td class="YLink">
+                                                <form id="editPay<c:out value="${payment.id}"/>For<c:out value="${registeredParticipant.registration.id}"/>" method="post" action="showPayments.htm">
+                                                    <input type="hidden" name="paymentId" value="<c:out value="${payment.id}"/>" />
+                                                    <input type="hidden" name="registration.id" value="<c:out value="${registeredParticipant.registration.id}"/>" />
+                                                    <a href="#" onclick="document.getElementById('editPay<c:out value="${payment.id}"/>For<c:out value="${registeredParticipant.registration.id}"/>').submit();">
+                                                        Edit
+                                                    </a>
+                                                </form>
+                                            </td>
                                         </tr>
                                     </c:forEach>
                                 <tbody>
@@ -428,6 +465,21 @@
                     </td>
                 </tr>
             </table>
+            <div id="button">
+                <table width="100%" cellpadding="2" cellspacing="2">
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr style="background-color:#DFDFDF;">
+                        <td align="center">
+                            <c:if test="${isAdmin || isSpotRegVolunteer}" >
+                                <a id="showPayments" href="#">Payments</a>
+                            </c:if>
+                            <a id="back" href="#">Back</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
         <div id="tabs-4">
             <c:if  test="${!empty registeredParticipant.registration.historyRecords}">
@@ -456,38 +508,6 @@
             </c:if>
         </div>
     </div>
-    <table width="100%" cellpadding="2" cellspacing="2" align="center">
-        <tr>
-            <td>&nbsp;</td>
-        </tr>
-    </table>
-    <div id="button">
-        <table width="100%" cellpadding="2" cellspacing="2">
-            <tr style="background-color:#DFDFDF;">
-                <td align="center">
-                    <c:choose>
-                        <c:when test="${user.access.admin}" >
-                            <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
-                        </c:when>
-                        <c:when test="${!registeredParticipant.registration.eventKit}" >
-                            <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
-                        </c:when>
-                    </c:choose>
-		            <c:if test="${isAdmin || isSpotRegVolunteer}" >
-                        <a id="showPayments" href="#">Payments</a>
-                    </c:if>
-                    <c:if test="${isAdmin}" >
-	                    <a id="cancelRegistration" href="#">Cancel Registration</a>
-	                    <a id="onHoldRegistration" href="#">On Hold</a>
-	                    <a id="changeToRegistered" href="#">Change To Registered</a>
-	                    <a id="replaceRegistration" href="#">Replace</a>
-                    </c:if>
-                    <a id="back" href="#">Back</a>
-                </td>
-            </tr>
-        </table>
-    </div>
-</form:form>
 <mytags:footer/>
 </body>
 </html>

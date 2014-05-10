@@ -1045,4 +1045,24 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         return results;
     }
 
+    public List<EventRegistration> allAttendedRegistrationsTill (Date tillDate)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(EventRegistration.class);
+        criteria.createAlias("event", "event");
+
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.add(Restrictions.eq("active", true));
+        criteria.add(Restrictions.eq("eventKit", true));
+        criteria.add(Restrictions.le("event.endDate", tillDate));
+        criteria.add(Restrictions.eq("event.eventType", Event.EventTypeCourse));
+        criteria.add(Restrictions.eq("review", false));
+
+        List<EventRegistration> results = criteria.list();
+
+        session.close();
+        return results;
+    }
+
+
 }

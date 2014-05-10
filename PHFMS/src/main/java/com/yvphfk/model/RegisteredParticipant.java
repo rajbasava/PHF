@@ -23,7 +23,7 @@ public class RegisteredParticipant implements Serializable, Importable
     public static final String ActionUpdate = "Update";
 
     private Participant participant;
-    private EventRegistration registration;
+    private EventRegistration registration = new EventRegistration();
     private EventPayment currentPayment;
     private List<EventPayment> allPayments = new ArrayList<EventPayment>();
     private HistoryRecord currentHistoryRecord;
