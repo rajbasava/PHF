@@ -7,10 +7,23 @@
 	<title>Events - Yoga Vidya Pranic Healing Foundation of Karnataka</title>
     <script type="text/javascript">
         function getTrainers(){
+			alert ("**"+$("select#courseTypeId").val()+" >> " +$("select#eventType").val());
             if ($("select#courseTypeId").val() == '' ||
-						$("select#eventType").val() == '' ||
-						    $("select#eventType").val() == '2') {
-               $("select#eventFeeId").html('<option value=""> --- Select --- </option>');
+					$("select#eventType").val() == '2' ||
+						$("select#eventType").val() == '') {
+                $.getJSON(
+                    "getTrainersForCourse.htm",
+                    {courseTypeId: $("select#primaryEligibilityId").val()},
+                    function(data) {
+                        var options = '<option value="-1"> --- Select --- </option>';
+                        var len = data.length;
+                        for(var i=0; i<len; i++){
+                            options +=  '<option value="' + data[i].id + '">' + data[i].value + '</option>';
+                        }
+						$("select#primaryTrainerId").html(options);
+						$("select#secondaryTrainerId").html(options);
+                    }
+                );
             }
             else {
                 $.getJSON(
@@ -30,10 +43,40 @@
         }
 
         function getCourseEligibilities(){
-            if ($("select#courseTypeId").val() == '' ||
-						$("select#eventType").val() == '' ||
-						    $("select#eventType").val() == '2') {
-               $("select#eventFeeId").html('<option value=""> --- Select --- </option>');
+            if ($("select#eventType").val() == '2') {
+                $.getJSON(
+                    "getAllCourseTypes.htm",
+                    {},
+                    function(data) {
+                        var basicOptions = '<option value="-1"> --- Select --- </option>';
+                        var len = data.length;
+                        var options = basicOptions;
+                        for (var i=0; i<len; i++) {
+                            options +=  '<option value="' + data[i].id + '">' + data[i].value + '</option>';
+                        }
+						$("select#primaryEligibilityId").html(options);
+						$("select#secondaryEligibilityId").html(options);
+						$("select#courseTypeId").html('<option value=""> --- Select --- </option>');
+                    }
+                );
+            }
+            else if ($("select#eventType").val() == '1' &&
+                    $("select#courseTypeId").val() == '') {
+                $.getJSON(
+                    "getAllCourseTypes.htm",
+                    {},
+                    function(data) {
+                        var basicOptions = '<option value="-1"> --- Select --- </option>';
+                        var len = data.length;
+                        var options = basicOptions;
+                        for (var i=0; i<len; i++) {
+                            options +=  '<option value="' + data[i].id + '">' + data[i].value + '</option>';
+                        }
+						$("select#primaryEligibilityId").html(options);
+						$("select#secondaryEligibilityId").html(options);
+						$("select#courseTypeId").html(options);
+                    }
+                );
             }
             else {
                 $.getJSON(
@@ -70,14 +113,19 @@
 
              $("select#courseTypeId").change(function()
              {
-				 getTrainers();
 				 getCourseEligibilities();
+				 getTrainers();
              });
 
              $("select#eventType").change(function()
              {
+				 getCourseEligibilities();
 				 getTrainers();
-				 getCourseEligibilities;
+             });
+
+             $("select#primaryEligibilityId").change(function()
+             {
+				 getTrainers();
              });
 
         });

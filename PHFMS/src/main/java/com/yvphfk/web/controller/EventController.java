@@ -32,9 +32,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class EventController extends CommonController
@@ -537,6 +539,25 @@ public class EventController extends CommonController
         return options;
     }
 
+    @RequestMapping(value = "/getAllCourseTypes", produces = "application/json; charset=utf-8")
+    public
+    @ResponseBody
+    List<Option> getAllCourseTypes (HttpServletRequest request)
+    {
+        List options = new ArrayList();
+
+        Map<String, String> courseTypes =   allCourseTypes();
+        Set set = courseTypes.keySet();
+        Iterator itr = set.iterator();
+
+        while (itr.hasNext()) {
+            String id = (String) itr.next();
+            String value = courseTypes.get(id);
+
+            options.add(new Option(Integer.parseInt(id),value));
+        }
+        return options;
+    }
 
     @RequestMapping(value = "/referenceGroup", method = RequestMethod.GET)
     public String referenceGroup (Map<String, Object> map)
