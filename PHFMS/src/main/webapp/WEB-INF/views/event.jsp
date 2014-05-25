@@ -7,7 +7,6 @@
 	<title>Events - Yoga Vidya Pranic Healing Foundation of Karnataka</title>
     <script type="text/javascript">
         function getTrainers(){
-			alert ("**"+$("select#courseTypeId").val()+" >> " +$("select#eventType").val());
             if ($("select#courseTypeId").val() == '' ||
 					$("select#eventType").val() == '2' ||
 						$("select#eventType").val() == '') {
