@@ -62,6 +62,13 @@
                  $("#modifyEvent").submit();
             });
 
+            $("a#notifyEmail").button();
+            $("a#notifyEmail").css("font-size", "11px");
+            $("a#notifyEmail").click(function() {
+                 $("#modifyEvent").get(0).setAttribute('action', 'sendNotification.htm');
+                 $("#modifyEvent").submit();
+            });
+
             $("#results").flexigrid({
                     colModel : [
                         {display: '<spring:message code="label.name"/>', width : 250, align: 'left'},
@@ -139,6 +146,7 @@
                     <a id="exportSeats" href="#">Export Allocated Seats</a>
                     <a id="deleteEvent" href="#">Deactivate</a>
                     <a id="editEvent" href="#">Edit</a>
+                    <a id="notifyEmail" href="#">Send Notification</a>
                 </td>
             </tr>
         </table>

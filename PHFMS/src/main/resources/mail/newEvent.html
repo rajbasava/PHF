@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{mail.greeting(${name})}" />
+<p>
+   <br />
+   Atma Namasthe!
+</p>
+
+<p>
+    Regards, <br />
+    &emsp; <em><p th:text="${foundationName}"/></em>
+</p>
+</body>
+</html>

@@ -30,8 +30,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -88,7 +90,6 @@ public class EventController extends CommonController
     @RequestMapping("/showEventDetails")
     public String showEventDetails (Map<String, Object> map, HttpServletRequest request)
     {
-
 
         boolean isFwd = false;
         String strIsFwd = (String) request.getAttribute("isForward");
@@ -148,7 +149,7 @@ public class EventController extends CommonController
                                      Map<String, Object> map,
                                      HttpServletRequest request)
     {
-        if (event.getPrimaryEligibilityId() != -1){
+        if (event.getPrimaryEligibilityId() != -1) {
             event.setPrimaryEligibility(eventService.getCourseType(event.getPrimaryEligibilityId()));
         }
         if (event.getSecondaryEligibilityId() != -1) {
@@ -164,6 +165,10 @@ public class EventController extends CommonController
         }
         if (event.getSecondaryTrainerId() != -1) {
             event.setSecondaryTrainer(participantService.getTrainer(event.getSecondaryTrainerId()));
+        }
+
+        if (event.getFoundationId() != -1) {
+            event.setFoundation(eventService.getFoundation(event.getFoundationId()));
         }
 
         EventValidator val = new EventValidator();
@@ -483,7 +488,7 @@ public class EventController extends CommonController
     List<Option> eventFees (HttpServletRequest request)
     {
         String strEventId = request.getParameter("eventId");
-        String strReview= request.getParameter("review");
+        String strReview = request.getParameter("review");
         boolean review = false;
         Integer eventId = null;
         if (!Util.nullOrEmptyOrBlank(strEventId)) {
@@ -546,7 +551,7 @@ public class EventController extends CommonController
     {
         List options = new ArrayList();
 
-        Map<String, String> courseTypes =   allCourseTypes();
+        Map<String, String> courseTypes = allCourseTypes();
         Set set = courseTypes.keySet();
         Iterator itr = set.iterator();
 
@@ -554,7 +559,7 @@ public class EventController extends CommonController
             String id = (String) itr.next();
             String value = courseTypes.get(id);
 
-            options.add(new Option(Integer.parseInt(id),value));
+            options.add(new Option(Integer.parseInt(id), value));
         }
         return options;
     }
@@ -580,4 +585,26 @@ public class EventController extends CommonController
         map.put("referenceGroupList", eventService.listReferenceGroups());
         return "referenceGroup";
     }
+
+    @RequestMapping("/sendNotification")
+    public String sendNotification (HttpServletRequest request)
+    {
+        String strEventId = request.getParameter("eventId");
+        if (!Util.nullOrEmptyOrBlank(strEventId)) {
+            Integer eventId = Integer.parseInt(strEventId);
+            Event event = eventService.getEvent(eventId);
+            Map map = new HashMap();
+            map.put("name", event.getName());
+            map.put("foundationName", event.getFoundation().getName());
+            String msgTxt = emailService.getMessageContent("newEvent.html",request.getLocale(), map);
+            try {
+                emailService.sendMail("rajbasava@gmail.com", "rajbasava@gmail.com", "test mail", msgTxt);
+            } catch (MessagingException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
+        }
+        return "redirect:/event.htm";
+    }
+
 }
