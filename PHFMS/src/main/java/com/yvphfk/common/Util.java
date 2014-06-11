@@ -25,6 +25,7 @@ import java.util.StringTokenizer;
 
 public class Util
 {
+    public static final String DefaultDatePattern =  "dd/MM/yy";
 
     public static boolean nullOrEmptyOrBlank (String toValidate)
     {
@@ -222,6 +223,21 @@ public class Util
             e.printStackTrace();
         }
 
+        return result;
+    }
+
+    public static Date parseDate (String dateValue, String pattern)
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+
+        Date result = null;
+        try {
+            result = formatter.parse(dateValue);
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+            result = null;
+        }
         return result;
     }
 }

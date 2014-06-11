@@ -104,7 +104,6 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
         Criteria criteria = session.createCriteria(Event.class);
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         criteria.addOrder(Order.asc("timeCreated"));
-        criteria.add(Restrictions.eq("active", true));
 
         if (!Util.nullOrEmptyOrBlank(eventCriteria.getName())) {
             criteria.add(Restrictions.ilike("name", eventCriteria.getName(), MatchMode.ANYWHERE));
@@ -134,6 +133,10 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
 
         if (eventCriteria.getEndDate() != null) {
             criteria.add(Restrictions.le("endDate", eventCriteria.getEndDate()));
+        }
+
+        if (!eventCriteria.isIncludeInactive()) {
+            criteria.add(Restrictions.eq("active", true));
         }
 
         List<Event> results = criteria.list();

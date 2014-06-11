@@ -119,9 +119,10 @@
 		<td>
 			<table>
 				<tr>
-					<td ><form:label path="foundation"><spring:message code="label.foundation"/></form:label></td>
+					<td ><form:label path="foundationId">
+					        <spring:message code="label.foundation"/></form:label></td>
 					<td >
-						<form:select path="foundation">
+						<form:select path="foundationId">
 						<form:option value="" label="--- Select ---"/>
 						<form:options items="${allFoundations}" />
 						</form:select>

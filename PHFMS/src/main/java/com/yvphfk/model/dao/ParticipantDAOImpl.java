@@ -624,14 +624,16 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
             criteria.add(Restrictions.eq("vip", participantCriteria.isVip()));
         }
 
+        boolean hasCourseAlias = false;
         if (participantCriteria.getFoundationId() != null) {
             criteria.createAlias("courses", "courses");
             Integer foundationId = participantCriteria.getFoundationId();
             criteria.add(Restrictions.eq("courses.foundation.id", foundationId));
+            hasCourseAlias = true;
         }
 
         if (participantCriteria.getCourseTypeId() != null) {
-            if (criteria.getAlias() != null && !criteria.getAlias().equals("courses")) {
+            if (criteria.getAlias() != null && !hasCourseAlias) {
                 criteria.createAlias("courses", "courses");
             }
             criteria.add(Restrictions.eq("courses.courseType.id", participantCriteria.getCourseTypeId()));
@@ -660,7 +662,10 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
         criteria.createAlias("participant", "participant");
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-        criteria.add(Restrictions.eq("active", true));
+
+        if (!registrationCriteria.isIncludeInactive()) {
+            criteria.add(Restrictions.eq("active", true));
+        }
 
         if (registrationCriteria.getParticipantId() != null) {
             criteria.add(Restrictions.eq("participant.id", registrationCriteria.getParticipantId()));
@@ -688,17 +693,25 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
             criteria.add(Restrictions.ilike("participant.name", registrationCriteria.getName(), MatchMode.ANYWHERE));
         }
 
-        if (registrationCriteria.getEventId() != null) {
+        if (registrationCriteria.getEventId() != null && registrationCriteria.getEventId() != -1) {
             criteria.add(Restrictions.eq("event.id", registrationCriteria.getEventId()));
+        }
+
+        if (registrationCriteria.getFromEventStartDate() != null) {
+            criteria.add(Restrictions.ge("event.startDate", registrationCriteria.getFromEventStartDate()));
+        }
+
+        if (registrationCriteria.getToEventStartDate() != null) {
+            criteria.add(Restrictions.le("event.endDate", registrationCriteria.getToEventStartDate()));
         }
 
         if (!Util.nullOrEmptyOrBlank(registrationCriteria.getEmail())) {
             criteria.add(Restrictions.ilike("participant.email", registrationCriteria.getEmail(), MatchMode.ANYWHERE));
         }
 
-        if (!Util.nullOrEmptyOrBlank(registrationCriteria.getFoundation())) {
-            String foundation = registrationCriteria.getFoundation();
-            criteria.add(Restrictions.eq("registration.foundation", foundation));
+        if (!Util.nullOrEmptyOrBlank(registrationCriteria.getFoundationId())) {
+            String foundationId = registrationCriteria.getFoundationId();
+            criteria.add(Restrictions.eq("registration.foundationId", foundationId));
         }
 
         if (!Util.nullOrEmptyOrBlank(registrationCriteria.getMobile())) {
@@ -833,7 +846,9 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
         if (paymentCriteria.getEventId() != null) {
             criteria.add(Restrictions.eq("registration.event.id", paymentCriteria.getEventId()));
-            criteria.add(Restrictions.eq("registration.event.active", true));
+            if (!paymentCriteria.isIncludeInactive()) {
+                criteria.add(Restrictions.eq("registration.event.active", true));
+            }
         }
 
         if (!Util.nullOrEmptyOrBlank(paymentCriteria.getFoundation())) {
@@ -1053,10 +1068,8 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         criteria.add(Restrictions.eq("active", true));
-        criteria.add(Restrictions.eq("eventKit", true));
         criteria.add(Restrictions.le("event.endDate", tillDate));
         criteria.add(Restrictions.eq("event.eventType", Event.EventTypeCourse));
-        criteria.add(Restrictions.eq("review", false));
 
         List<EventRegistration> results = criteria.list();
 

@@ -99,6 +99,25 @@
             }
         }
 
+        function loadEventData(){
+            if ($("#event input[name='id']").val() != '') {
+                $.getJSON(
+                    "getEventHtmlData.htm",
+                    {eventId: $("#event input[name='id']").val()},
+                    function(data) {
+                        var len = data.length;
+                        if (len > 0) {
+
+                            $("select#primaryEligibilityId").html(data[0]);
+                            $("select#secondaryEligibilityId").html(data[1]);
+                            $("select#primaryTrainerId").html(data[2]);
+                            $("select#secondaryTrainerId").html(data[3]);
+						}
+                    }
+                );
+            }
+        }
+
         $(document).ready(function(){
             $("#startDate").datepicker({ showOn: 'button', dateFormat: 'dd/mm/yy', buttonImageOnly: true, buttonImage: '<c:url value="/resources/img/calendar.gif"/>' });
             $("#endDate").datepicker({ showOn: 'button', dateFormat: 'dd/mm/yy', buttonImageOnly: true, buttonImage: '<c:url value="/resources/img/calendar.gif"/>' });
@@ -110,22 +129,24 @@
                  $("#event").submit();
             });
 
-             $("select#courseTypeId").change(function()
-             {
-				 getCourseEligibilities();
-				 getTrainers();
-             });
+            loadEventData();
 
-             $("select#eventType").change(function()
-             {
-				 getCourseEligibilities();
-				 getTrainers();
-             });
+            $("select#courseTypeId").change(function()
+            {
+                getCourseEligibilities();
+                getTrainers();
+            });
 
-             $("select#primaryEligibilityId").change(function()
-             {
-				 getTrainers();
-             });
+            $("select#eventType").change(function()
+            {
+                getCourseEligibilities();
+                getTrainers();
+            });
+
+            $("select#primaryEligibilityId").change(function()
+            {
+                getTrainers();
+            });
 
         });
     </script>
@@ -160,7 +181,7 @@
                     <td><form:label path="courseTypeId">Course</form:label></td>
                     <td>
                         <form:select path="courseTypeId">
-                            <form:option value="" label="--- Select ---"/>
+                            <form:option value="-1" label="--- Select ---"/>
                             <form:options items="${allParticipantCourseTypes}" />
                         </form:select>
                     </td>
@@ -169,7 +190,7 @@
                     <td><form:label path="primaryEligibilityId">Primary Eligibility</form:label></td>
                     <td>
                         <form:select path="primaryEligibilityId">
-                            <form:option value="" label="--- Select ---"/>
+                            <form:option value="-1" label="--- Select ---"/>
                             <form:options items="${allParticipantCourseTypes}" />
                         </form:select>
                     </td>
@@ -178,7 +199,7 @@
                     <td><form:label path="secondaryEligibilityId">Secondary Eligibility</form:label></td>
                     <td>
                         <form:select path="secondaryEligibilityId">
-                            <form:option value="" label="--- Select ---"/>
+                            <form:option value="-1" label="--- Select ---"/>
                             <form:options items="${allParticipantCourseTypes}" />
                         </form:select>
                     </td>

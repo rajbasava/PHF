@@ -38,6 +38,7 @@ public class DownloadController extends CommonController
                                      Map<String, Object> map,
                                      RegistrationCriteria registrationCriteria)
     {
+        registrationCriteria.setIncludeInactive(true);
         downloadService.downloadRegistrationsReport(response, registrationCriteria);
     }
 
@@ -47,6 +48,7 @@ public class DownloadController extends CommonController
                                            RegistrationCriteria registrationCriteria)
     {
         registrationCriteria.setConsolidated(true);
+        registrationCriteria.setIncludeInactive(true);
         downloadService.downloadRegistrationsReport(response, registrationCriteria);
     }
 
@@ -55,6 +57,7 @@ public class DownloadController extends CommonController
                                            Map<String, Object> map,
                                            RegistrationCriteria registrationCriteria)
     {
+        registrationCriteria.setIncludeInactive(true);
         downloadService.downloadRegistrationsReportForImport(response, registrationCriteria);
     }
 
@@ -76,6 +79,7 @@ public class DownloadController extends CommonController
                         Map<String, Object> map,
                         PaymentCriteria paymentCriteria)
     {
+        paymentCriteria.setIncludeInactive(true);
         downloadService.downloadPaymentsReport(response, paymentCriteria);
     }
 

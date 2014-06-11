@@ -16,7 +16,7 @@ public class RegistrationCriteria implements Serializable
     private String mobile;
     private String email;
     private Integer courseTypeId;
-    private String foundation;
+    private String foundationId;
     private Integer seat;
     private String amountPaidCategory;
     private String reference;
@@ -27,7 +27,10 @@ public class RegistrationCriteria implements Serializable
     private String eventKit = "";
     private Date fromRegistrationDate;
     private Date toRegistrationDate;
+    private Date fromEventStartDate;
+    private Date toEventStartDate;
     private String status = EventRegistration.StatusRegistered;
+    private boolean includeInactive;
 
     public Integer getParticipantId ()
     {
@@ -79,14 +82,14 @@ public class RegistrationCriteria implements Serializable
         this.courseTypeId = courseTypeId;
     }
 
-    public String getFoundation ()
+    public String getFoundationId ()
     {
-        return foundation;
+        return foundationId;
     }
 
-    public void setFoundation (String foundation)
+    public void setFoundationId (String foundationId)
     {
-        this.foundation = foundation;
+        this.foundationId = foundationId;
     }
 
     public Integer getSeat ()
@@ -197,5 +200,35 @@ public class RegistrationCriteria implements Serializable
     public void setStatus (String status)
     {
         this.status = status;
+    }
+
+    public boolean isIncludeInactive ()
+    {
+        return includeInactive;
+    }
+
+    public void setIncludeInactive (boolean includeInactive)
+    {
+        this.includeInactive = includeInactive;
+    }
+
+    public Date getFromEventStartDate ()
+    {
+        return fromEventStartDate;
+    }
+
+    public void setFromEventStartDate (Date fromEventStartDate)
+    {
+        this.fromEventStartDate = fromEventStartDate;
+    }
+
+    public Date getToEventStartDate ()
+    {
+        return toEventStartDate;
+    }
+
+    public void setToEventStartDate (Date toEventStartDate)
+    {
+        this.toEventStartDate = toEventStartDate;
     }
 }

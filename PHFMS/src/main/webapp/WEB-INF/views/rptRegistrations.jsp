@@ -9,6 +9,25 @@
     <mytags:style/>
     <mytags:menu/>
     <script type="text/javascript">
+        function loadEventData(){
+            if ($("#registrationCriteria input[name='fromEventStartDate']").val() != '' ||
+                            $("#registrationCriteria input[name='toEventStartDate']").val()) {
+                $.getJSON(
+                    "getEventDataForDateRange.htm",
+                    {fromEventStartDate: $("#registrationCriteria input[name='fromEventStartDate']").val(),
+                        toEventStartDate: $("#registrationCriteria input[name='toEventStartDate']").val()},
+                    function(data) {
+                        var len = data.length;
+                        var options;
+                        for (var i=0; i<len; i++) {
+                            options += data[i];
+                        }
+                        $("select#eventId").html(options);
+                    }
+                );
+            }
+        }
+
         $(function() {
             $("a#exportRegistrations").button();
             $("a#exportRegistrations").css("font-size", "11px");
@@ -46,6 +65,26 @@
                     buttonImageOnly: true,
                     buttonImage: '<c:url value="/resources/img/calendar.gif"/>'
                 });
+
+                $("#registrationCriteria input[name='fromEventStartDate']").datepicker({
+                    showOn: 'button',
+                    dateFormat: 'dd/mm/yy',
+                    buttonImageOnly: true,
+                    buttonImage: '<c:url value="/resources/img/calendar.gif"/>',
+                    onSelect: function() {
+                        loadEventData();
+                    }
+                });
+
+                $("#registrationCriteria input[name='toEventStartDate']").datepicker({
+                    showOn: 'button',
+                    dateFormat: 'dd/mm/yy',
+                    buttonImageOnly: true,
+                    buttonImage: '<c:url value="/resources/img/calendar.gif"/>',
+                    onSelect: function() {
+                        loadEventData();
+                    }
+                });
             });
         });
     </script>
@@ -58,32 +97,15 @@
 
 <table align="center" cellpadding="3" cellspacing="3">
     <tr>
-        <td><form:label path="name"><spring:message code="label.name"/></form:label></td>
-        <td><form:input path="name" /></td>
-        <td><form:label path="foundation"><spring:message code="label.foundation"/></form:label></td>
+        <td><form:label path="foundationId"><spring:message code="label.foundation"/></form:label></td>
         <td>
-            <form:select path="foundation">
+            <form:select path="foundationId">
                 <form:option value="" label="--- Select ---"/>
                 <form:options items="${allFoundations}" />
             </form:select>
         </td>
-    </tr>
-    <tr>
-        <td><form:label path="email"><spring:message code="label.email"/></form:label></td>
-        <td><form:input path="email" /></td>
-        <td><form:label path="courseTypeId"><spring:message code="label.courseType"/></form:label></td>
-        <td>
-            <form:select path="courseTypeId">
-                <form:option value="" label="--- Select ---"/>
-                <form:options items="${allParticipantCourseTypes}" />
-            </form:select>
-        </td>
-    </tr>
-    <tr>
-        <td><form:label path="mobile"><spring:message code="label.mobile"/></form:label></td>
-        <td><form:input path="mobile" /></td>
-        <td><form:label path="seat"><spring:message code="label.seat"/></form:label></td>
-        <td><form:input path="seat" /></td>
+        <td>Event Date: </td>
+        <td>From: <form:input path="fromEventStartDate"/> To: <form:input path="toEventStartDate"/></td>
     </tr>
     <tr>
         <td><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
@@ -93,8 +115,13 @@
                 <form:options items="${allEvents}" />
             </form:select>
         </td>
-        <td><form:label path="vip"><spring:message code="label.vip"/></form:label></td>
-        <td><form:checkbox path="vip"/></td>
+        <td><form:label path="courseTypeId"><spring:message code="label.courseType"/></form:label></td>
+        <td>
+            <form:select path="courseTypeId">
+                <form:option value="" label="--- Select ---"/>
+                <form:options items="${allParticipantCourseTypes}" />
+            </form:select>
+        </td>
     </tr>
     <tr>
         <td><form:label path="amountPaidCategory"><spring:message code="label.amountPaidCategory"/></form:label></td>

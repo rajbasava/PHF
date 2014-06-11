@@ -5,6 +5,7 @@
 
 package com.yvphfk.web.controller;
 
+import com.yvphfk.common.CommonHTMLUtil;
 import com.yvphfk.common.SeatingType;
 import com.yvphfk.common.Util;
 import com.yvphfk.model.EventCriteria;
@@ -39,6 +40,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Date;
 
 @Controller
 public class EventController extends CommonController
@@ -132,12 +134,17 @@ public class EventController extends CommonController
             event.setCourseTypeId(event.getCourseType().getId());
         }
 
+        if (event.getFoundation() != null) {
+            event.setFoundationId(event.getFoundation().getId());
+        }
+
         map.put("event", event);
         map.put("isEdit", isEdit);
         map.put("eventList", eventService.allEvents());
         map.put("eventFeeList", eventService.getEventFees(eventId));
         map.put("allParticipantCourseTypes", allCourseTypes());
         map.put("allSeatingTypes", SeatingType.allSeatingTypes());
+        map.put("allFoundations", allFoundations());
         map.put("allRowMetaNames", eventService.getAllRowMetaNames());
         map.put("eventTypeMap", getEventTypeMap());
         return "eventDetails";
@@ -150,10 +157,12 @@ public class EventController extends CommonController
                                      HttpServletRequest request)
     {
         if (event.getPrimaryEligibilityId() != -1) {
-            event.setPrimaryEligibility(eventService.getCourseType(event.getPrimaryEligibilityId()));
+            event.setPrimaryEligibility(
+                    eventService.getCourseType(event.getPrimaryEligibilityId()));
         }
         if (event.getSecondaryEligibilityId() != -1) {
-            event.setSecondaryEligibility(eventService.getCourseType(event.getSecondaryEligibilityId()));
+            event.setSecondaryEligibility(
+                    eventService.getCourseType(event.getSecondaryEligibilityId()));
         }
 
         if (event.getCourseTypeId() != -1) {
@@ -384,7 +393,8 @@ public class EventController extends CommonController
     {
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
         volunteerKit.initialize(login.getEmail());
-        LoggedInVolunteer loggedInVolunteer = volunteerService.getVolunteer(volunteerKit.getVolunteerId()).getLogin();
+        LoggedInVolunteer loggedInVolunteer =
+                volunteerService.getVolunteer(volunteerKit.getVolunteerId()).getLogin();
         volunteerKit.setLoggedInVolunteer(loggedInVolunteer);
         volunteerService.addVolunteerKit(volunteerKit);
         String strEventId = String.valueOf(volunteerKit.getKit().getEvent().getId());
@@ -450,7 +460,7 @@ public class EventController extends CommonController
             Integer eventId = Integer.parseInt(strEventId);
             eventService.removeEvent(eventId);
         }
-        return "redirect:/event.htm";
+        return "redirect:/showManageEvents.htm";
     }
 
     @RequestMapping("/deleteEventFee")
@@ -532,13 +542,15 @@ public class EventController extends CommonController
         if (courseType.getPrimaryEligibility() != null) {
             options.add(
                     new Option(courseType.getPrimaryEligibility().getId(),
-                            courseType.getPrimaryEligibility().getName()));
+                            courseType.getPrimaryEligibility().getName())
+            );
         }
 
         if (courseType.getSecondaryEligibility() != null) {
             options.add(
                     new Option(courseType.getSecondaryEligibility().getId(),
-                            courseType.getSecondaryEligibility().getName()));
+                            courseType.getSecondaryEligibility().getName())
+            );
         }
 
         return options;
@@ -596,15 +608,75 @@ public class EventController extends CommonController
             Map map = new HashMap();
             map.put("name", event.getName());
             map.put("foundationName", event.getFoundation().getName());
-            String msgTxt = emailService.getMessageContent("newEvent.html",request.getLocale(), map);
+            String msgTxt =
+                    emailService.getMessageContent("newEvent.html", request.getLocale(), map);
             try {
-                emailService.sendMail("rajbasava@gmail.com", "rajbasava@gmail.com", "test mail", msgTxt);
-            } catch (MessagingException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                emailService.sendMail("rajbasava@gmail.com", "rajbasava@gmail.com", "test mail",
+                        msgTxt);
+            }
+            catch (MessagingException e) {
+                e.printStackTrace();
             }
 
         }
         return "redirect:/event.htm";
+    }
+
+    @RequestMapping(value = "/getEventHtmlData", produces = "application/json; charset=utf-8")
+    public
+    @ResponseBody
+    List getEventHtmlData (HttpServletRequest request)
+    {
+        String strEventId = request.getParameter("eventId");
+        List data = new ArrayList();
+        if (!Util.nullOrEmptyOrBlank(strEventId)) {
+            Integer eventId = Integer.parseInt(strEventId);
+            Event event = eventService.getEvent(eventId);
+
+            data.add(CommonHTMLUtil.htmlSelectOption(
+                    event, "primaryEligibility.id", "primaryEligibility.name"));
+            data.add(CommonHTMLUtil.htmlSelectOption(
+                    event, "secondaryEligibility.id", "secondaryEligibility.name"));
+            data.add(CommonHTMLUtil.htmlSelectOption(
+                    event, "primaryTrainer.id", "primaryTrainer.participant.name"));
+            data.add(CommonHTMLUtil.htmlSelectOption(
+                    event, "secondaryTrainer.id", "secondaryTrainer.participant.name"));
+        }
+        return data;
+    }
+
+    @RequestMapping(value = "/getEventDataForDateRange", produces = "application/json; charset=utf-8")
+    public
+    @ResponseBody
+    List getEventDataForDateRange (HttpServletRequest request)
+    {
+        String strFromEventStartDate = request.getParameter("fromEventStartDate");
+        String strToEventStartDate = request.getParameter("toEventStartDate");
+
+        EventCriteria eventCriteria = new EventCriteria();
+        eventCriteria.setIncludeInactive(true);
+        if (!Util.nullOrEmptyOrBlank(strFromEventStartDate)) {
+            Date fromEventStartDate =
+                    Util.parseDate(strFromEventStartDate, Util.DefaultDatePattern);
+            eventCriteria.setStartDate(fromEventStartDate);
+        }
+
+        if (!Util.nullOrEmptyOrBlank(strToEventStartDate)) {
+            Date toEventStartDate =
+                    Util.parseDate(strToEventStartDate, Util.DefaultDatePattern);
+            eventCriteria.setEndDate(toEventStartDate);
+        }
+
+        List data = new ArrayList();
+        List<Event> events = eventService.searchEvents(eventCriteria);
+
+        data.add(CommonHTMLUtil.DefaultSelectOption);
+        for (Event event: events) {
+            data.add(CommonHTMLUtil.htmlSelectOption(
+                    event, "id", "name"));
+        }
+
+        return data;
     }
 
 }

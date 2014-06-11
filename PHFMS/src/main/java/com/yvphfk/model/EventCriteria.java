@@ -16,6 +16,7 @@ public class EventCriteria implements Serializable
     private Date startDate;
     private Date endDate;
     private String venue;
+    private boolean includeInactive;
 
     public String getName ()
     {
@@ -85,5 +86,15 @@ public class EventCriteria implements Serializable
     public void setVenue (String venue)
     {
         this.venue = venue;
+    }
+
+    public boolean isIncludeInactive ()
+    {
+        return includeInactive;
+    }
+
+    public void setIncludeInactive (boolean includeInactive)
+    {
+        this.includeInactive = includeInactive;
     }
 }

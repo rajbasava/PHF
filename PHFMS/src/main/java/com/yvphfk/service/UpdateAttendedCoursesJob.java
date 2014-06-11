@@ -38,7 +38,7 @@ public class UpdateAttendedCoursesJob extends AutoWiringQuartzJobBean
     @Override
     protected void run (org.quartz.JobExecutionContext jobExecutionContext) throws JobExecutionException
     {
-        Date cutOffDate = Util.add(Util.getDateWithoutTime(new Date()), Calendar.DATE, -3);
+        Date cutOffDate = Util.add(Util.getDateWithoutTime(new Date()), Calendar.DATE, -2);
 
         List<EventRegistration> registrationList = participantDAO.allAttendedRegistrationsTill(cutOffDate);
 
@@ -51,8 +51,12 @@ public class UpdateAttendedCoursesJob extends AutoWiringQuartzJobBean
 
         int count = 0;
         for (EventRegistration registration : registrationList) {
-            ParticipantCourse course = createParticipantCourse(registration);
-            session.save(course);
+            if (EventRegistration.StatusRegistered.equals(registration.getStatus()) &&
+                    registration.isEventKit() &&
+                    !registration.isReview()) {
+                ParticipantCourse course = createParticipantCourse(registration);
+                session.save(course);
+            }
 
             registration.setActive(false);
             session.update(registration);

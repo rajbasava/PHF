@@ -146,7 +146,7 @@
                     <a id="exportSeats" href="#">Export Allocated Seats</a>
                     <a id="deleteEvent" href="#">Deactivate</a>
                     <a id="editEvent" href="#">Edit</a>
-                    <a id="notifyEmail" href="#">Send Notification</a>
+                    <!-- <a id="notifyEmail" href="#">Send Notification</a> -->
                 </td>
             </tr>
         </table>

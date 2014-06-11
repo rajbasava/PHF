@@ -55,7 +55,8 @@
 
     <bean id="cronUpdateAttendedCoursesJob" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="updateAttendedCoursesJob"/>
-        <property name="cronExpression" value="0 0/2 * * * ?"/>
+        <!--Fire at 10:30 AM every Monday, Tuesday, Wednesday, Thursday and Friday-->
+        <property name="cronExpression" value="0 30 10 ? * MON-FRI"/>
     </bean>
 
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">

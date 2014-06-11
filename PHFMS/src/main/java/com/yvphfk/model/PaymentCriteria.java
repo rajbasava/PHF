@@ -19,6 +19,7 @@ public class PaymentCriteria implements Serializable
     private boolean pdcNotClear;
     private Date fromPdcDate;
     private Date toPdcDate;
+    private boolean includeInactive;
 
     public Integer getEventId ()
     {
@@ -118,5 +119,15 @@ public class PaymentCriteria implements Serializable
     public void setToPdcDate (Date toPdcDate)
     {
         this.toPdcDate = toPdcDate;
+    }
+
+    public boolean isIncludeInactive ()
+    {
+        return includeInactive;
+    }
+
+    public void setIncludeInactive (boolean includeInactive)
+    {
+        this.includeInactive = includeInactive;
     }
 }

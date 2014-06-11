@@ -80,10 +80,25 @@ public class ParticipantController extends CommonController
         participantCourseForm.initialize(login.getEmail());
 
         ParticipantCourse participantCourse = participantCourseForm.getParticipantCourse();
-        participantCourse.setCourseType(
-                eventService.getCourseType(participantCourse.getCourseTypeId()));
-        participantCourse.setFoundation(
-                eventService.getFoundation(participantCourse.getFoundationId()));
+        if (participantCourse.getCourseTypeId() != null) {
+            participantCourse.setCourseType(
+                    eventService.getCourseType(participantCourse.getCourseTypeId()));
+        }
+
+        if (participantCourse.getFoundationId() != null) {
+            participantCourse.setFoundation(
+                    eventService.getFoundation(participantCourse.getFoundationId()));
+        }
+
+        if (participantCourse.getPrimaryTrainerId() != null) {
+            participantCourse.setPrimaryTrainer(
+                    participantService.getTrainer(participantCourse.getPrimaryTrainerId()));
+        }
+
+        if (participantCourse.getSecondaryTrainerId() != null) {
+            participantCourse.setSecondaryTrainer(
+                    participantService.getTrainer(participantCourse.getSecondaryTrainerId()));
+        }
 
         Participant participant = null;
         if (participantCourseForm.getParticipantId() != null) {

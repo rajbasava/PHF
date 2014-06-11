@@ -217,7 +217,7 @@
                     <tr height="10px"><td>&nbsp;</td></tr>
                     <tr style="background-color:#E8E8E8;">
                         <td align="center" cellpadding="2px">
-                            <a id="addCourseToParticipant" href="#">Add Course</a>
+                            <a id="addCourseToParticipant" href="#">Add Completed Course</a>
                             <c:choose>
                                 <c:when test="${isTrainer}">
                                     <a id="addTrainer" href="#">Add Trainer</a>
