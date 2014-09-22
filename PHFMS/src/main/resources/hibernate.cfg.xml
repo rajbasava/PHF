@@ -23,5 +23,6 @@
         <mapping class="com.yvphfk.model.form.Trainer"/>
         <mapping class="com.yvphfk.model.form.TrainerCourse"/>
         <mapping class="com.yvphfk.model.form.ParticipantCourse"/>
+        <mapping class="com.yvphfk.model.form.MailNotification"/>
     </session-factory>
 </hibernate-configuration>

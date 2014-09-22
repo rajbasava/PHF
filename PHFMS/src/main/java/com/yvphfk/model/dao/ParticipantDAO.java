@@ -27,6 +27,12 @@ import java.util.List;
 
 public interface ParticipantDAO extends CommonDAO
 {
+    public static final int All = 0;
+
+    public static final int Indians = 1;
+
+    public static final int NonIndians = 2;
+
     public ParticipantCourse addParticipantCourse (ParticipantCourseForm participantCourseForm);
 
     public EventRegistration registerParticipant (RegisteredParticipant registeredParticipant, Login login);
@@ -41,7 +47,7 @@ public interface ParticipantDAO extends CommonDAO
 
     public List<EventRegistration> listRegistrations (RegistrationCriteria registrationCriteria);
 
-    public List<EventRegistration> allUnallocatedRegistrations (Event event, boolean vip, boolean indian);
+    public List<EventRegistration> allUnallocatedRegistrations (Event event, boolean vip, int countryCode);
 
     public List<EventPayment> listPayments (PaymentCriteria paymentCriteria);
 
@@ -60,6 +66,8 @@ public interface ParticipantDAO extends CommonDAO
                                     HistoryRecord record);
 
     public List<ParticipantSeat> getAllocatedSeats (Event event, String alpha, String suffix);
+
+    public ParticipantSeat getMaxAllocatedSeat (Event event);
 
     public void removeEventRegistrations (Integer id);
 

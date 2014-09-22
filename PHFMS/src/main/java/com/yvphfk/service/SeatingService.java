@@ -14,4 +14,9 @@ public interface SeatingService
 
     public ParticipantSeat nextSeat (Event event, EventRegistration registration);
 
+    public ParticipantSeat createSeat (EventRegistration registration,
+                                          String alpha,
+                                          Integer seatNo);
+
+
 }

@@ -30,6 +30,7 @@ public class RegistrationCriteria implements Serializable
     private Date fromEventStartDate;
     private Date toEventStartDate;
     private String status = EventRegistration.StatusRegistered;
+    private Integer amountDue;
     private boolean includeInactive;
 
     public Integer getParticipantId ()
@@ -230,5 +231,15 @@ public class RegistrationCriteria implements Serializable
     public void setToEventStartDate (Date toEventStartDate)
     {
         this.toEventStartDate = toEventStartDate;
+    }
+
+    public Integer getAmountDue ()
+    {
+        return amountDue;
+    }
+
+    public void setAmountDue (Integer amountDue)
+    {
+        this.amountDue = amountDue;
     }
 }

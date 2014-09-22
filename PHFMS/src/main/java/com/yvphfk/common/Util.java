@@ -9,6 +9,16 @@ import com.yvphfk.model.Login;
 import ognl.Ognl;
 import ognl.OgnlException;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.TriggerUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.quartz.JobDetailBean;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -21,6 +31,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 public class Util
@@ -239,5 +253,72 @@ public class Util
             result = null;
         }
         return result;
+    }
+
+    public static boolean isQuartzJobRunning (String name, Map dataMap) throws SchedulerException
+    {
+        if (Util.nullOrEmptyOrBlank(name)) {
+            return false;
+        }
+
+        ApplicationContext context = ApplicationContextUtils.getApplicationContext();
+        Scheduler scheduler = (Scheduler) context.getBean("scheduler");
+
+        List<JobExecutionContext> currentJobs = scheduler.getCurrentlyExecutingJobs();
+        for (JobExecutionContext currentJob: currentJobs) {
+            JobDetail jobDetail = currentJob.getJobDetail();
+            String fullName = generateJobName(name, dataMap);
+
+            if (fullName.equals(jobDetail.getName())) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    public static void executeQJobImmediately (String name, Map dataMap) throws SchedulerException
+    {
+        if (Util.nullOrEmptyOrBlank(name)) {
+            return;
+        }
+
+        if (isQuartzJobRunning(name, dataMap)) {
+            return;
+        }
+
+        ApplicationContext context = ApplicationContextUtils.getApplicationContext();
+        Scheduler scheduler = (Scheduler) context.getBean("scheduler");
+
+        QuartzJobBean quartzJobBean = (QuartzJobBean) context.getBean(name);
+        Trigger trigger = TriggerUtils.makeImmediateTrigger(generateJobName(name, dataMap), 0, 0);
+
+        JobDetailBean jobDetailBean = new JobDetailBean();
+        jobDetailBean.setGroup("DEFAULT");
+        jobDetailBean.setName(trigger.getName());
+        jobDetailBean.setJobClass(quartzJobBean.getClass());
+        jobDetailBean.setJobDataMap(new JobDataMap(dataMap));
+        jobDetailBean.setVolatility(false);
+
+        scheduler.scheduleJob(jobDetailBean, trigger);
+        scheduler.startDelayed(1);
+    }
+
+    private static String generateJobName(String name, Map dataMap)
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.append(name);
+
+        Set keys = dataMap.keySet();
+        Iterator itr = keys.iterator();
+        while(itr.hasNext()) {
+            String key = (String) itr.next();
+            String value = String.valueOf(dataMap.get(key));
+            builder.append("#");
+            builder.append(key+":"+value);
+        }
+
+        return builder.toString();
     }
 }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<emailTemplates>
+    <template>
+        <name>NewEvent</name>
+        <subject>testSubject</subject>
+        <bodyFile>newEvent.html</bodyFile>
+        <image>
+            <contentType>image/jpg</contentType>
+            <fileName>MCKS.jpg</fileName>
+        </image>
+        <image>
+            <contentType>image/jpg</contentType>
+            <fileName>logo.jpg</fileName>
+        </image>
+    </template>
+    <template>
+        <name>OutstandingPayment</name>
+        <subject>Welcome to the course</subject>
+        <bodyFile>newEvent.html</bodyFile>
+        <image>
+            <contentType>image/png</contentType>
+            <fileName>gmcks.png</fileName>
+        </image>
+        <image>
+            <contentType>image/jpg</contentType>
+            <fileName>PHF_Logo.jpg</fileName>
+        </image>
+        <image>
+            <contentType>image/png</contentType>
+            <fileName>facebook.png</fileName>
+        </image>
+        <image>
+            <contentType>image/png</contentType>
+            <fileName>twitter.png</fileName>
+        </image>
+        <image>
+            <contentType>image/png</contentType>
+            <fileName>grey-175x130.png</fileName>
+        </image>
+    </template>
+    <template>
+        <name>RegisteredParticipant</name>
+        <subject>Welcome to the course</subject>
+        <bodyFile>newEvent.html</bodyFile>
+        <image>
+            <contentType>image/png</contentType>
+            <fileName>gmcks.png</fileName>
+        </image>
+        <image>
+            <contentType>image/jpg</contentType>
+            <fileName>PHF_Logo.jpg</fileName>
+        </image>
+        <image>
+            <contentType>image/png</contentType>
+            <fileName>facebook.png</fileName>
+        </image>
+        <image>
+            <contentType>image/png</contentType>
+            <fileName>twitter.png</fileName>
+        </image>
+        <image>
+            <contentType>image/png</contentType>
+            <fileName>grey-175x130.png</fileName>
+        </image>
+    </template>
+</emailTemplates>

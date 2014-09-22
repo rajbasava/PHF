@@ -8,6 +8,9 @@ package com.yvphfk.web.controller;
 import com.yvphfk.common.CommonHTMLUtil;
 import com.yvphfk.common.SeatingType;
 import com.yvphfk.common.Util;
+import com.yvphfk.common.email.NotificationConstants;
+import com.yvphfk.common.email.NotificationManager;
+import com.yvphfk.common.email.RegisteredParticipantNotifier;
 import com.yvphfk.model.EventCriteria;
 import com.yvphfk.model.Login;
 import com.yvphfk.model.Option;
@@ -23,6 +26,7 @@ import com.yvphfk.model.form.validator.EventValidator;
 import com.yvphfk.service.EventService;
 import com.yvphfk.service.ParticipantService;
 import com.yvphfk.service.VolunteerService;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -191,6 +195,7 @@ public class EventController extends CommonController
             map.put("allSeatingTypes", SeatingType.allSeatingTypes());
             map.put("allRowMetaNames", eventService.getAllRowMetaNames());
             map.put("eventTypeMap", getEventTypeMap());
+            map.put("allFoundations", allFoundations());
             return "addEvent";
         }
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
@@ -601,24 +606,17 @@ public class EventController extends CommonController
     @RequestMapping("/sendNotification")
     public String sendNotification (HttpServletRequest request)
     {
+        Map map = new HashMap();
         String strEventId = request.getParameter("eventId");
         if (!Util.nullOrEmptyOrBlank(strEventId)) {
             Integer eventId = Integer.parseInt(strEventId);
             Event event = eventService.getEvent(eventId);
-            Map map = new HashMap();
-            map.put("name", event.getName());
-            map.put("foundationName", event.getFoundation().getName());
-            String msgTxt =
-                    emailService.getMessageContent("newEvent.html", request.getLocale(), map);
-            try {
-                emailService.sendMail("rajbasava@gmail.com", "rajbasava@gmail.com", "test mail",
-                        msgTxt);
-            }
-            catch (MessagingException e) {
-                e.printStackTrace();
-            }
-
+            map.put(NotificationConstants.EventId, event.getId());
+            map.put(NotificationConstants.NotificationJob,
+                    RegisteredParticipantNotifier.JobName);
+            NotificationManager.get().notify(map);
         }
+
         return "redirect:/event.htm";
     }
 

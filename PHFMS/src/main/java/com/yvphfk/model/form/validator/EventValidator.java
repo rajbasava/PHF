@@ -30,17 +30,37 @@ public class EventValidator implements Validator
         Event event = (Event) target;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "event.name.empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "venue", "event.venue.empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "city", "event.city.empty");
-        if (event.getCourseType().getPrimaryEligibility() != null) {
-            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "primaryEligibility", "event.primaryEligibility.empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "eventType", "event.eventType.empty");
+
+        if (event.getEventType() == Event.EventTypeCourse) {
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "courseType", "event.courseType.empty");
         }
-        if (event.getCourseType().getSecondaryEligibility() != null) {
-            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "secondaryEligibility", "event.secondaryEligibility.empty");
+
+        if (event.getCourseType() != null &&
+                event.getCourseType().getPrimaryEligibility() != null) {
+            ValidationUtils.rejectIfEmptyOrWhitespace(
+                    errors, "primaryEligibility", "event.primaryEligibility.empty");
         }
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "state", "event.state.empty");
+
+        if (event.getCourseType() != null &&
+                event.getCourseType().getSecondaryEligibility() != null) {
+            ValidationUtils.rejectIfEmptyOrWhitespace(
+                    errors, "secondaryEligibility", "event.secondaryEligibility.empty");
+        }
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "primaryTrainer", "event.primaryTrainer.empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "foundation", "event.foundation.empty");
+
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "startDate", "event.startDate.empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "endDate", "event.endDate.empty");
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "venue", "event.venue.empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "city", "event.city.empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "state", "event.state.empty");
+
+        if ("NONE".equalsIgnoreCase(event.getSeatingType())) {
+            errors.rejectValue("seatingType", "event.seatingType.empty");
+        }
     }
 
 }

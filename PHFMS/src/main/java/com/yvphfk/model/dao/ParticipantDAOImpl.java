@@ -751,6 +751,12 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
             criteria.add(Restrictions.le("registrationDate", registrationCriteria.getToRegistrationDate()));
         }
 
+        if (registrationCriteria.getAmountDue() != null) {
+            criteria.add(Restrictions.or(
+                    Restrictions.ge("amountDue", registrationCriteria.getAmountDue()),
+                    Restrictions.isNull("amountDue"))) ;
+        }
+
         if (!Util.nullOrEmptyOrBlank(registrationCriteria.getStatus())) {
             criteria.add(Restrictions.eq("status", registrationCriteria.getStatus()));
         }
@@ -761,7 +767,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         return results;
     }
 
-    public List<EventRegistration> allUnallocatedRegistrations (Event event, boolean vip, boolean indian)
+    public List<EventRegistration> allUnallocatedRegistrations (Event event, boolean vip, int countryCode)
     {
         if (event == null) {
             return null;
@@ -782,15 +788,19 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         criteria.add(Restrictions.isNull("seats.seat"));
         criteria.add(Restrictions.eq("participant.vip", vip));
 
-        if (indian) {
-            Criterion indCond = Restrictions.eq("participant.country", "India");
-            Criterion nullCond = Restrictions.isNull("participant.country");
-            criteria.add(Restrictions.or(indCond, nullCond));
-        }
-        else {
-            Criterion forgnCond = Restrictions.ne("participant.country", "India");
-            Criterion notNullCond = Restrictions.isNotNull("participant.country");
-            criteria.add(Restrictions.or(forgnCond, notNullCond));
+        switch (countryCode) {
+            case Indians: {
+                Criterion forgnCond = Restrictions.ne("participant.country", "India");
+                Criterion notNullCond = Restrictions.isNotNull("participant.country");
+                criteria.add(Restrictions.or(forgnCond, notNullCond));
+                break;
+            }
+            case NonIndians: {
+                Criterion forgnCond = Restrictions.ne("participant.country", "India");
+                Criterion notNullCond = Restrictions.isNotNull("participant.country");
+                criteria.add(Restrictions.or(forgnCond, notNullCond));
+                break;
+            }
         }
 
         criteria.add(Restrictions.eq("status", EventRegistration.StatusRegistered));
@@ -907,10 +917,12 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
                                 registration.getEvent().getName(),
                                 participantToReplace.getName(),
                                 oldParticipant.getName()},
-                        null),
+                        null
+                ),
                 Util.getCurrentUser().getEmail(),
                 registration,
-                session);
+                session
+        );
         addHistoryRecord(record, registration, session);
         session.update(registration);
         session.flush();
@@ -958,6 +970,26 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         session.flush();
         session.close();
         return results;
+    }
+
+    public ParticipantSeat getMaxAllocatedSeat (Event event)
+    {
+        if (event == null) {
+            return null;
+        }
+
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(ParticipantSeat.class);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.addOrder(Order.desc("seat"));
+        criteria.setMaxResults(1);
+
+        criteria.add(Restrictions.eq("event", event));
+
+        ParticipantSeat seat = (ParticipantSeat) criteria.uniqueResult();
+        session.flush();
+        session.close();
+        return seat;
     }
 
     public List<ParticipantSeat> getAllSeats (Event event)

@@ -5,6 +5,7 @@
 
 package com.yvphfk.model.dao;
 
+import com.yvphfk.common.Log;
 import com.yvphfk.common.Util;
 import com.yvphfk.model.EventCriteria;
 import com.yvphfk.model.form.CourseType;
@@ -99,6 +100,8 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
     @Override
     public List<Event> searchEvents (EventCriteria eventCriteria)
     {
+
+        Log.event.warn("search of events called");
 
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(Event.class);

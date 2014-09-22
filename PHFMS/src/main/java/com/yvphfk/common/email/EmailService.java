@@ -3,24 +3,30 @@
     All rights reserved. Patents pending.
 */
 
-package com.yvphfk.service;
+package com.yvphfk.common.email;
 
+import com.yvphfk.common.AppProperties;
+import com.yvphfk.common.ApplicationContextUtils;
 import com.yvphfk.common.Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.InputStreamSource;
+import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
+import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,7 +40,17 @@ public class EmailService
     private TemplateEngine templateEngine;
 
     @Autowired
-    private HttpServletRequest request;
+    private AppProperties appProperties;
+
+
+    public void sendMail (String recipientEmail,
+                          String fromEmail,
+                          String subject,
+                          String msgBody)
+            throws MessagingException
+    {
+        sendMail(recipientEmail, fromEmail, subject, msgBody, null, null, null);
+    }
 
     /*
      * Send HTML mail (simple)
@@ -49,7 +65,7 @@ public class EmailService
             throws MessagingException
     {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+        MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
         message.setSubject(subject);
         message.setFrom(fromEmail);
         message.setTo(recipientEmail);
@@ -69,19 +85,39 @@ public class EmailService
     public void sendMail (String recipientEmail,
                           String fromEmail,
                           String subject,
-                          String msgBody)
+                          String msgBody,
+                          List<Image> images)
             throws MessagingException
     {
-        sendMail(recipientEmail, fromEmail, subject, msgBody, null, null, null);
+        ApplicationContext appContext = ApplicationContextUtils.getApplicationContext();
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+        message.setSubject(subject);
+        message.setFrom(fromEmail);
+        message.setTo(recipientEmail);
+        message.setText(msgBody, true);
+
+        for (Image image : images) {
+            Resource resource = appContext.getResource("file:"+appProperties.getDocRoot() +"/" + image.getFileName());
+            try {
+                message.addInline(image.getFileName(),resource.getFile());
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Send email
+        mailSender.send(mimeMessage);
     }
 
-    public String getMessageContent (String templateName,
-                                     Locale locale,
-                                     Map parameters)
+    public String getMessageContent (Map parameters)
     {
-        WebContext ctx = new WebContext(request, null,
-                request.getServletContext(), Locale.ENGLISH);
 
+        String templateName = (String) parameters.get(NotificationManager.TemplateName);
+        EmailTemplate template = EmailUtil.getTemplate(templateName);
+
+        Context ctx = new Context();
         Set set = parameters.keySet();
 
         Iterator itr = set.iterator();
@@ -91,7 +127,7 @@ public class EmailService
             ctx.setVariable(key, objValue);
         }
 
-        String htmlContent = templateEngine.process(templateName, ctx);
+        String htmlContent = templateEngine.process(template.getBodyFile(), ctx);
 
         return htmlContent;
     }

@@ -1,18 +1,241 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
-<body>
-<p th:text="#{mail.greeting(${name})}" />
-<p>
-   <br />
-   Atma Namasthe!
-</p>
+    <meta name="viewport" content="initial-scale=1.0" />
+    <!-- So that mobile webkit will display zoomed in -->
+    <meta name="format-detection" content="telephone=no" />
+    <!-- disable auto telephone linking in iOS -->
 
-<p>
-    Regards, <br />
-    &emsp; <em><p th:text="${foundationName}"/></em>
-</p>
+    <title>2 columns to rows template | Antwort</title>
+
+    <style type="text/css">
+        /* Resets: see reset.css for details */
+        .ReadMsgBody {
+        width: 100%;
+        background-color: #ebebeb;
+        }
+        .ExternalClass {
+        width: 100%;
+        background-color: #ebebeb;
+        }
+        .ExternalClass,
+        .ExternalClass p,
+        .ExternalClass span,
+        .ExternalClass font,
+        .ExternalClass td,
+        .ExternalClass div {
+        line-height: 100%;
+        }
+        body {
+        -webkit-text-size-adjust: none;
+        -ms-text-size-adjust: none;
+        }
+        body {
+        margin: 0;
+        padding: 0;
+        }
+        table {
+        border-spacing: 0;
+        }
+        table td {
+        border-collapse: collapse;
+        }
+        .yshortcuts a {
+        border-bottom: none !important;
+        }
+        /* Constrain email width for small screens */
+        @media screen and (max-width: 650px) {
+        table[class="container"] {
+        width: 95% !important;
+        }
+        }
+        /* Give content more room on mobile */
+        @media screen and (max-width: 480px) {
+        td[class="container-padding"] {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+        }
+        }
+        /* Styles for forcing columns to rows */
+        @media only screen and (max-width: 650px) {
+        /* force container columns to (horizontal) blocks */
+        td[class="force-col"] {
+        display: block;
+        padding-right: 0 !important;
+        }
+        table[class="col-2"] {
+        /* unset table align="left/right" */
+        float: none !important;
+        width: 100% !important;
+        /* change left/right padding and margins to top/bottom ones */
+        margin-bottom: 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #eee;
+        }
+        /* remove bottom border for last column/row */
+        table[id="last-col-2"] {
+        border-bottom: none !important;
+        margin-bottom: 0;
+        }
+        /* align images right and shrink them a bit */
+        img[class="col-2-img"] {
+        float: right;
+        margin-left: 6px;
+        max-width: 210px;
+        }
+        }
+    </style>
+</head>
+<body style="margin:0; padding:10px 0;" bgcolor="#ebebeb" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<br></br>
+<!-- 100% wrapper (grey background) -->
+<table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0" bgcolor="#ebebeb">
+    <tr>
+        <td style="background-color:#ebebeb;height:25px;" valign="top"></td>
+    </tr>
+    <tr>
+        <td align="center" valign="top" bgcolor="#ebebeb" style="background-color: #ebebeb;">
+            <!-- 650px container (white background) -->
+            <table border="0" width="650" cellpadding="0" cellspacing="0" class="container" style="border:1px solid #91548f;background-color:#ffffff">
+                <tr>
+                    <td>
+                        <img src="PHF_Logo.jpg" th:src="'cid:PHF_Logo.jpg'" alt="Image Caption" border="0" hspace="0" vspace="0" align="left" style="vertical-align:top;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color:#91548f;padding-bottom:2px;height:1px;line-height:1px" valign="top"></td>
+                </tr>
+
+                <tr>
+                    <td class="container-padding" bgcolor="#ffffff" style="background-color: #ffffff; padding-left: 30px; padding-right: 30px; font-size: 14px; line-height: 20px; font-family: Helvetica, sans-serif; color: #333;">
+
+                        <br></br>
+                        <div style="font-weight: bold; font-size: 18px; line-height: 18px; color: #D03C0F;">
+                            <p th:text="#{mail.greeting(${ValueSource.participant.name})}" />
+                        </div>
+
+                        Atma Namasthe!!!
+
+                        <table border="0" cellpadding="0" cellspacing="0" class="columns-container">
+                            <tr>
+                                <td class="force-col" valign="top">
+                                    <table border="0" cellspacing="0" cellpadding="0" width="610" align="left" class="col-2">
+                                        <tr>
+                                            <td align="left" valign="top" style="font-size:13px; line-height: 20px; font-family: Arial, sans-serif;">
+                                                <img src="gmcks.png" th:src="'cid:gmcks.png'" alt="Image Caption" border="0" hspace="0" vspace="0" align="right" style="vertical-align:top; padding-left:12px; padding-bottom:12px;" class="col-2-img" />
+                                                <br></br>
+                                                <a href="#" style="color:#2469A0; font-weight:bold">Herman Melville</a>
+                                                <br></br>It's worse than being in the whirled woods, the last day of the year! Who'd go climbing after chestnuts now? But there they go, all cursing, and here I don't. Originally made for transactional emails with dynamic content, Antwort's responsive layouts fit and adapt to email client widths.
+                                                <br></br>This means the layouts have been thoroughly tested in live environments with real data. Antwort uses HTML tables for universal compatibility, including Outlook, and nest tables for complex layouts. There is also a style guide and troubleshooting FAQ included on the site.
+                                                <br></br>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="container-padding" bgcolor="#ffffff" style="background-color: #ffffff; padding-left: 30px; padding-right: 30px; font-size: 13px; line-height: 20px; font-family: Helvetica, sans-serif; color: #333;" align="left">
+                        <br></br>
+
+                        <div style="font-weight: bold; font-size: 18px; line-height: 24px; color: #D03C0F; border-top: 1px solid #ddd;">
+                            <br></br>Demo: Two columns to rows</div>
+                        <br></br>
+
+                        <table border="0" cellpadding="0" cellspacing="0" class="columns-container">
+                            <tr>
+                                <td class="force-col" style="padding-right: 20px;" valign="top">
+
+                                    <table border="0" cellspacing="0" cellpadding="0" width="610" align="left" class="col-2">
+                                        <tr>
+                                            <td align="left" valign="top" style="font-size:13px; line-height: 20px; font-family: Arial, sans-serif;">
+                                                <img src="grey-175x130.png" th:src="'cid:grey-175x130.png'" alt="Image Caption" border="0" hspace="0" vspace="0" align="left" style="vertical-align:top; padding-right:12px; padding-bottom:12px;" class="col-2-img" />
+                                                <br></br>
+                                                <a href="#" style="color:#2469A0; font-weight:bold">Herman Melville</a>
+                                                <br></br>It's worse than being in the whirled woods, the last day of the year! Who'd go climbing after chestnuts now? But there they go, all cursing, and here I don't. Originally made for transactional emails with dynamic content, Antwort's responsive layouts fit and adapt to email client widths.
+                                                <br></br>This means the layouts have been thoroughly tested in live environments with real data. Antwort uses HTML tables for universal compatibility, including Outlook, and nest tables for complex layouts. There is also a style guide and troubleshooting FAQ included on the site.
+                                                <br></br>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </td>
+                            </tr>
+                        </table>
+
+                        <br></br>
+                        <br></br>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table border="0" cellpadding="0" cellspacing="0" class="columns-container" width="690">
+                            <tr>
+                                <td style="background-color:#ffb966;padding-bottom:9px;height:1px;line-height:1px" valign="top"></td>
+                            </tr>
+
+                            <tr>
+
+                                <td bgcolor="#91548f" style="font-family:Arial,Helvetica,sans-serif;font-size:10pt;padding:25px 25px 25px 25px" valign="top" align="left">
+                                    <div style="color:#ffffff; text-align:left;font-family:Georgia,Times New Roman,Times,Serif;font-size:14pt; padding:1px 1px 1px 1px" align="left">Yoga Vidya Pranic Healing Foundation of Karnataka
+                                        <br></br>
+                                    </div>
+                                    <div style="text-align:left;padding:1px 1px 1px 1px" align="left"><a style="color:rgb(255,255,255);text-decoration:underline;font-family:Georgia,Times New Roman,Times,Serif" shape="rect" href="http://www.pranichealingkarnataka.com" target="_blank">www.<span>pranichealingkarnataka</span>.<span>com</span></a>
+                                        <br></br>
+                                    </div>
+                                    <div align="left" style="color:#ffffff; text-align:left;font-family:Georgia,Times New Roman,Times,Serif;padding:1px 1px 1px 1px">#301, #67, HM Studios, St. Marks Road,
+                                        <br></br>
+                                    </div>
+                                    <div align="left" style="color:#ffffff; text-align:left;font-family:Georgia,Times New Roman,Times,Serif; padding:1px 1px 1px 1px">Bangalore - 560 001
+                                        <br></br>
+                                    </div>
+                                    <div align="left" style="color:#ffffff; text-align:left;font-family:Georgia,Times New Roman,Times,Serif; padding:1px 1px 1px 1px"><strong>Landmark</strong>: Behind Nandhini Hotel
+                                        <br></br>
+                                        <br></br>
+                                    </div>
+                                    <div align="left" style="color:#ffffff; text-align:left;font-family:Georgia,Times New Roman,Times,Serif; padding:1px 1px 1px 1px"><strong>Landline</strong>:080 22231748/ 49
+                                        <br></br>
+                                    </div>
+                                    <div align="left" style="color:#ffffff; text-align:left;font-family:Georgia,Times New Roman,Times,Serif; padding:1px 1px 1px 1px"><strong>Mobile</strong>:+91 8971650161
+                                        <br></br>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:#f3f2f4;font-family:Arial,Helvetica,sans-serif;font-size:8pt;padding:15px 25px 15px 25px" valign="top" align="left">
+                                    <div>
+                                        <b><i class="text-align:left;font-family:Georgia,Times New Roman,Times,Serif; padding:1px 1px 1px 1px">Stay Connected</i></b>&nbsp;&nbsp;
+                                        <a style="color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:10pt" shape="rect" href="https://www.facebook.com/yvphfk" target="_blank">
+                                            <img height="22" vspace="0" border="0" hspace="0" width="22" alt="Facebook" src="facebook.png" th:src="'cid:facebook.png'" />
+                                        </a>
+                                        &nbsp;&nbsp;
+                                        <a style="color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:10pt" shape="rect" href="https://twitter.com/yvphfk" target="_blank">
+                                            <img height="22" vspace="0" border="0" hspace="0" width="22" alt="Twitter" src="twitter.png" th:src="'cid:twitter.png'" />
+                                        </a>
+                                        <br></br>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="background-color:#ebebeb;height:25px;" valign="top"></td>
+    </tr>
+</table>
+<!--/100% wrapper-->
+<br></br>
+<br></br>
 </body>
+
 </html>

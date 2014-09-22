@@ -11,7 +11,7 @@ import com.yvphfk.model.form.EventFee;
 import com.yvphfk.model.form.EventRegistration;
 import com.yvphfk.model.form.ReferenceGroup;
 import com.yvphfk.model.RegistrationCriteria;
-import com.yvphfk.service.EmailService;
+import com.yvphfk.common.email.EmailService;
 import com.yvphfk.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;

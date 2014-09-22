@@ -12,7 +12,7 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 /**
- Validator to validate the fields of the User Registration Form.
+ * Validator to validate the fields of the User Registration Form.
  */
 public class RegistrationValidator implements Validator
 {
@@ -24,7 +24,7 @@ public class RegistrationValidator implements Validator
     }
 
     /**
-     {@inheritDoc}
+     * {@inheritDoc}
      */
     @Override
     public void validate (Object target, Errors errors)
@@ -33,31 +33,38 @@ public class RegistrationValidator implements Validator
             throw new IllegalArgumentException("Target should be of RegisteredParticipant type");
         }
 
-        RegisteredParticipant participant = (RegisteredParticipant) target;
-        if (RegisteredParticipant.ActionRegister.equals(participant.getAction()) && participant.isNewbie()) {
-            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "participant.name", "participant.name");
-        }
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "participant.mobile", "participant.mobile");
+        RegisteredParticipant registeredParticipant = (RegisteredParticipant) target;
 
-        if (participant.getParticipant().isVip()) {
-            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "participant.vipDesc", "participant.vipDesc");
+        if (RegisteredParticipant.ActionRegister.equals(
+                registeredParticipant.getAction()) &&
+                registeredParticipant.isNewbie()) {
+            errors.pushNestedPath("participant");
+
+            ValidationUtils.invokeValidator(new ParticipantValidator(),
+                    registeredParticipant.getParticipant(), errors);
+
+            errors.popNestedPath();
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "eventId", "eventId");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "registration.foundationId", "registration.foundationId");
 //        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "registration.level", "registration.level");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "registration.eventFee", "registration.eventFee");
 
-        if (participant.getRegistration().getAmountPayable() == null || participant.getRegistration().getAmountPayable() <= 0) {
+        if (registeredParticipant.getRegistration().getAmountPayable() == null ||
+                registeredParticipant.getRegistration().getAmountPayable() <= 0) {
             errors.reject("registration.amountPayable", "registration.amountPayable");
         }
 
         Login login = Util.getCurrentUser();
         if (login.getAccess().isRegVolunteer() &&
-                !(participant.getRegistration().getTotalAmountPaid() >= participant.getRegistration().getAmountPayable())) {
+                !(registeredParticipant.getRegistration().getTotalAmountPaid() >=
+                        registeredParticipant.getRegistration().getAmountPayable())) {
             errors.reject("registration.noAccess", "registration.noAccess");
         }
 
-        if (participant.getCurrentPayment() != null &&
-                participant.getCurrentPayment().getAmountPaid() != null) {
+        if (registeredParticipant.getCurrentPayment() != null &&
+                registeredParticipant.getCurrentPayment().getAmountPaid() != null) {
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "currentPayment.receiptInfo", "currentPayment.receiptInfo");
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "currentPayment.mode", "currentPayment.mode");
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "currentPayment.receiptDate", "currentPayment.receiptDate");

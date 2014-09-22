@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS phk_vollogin;
 DROP TABLE IF EXISTS phk_volunteer;
 DROP TABLE IF EXISTS phk_kit;
 DROP TABLE IF EXISTS phk_event;
+DROP TABLE IF EXISTS phk_mail;
 
 CREATE TABLE phk_event (
 	id INT PRIMARY KEY auto_increment,
@@ -285,6 +286,20 @@ CREATE TABLE phk_trainercourse (
 	apprentice int,
 	contractstartdate TIMESTAMP null,
 	contractenddate TIMESTAMP null,
+	preparedby VARCHAR(50),
+	timecreated TIMESTAMP null,
+	timeupdated TIMESTAMP null,
+	active VARCHAR(1)
+);
+
+CREATE TABLE phk_mail (
+	id INT PRIMARY KEY auto_increment,
+	message mediumtext,
+	subject VARCHAR(100),
+	toaddr varchar(50),
+	fromaddr varchar(50),
+	retry int,
+	templateName VARCHAR(50),
 	preparedby VARCHAR(50),
 	timecreated TIMESTAMP null,
 	timeupdated TIMESTAMP null,

@@ -59,7 +59,17 @@
         <property name="cronExpression" value="0 30 10 ? * MON-FRI"/>
     </bean>
 
-    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <bean name="emailNotificationDispatcherJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.yvphfk.common.email.EmailNotificationDispatcher"/>
+    </bean>
+
+    <bean id="cronEmailNotificationDispatcher" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="emailNotificationDispatcherJob"/>
+        <!--Fire for every 10 minutes-->
+        <property name="cronExpression" value="0 0/5 * * * ?"/>
+    </bean>
+
+    <bean name ="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="jobFactory">
             <bean class="org.springframework.scheduling.quartz.SpringBeanJobFactory"/>
         </property>
@@ -67,6 +77,7 @@
         <property name="triggers">
             <list>
                 <ref bean="cronUpdateAttendedCoursesJob"/>
+                <ref bean="cronEmailNotificationDispatcher"/>
             </list>
         </property>
     </bean>
@@ -87,6 +98,8 @@
         <property name="maxUploadSize" value="512000"/>
     </bean>
 
+    <bean name="appInitializer" init-method="initialize" class="com.yvphfk.common.AppInitializer" lazy-init="false"  />
+
     <!-- Email support -->
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${mail.server.host}"/>
@@ -99,14 +112,14 @@
         </property>
     </bean>
 
-    <!-- THYMELEAF: Template Resolver for email templates -->
+    <!-- THYMELEAF: Template Resolver for email template -->
     <bean id="emailTemplateResolver" class="org.thymeleaf.templateresolver.ClassLoaderTemplateResolver">
         <property name="prefix" value="mail/"/>
         <property name="templateMode" value="HTML5"/>
         <property name="characterEncoding" value="UTF-8"/>
         <property name="order" value="1"/>
         <!-- Template cache is true by default. Set to false if you want -->
-        <!-- templates to be automatically updated when modified.        -->
+        <!-- template to be automatically updated when modified.        -->
         <property name="cacheable" value="true"/>
     </bean>
 

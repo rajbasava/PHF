@@ -15,10 +15,13 @@ import com.yvphfk.model.form.Participant;
 import com.yvphfk.model.form.ParticipantCourse;
 import com.yvphfk.model.form.Trainer;
 import com.yvphfk.model.form.TrainerCourse;
+import com.yvphfk.model.form.validator.ParticipantCourseValidator;
 import com.yvphfk.service.EventService;
 import com.yvphfk.service.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -52,12 +55,6 @@ public class ParticipantController extends CommonController
         String page = request.getParameter("page");
         map.put("page", page);
 
-
-//        String strRegistrationId = request.getParameter("registrationId");
-//        RegisteredParticipant registeredParticipant = populateRegisteredParticipant(strRegistrationId);
-//        if (registeredParticipant != null) {
-//            map.put("registeredParticipant", registeredParticipant);
-//        }
         return page;
     }
 
@@ -72,8 +69,10 @@ public class ParticipantController extends CommonController
     }
 
     @RequestMapping("/addParticipantCourse")
-    public String addParticipantCourse (Map<String, Object> map,
-                                        ParticipantCourseForm participantCourseForm,
+    public String addParticipantCourse (@ModelAttribute("participantCourseForm")
+                                            ParticipantCourseForm participantCourseForm,
+                                        BindingResult errors,
+                                        Map<String, Object> map,
                                         HttpServletRequest request)
     {
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
@@ -101,13 +100,27 @@ public class ParticipantController extends CommonController
         }
 
         Participant participant = null;
-        if (participantCourseForm.getParticipantId() != null) {
-            participant = participantService.getParticipant(participantCourseForm.getParticipantId());
+        Integer participantId = participantCourseForm.getParticipantId();
+        if (participantId != null) {
+            participant = participantService.getParticipant(participantId);
         }
         else {
             participant = participantCourseForm.getParticipant();
         }
         participantCourse.setParticipant(participant);
+
+        ParticipantCourseValidator val = new ParticipantCourseValidator();
+        val.validate(participantCourse, errors);
+
+        if (errors.hasErrors()) {
+            map.put("errors", errors);
+            map.put("participantCourseForm", participantCourseForm);
+            map.put("showParticipantDetails", participantId == null);
+            map.put("allParticipantCourseTypes", allCourseTypes());
+            map.put("allFoundations", allFoundations());
+            map.put("allTrainers", participantService.listTrainers(new TrainerCriteria()));
+            return "addParticipantCourse";
+        }
 
         participantCourse = participantService.addParticipantCourse(participantCourseForm);
 
@@ -267,10 +280,12 @@ public class ParticipantController extends CommonController
         trainerCourse.setTrainer(trainer);
         trainerCourse.setCourseType(
                 eventService.getCourseType(
-                        trainerCourse.getCourseTypeId()));
+                        trainerCourse.getCourseTypeId())
+        );
         trainerCourse.setFoundation(
                 eventService.getFoundation(
-                        trainerCourse.getFoundationId()));
+                        trainerCourse.getFoundationId())
+        );
 
         trainerCourse.initialize(login.getEmail());
         trainerCourse = participantService.addTrainerCourse(trainerCourse);

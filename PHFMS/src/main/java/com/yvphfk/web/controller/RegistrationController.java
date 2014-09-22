@@ -94,10 +94,6 @@ public class RegistrationController extends CommonController
     public String search (Map<String, Object> map)
     {
         RegistrationCriteria criteria = new RegistrationCriteria();
-        Event defEvent = getDefaultEvent();
-        if (defEvent != null) {
-            criteria.setEventId(getDefaultEvent().getId());
-        }
         map.put("registrationCriteria", criteria);
         map.put("allParticipantCourseTypes", allCourseTypes());
         map.put("allFoundations", allFoundations());
@@ -157,6 +153,7 @@ public class RegistrationController extends CommonController
             map.put("allFoundations", allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));
             map.put("allReferenceGroups", getAllReferenceGroups(eventService.listReferenceGroups()));
+            map.put("newbie", registeredParticipant.isNewbie());
 
             if (RegisteredParticipant.ActionRegister.equals(action)) {
                 map.put("registeredParticipant", registeredParticipant);

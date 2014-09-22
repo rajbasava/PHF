@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class AlphaNumericSeating implements SeatingService
+public class AlphaNumericSeating extends AbstractSeatingService
 {
     @Autowired
     private ParticipantDAO participantDAO;
@@ -44,9 +44,9 @@ public class AlphaNumericSeating implements SeatingService
         }
 
         List<EventRegistration> allUnallocatedForeignRegistrations =
-                participantDAO.allUnallocatedRegistrations(event, false, false);
+                participantDAO.allUnallocatedRegistrations(event, false, ParticipantDAO.NonIndians);
         List<EventRegistration> allUnallocatedIndianRegistrations =
-                participantDAO.allUnallocatedRegistrations(event, false, true);
+                participantDAO.allUnallocatedRegistrations(event, false, ParticipantDAO.Indians);
         List<EventRegistration> allUnallocatedRegistrations = new ArrayList<EventRegistration>();
         allUnallocatedRegistrations.addAll(allUnallocatedForeignRegistrations);
         allUnallocatedRegistrations.addAll(allUnallocatedIndianRegistrations);
@@ -105,20 +105,6 @@ public class AlphaNumericSeating implements SeatingService
             seatFlags[allocatedSeat.getSeat().intValue() - 1] = true;
         }
         return seatFlags;
-    }
-
-    private ParticipantSeat createSeat (EventRegistration registration,
-                                        String alpha,
-                                        Integer seatNo)
-    {
-        ParticipantSeat seat = new ParticipantSeat();
-        seat.setAlpha(alpha);
-        seat.setSeat(seatNo);
-        seat.setEvent(registration.getEvent());
-        seat.setCourseType(registration.getEvent().getPrimaryEligibility());
-        seat.setRegistration(registration);
-
-        return seat;
     }
 
     @Transactional
