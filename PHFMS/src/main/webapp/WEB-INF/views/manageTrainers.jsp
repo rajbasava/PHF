@@ -112,9 +112,9 @@
                         <tr>
                             <td  width="5%"><c:out value="${participant.id}"/></td>
                             <td class="YLink">
-                                <form id="openPart<c:out value="${event.id}"/>" method="post" action="showTrainerDetails.htm">
+                                <form id="openPart<c:out value="${trainer.id}"/>" method="post" action="showTrainerDetails.htm">
                                     <input type="hidden" name="trainerId" value="<c:out value="${trainer.id}"/>" />
-                                    <a href="#" onclick="document.getElementById('openPart<c:out value="${event.id}"/>').submit();">
+                                    <a href="#" onclick="document.getElementById('openPart<c:out value="${trainer.id}"/>').submit();">
                                         <c:out value="${trainer.participant.name}"/>
                                     </a>
                                 </form>
