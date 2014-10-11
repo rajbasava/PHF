@@ -512,6 +512,25 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         return participant;
     }
 
+    public Participant getParticipant (String name, String mobile)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(Participant.class);
+        criteria.setFetchMode("comments", FetchMode.EAGER);
+        criteria.setFetchMode("seats", FetchMode.EAGER);
+        criteria.add(Restrictions.eq("name", name));
+        criteria.add(Restrictions.eq("mobile", mobile));
+        List results = criteria.list();
+        Participant participant = null;
+
+        if (results != null || !results.isEmpty()) {
+            participant = (Participant) results.get(0);
+        }
+        session.close();
+
+        return participant;
+    }
+
     public void cancelRegistration (EventRegistration registration, HistoryRecord historyRecord)
     {
         Session session = sessionFactory.openSession();

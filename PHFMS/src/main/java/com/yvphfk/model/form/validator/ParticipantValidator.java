@@ -5,7 +5,9 @@
 
 package com.yvphfk.model.form.validator;
 
+import com.yvphfk.common.ApplicationContextUtils;
 import com.yvphfk.common.Util;
+import com.yvphfk.model.dao.ParticipantDAO;
 import com.yvphfk.model.form.Participant;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -29,6 +31,17 @@ public class ParticipantValidator implements Validator
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "participant.name.empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "mobile", "participant.mobile.empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "participant.email.empty");
+//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "participant.email.empty");
+
+        if (participant.getName() != null &&
+                participant.getMobile() != null) {
+            ParticipantDAO participantDAO =
+                    (ParticipantDAO) ApplicationContextUtils.getApplicationContext().getBean("participantDAOImpl");
+            Participant temp = participantDAO.getParticipant(participant.getName(), participant.getMobile());
+            if (temp != null) {
+                errors.reject("participant.name.unique");
+            }
+        }
+
     }
 }

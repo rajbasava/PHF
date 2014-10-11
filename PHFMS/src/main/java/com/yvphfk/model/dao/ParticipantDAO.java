@@ -39,6 +39,8 @@ public interface ParticipantDAO extends CommonDAO
 
     public Participant getParticipant (Integer userId);
 
+    public Participant getParticipant (String name, String mobile);
+
     public void addParticipantSeat (ParticipantSeat participantSeat);
 
     public EventRegistration getEventRegistration (Integer registrationId);
