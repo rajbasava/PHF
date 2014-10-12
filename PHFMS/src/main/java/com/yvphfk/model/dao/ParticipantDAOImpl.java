@@ -505,7 +505,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         List results = criteria.list();
         Participant participant = null;
 
-        if (results != null || !results.isEmpty()) {
+        if (results != null && !results.isEmpty()) {
             participant = (Participant) results.get(0);
         }
         session.close();
@@ -523,7 +523,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         List results = criteria.list();
         Participant participant = null;
 
-        if (results != null || !results.isEmpty()) {
+        if (results != null && !results.isEmpty()) {
             participant = (Participant) results.get(0);
         }
         session.close();
