@@ -169,7 +169,8 @@ public class EventController extends CommonController
                     eventService.getCourseType(event.getSecondaryEligibilityId()));
         }
 
-        if (event.getCourseTypeId() != -1) {
+        // course type can be null if the event is for a workshop.
+        if (event.getCourseTypeId() != null && event.getCourseTypeId() != -1) {
             event.setCourseType(eventService.getCourseType(event.getCourseTypeId()));
         }
 
