@@ -16,6 +16,7 @@ import com.yvphfk.model.form.ParticipantCourse;
 import com.yvphfk.model.form.Trainer;
 import com.yvphfk.model.form.TrainerCourse;
 import com.yvphfk.model.form.validator.ParticipantCourseValidator;
+import com.yvphfk.model.form.validator.ParticipantValidator;
 import com.yvphfk.service.EventService;
 import com.yvphfk.service.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -298,12 +299,34 @@ public class ParticipantController extends CommonController
     }
 
     @RequestMapping("/updateParticipant")
-    public String addParticipantCourse (Map<String, Object> map,
-                                        Participant participant,
-                                        HttpServletRequest request)
+    public String updateParticipant (Map<String, Object> map,
+                                     Participant participant,
+                                     BindingResult errors,
+                                     HttpServletRequest request)
     {
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
         participant.initializeForUpdate(login.getEmail());
+
+        ParticipantValidator val = new ParticipantValidator();
+        val.validate(participant, errors);
+
+        if (errors.hasErrors()) {
+            List<ParticipantCourse> courses = participantService.getCourses(participant.getId());
+            List list = participantService.getEligibleCourses(participant.getId());
+            List<EventRegistration> registrations = participantService.getRegisteredCourses(participant.getId());
+            Trainer trainer = participantService.getTrainer(participant.getId());
+
+            map.put("errors", errors);
+            map.put("participant", participant);
+            map.put("courses", courses);
+            map.put("newEvents", list.get(0));
+            map.put("reviewEvents", list.get(1));
+            map.put("registrations", registrations);
+            map.put("isEdit", true);
+            map.put("isTrainer", trainer == null ? true : false);
+            return "participantDetails";
+        }
+
         participantService.saveOrUpdateParticipant(participant);
         request.setAttribute("isForward", "true");
         request.setAttribute("isEdit", "false");

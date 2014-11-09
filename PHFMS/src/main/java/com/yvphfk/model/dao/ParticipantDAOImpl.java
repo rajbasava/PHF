@@ -518,7 +518,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         Criteria criteria = session.createCriteria(Participant.class);
         criteria.setFetchMode("comments", FetchMode.EAGER);
         criteria.setFetchMode("seats", FetchMode.EAGER);
-        criteria.add(Restrictions.eq("name", name));
+        criteria.add(Restrictions.eq("name", name).ignoreCase());
         criteria.add(Restrictions.eq("mobile", mobile));
         List results = criteria.list();
         Participant participant = null;

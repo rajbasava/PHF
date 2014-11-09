@@ -37,11 +37,19 @@ public class ParticipantValidator implements Validator
                 participant.getMobile() != null) {
             ParticipantDAO participantDAO =
                     (ParticipantDAO) ApplicationContextUtils.getApplicationContext().getBean("participantDAOImpl");
+            Participant orgParticipant = participantDAO.getParticipant(participant.getId());
+
+            if (orgParticipant != null) {
+                if (orgParticipant.getName().equalsIgnoreCase(participant.getName()) &&
+                        orgParticipant.getMobile().equalsIgnoreCase(participant.getMobile()))  {
+                    return;
+                }
+            }
+
             Participant temp = participantDAO.getParticipant(participant.getName(), participant.getMobile());
             if (temp != null) {
                 errors.reject("participant.name.unique");
             }
         }
-
     }
 }
