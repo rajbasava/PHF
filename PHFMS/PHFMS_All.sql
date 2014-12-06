@@ -305,3 +305,14 @@ CREATE TABLE phk_mail (
 	timeupdated TIMESTAMP null,
 	active VARCHAR(1)
 );
+
+CREATE INDEX idx_part_name ON phk_participant(name(250));
+CREATE INDEX idx_part_mbl ON phk_participant (mobile);
+CREATE INDEX idx_part_email ON phk_participant (email);
+
+CREATE INDEX idx_partcrs_part ON phk_partipantcourse (participant);
+
+CREATE INDEX idx_trn_part ON phk_trainer(participant);
+
+CREATE INDEX idx_trncrs_trn ON phk_trainercourse(trainer);
+CREATE INDEX idx_trncrs_crs ON phk_trainercourse(coursetype);

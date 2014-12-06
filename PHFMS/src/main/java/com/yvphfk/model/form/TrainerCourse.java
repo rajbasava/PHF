@@ -75,6 +75,11 @@ public class TrainerCourse extends BaseForm
     @Transient
     private Integer foundationId;
 
+    public TrainerCourse ()
+    {
+        setFoundationId(getDefaultFoundationId());
+    }
+
     @Override
     public Integer getId ()
     {

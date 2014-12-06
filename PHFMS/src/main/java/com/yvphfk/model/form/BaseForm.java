@@ -5,7 +5,10 @@
 
 package com.yvphfk.model.form;
 
+import com.yvphfk.common.AppProperties;
+import com.yvphfk.common.ApplicationContextUtils;
 import com.yvphfk.model.Importable;
+import org.springframework.context.ApplicationContext;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -59,5 +62,22 @@ public abstract class BaseForm implements Serializable, Importable
     public void applyEvent (Event event)
     {
 
+    }
+
+    protected Integer getDefaultFoundationId ()
+    {
+        ApplicationContext context = ApplicationContextUtils.getApplicationContext();
+
+        if (context == null) {
+            return null;
+        }
+
+        AppProperties appProperties =
+                (AppProperties) context.getBean("appProperties");
+        if (appProperties != null) {
+            return appProperties.getDefaultFoundationId();
+        }
+
+        return null;
     }
 }

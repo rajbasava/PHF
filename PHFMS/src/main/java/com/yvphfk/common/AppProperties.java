@@ -28,6 +28,9 @@ public class AppProperties
     @Value("${app.docRoot}")
     private String docRoot;
 
+    @Value("${default.foundationId}")
+    private Integer defaultFoundationId;
+
     public String getFromAddress ()
     {
         return fromAddress;
@@ -46,5 +49,10 @@ public class AppProperties
     public String getDocRoot ()
     {
         return docRoot;
+    }
+
+    public Integer getDefaultFoundationId ()
+    {
+        return defaultFoundationId;
     }
 }

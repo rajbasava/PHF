@@ -109,6 +109,21 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         return trainer;
     }
 
+    public Trainer getTrainerByParticipantId (Integer participantId)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(Trainer.class);
+        criteria.add(Restrictions.eq("participant.id", participantId));
+        List results = criteria.list();
+        Trainer trainer = null;
+
+        if (results != null && !results.isEmpty()) {
+            trainer = (Trainer) results.get(0);
+        }
+        session.close();
+        return trainer;
+    }
+
     public List<TrainerCourse> getTrainerCourses (Integer trainerId)
     {
         Session session = sessionFactory.openSession();

@@ -92,6 +92,10 @@ public class ParticipantCourse extends BaseForm
     @Transient
     private Integer foundationId;
 
+    public ParticipantCourse ()
+    {
+        setFoundationId(getDefaultFoundationId());
+    }
 
     @Override
     public Integer getId ()

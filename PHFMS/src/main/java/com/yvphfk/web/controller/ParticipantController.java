@@ -314,7 +314,7 @@ public class ParticipantController extends CommonController
             List<ParticipantCourse> courses = participantService.getCourses(participant.getId());
             List list = participantService.getEligibleCourses(participant.getId());
             List<EventRegistration> registrations = participantService.getRegisteredCourses(participant.getId());
-            Trainer trainer = participantService.getTrainer(participant.getId());
+            Trainer trainer = participantService.getTrainerByParticipantId(participant.getId());
 
             map.put("errors", errors);
             map.put("participant", participant);
@@ -384,7 +384,7 @@ public class ParticipantController extends CommonController
         List<ParticipantCourse> courses = participantService.getCourses(participantId);
         List list = participantService.getEligibleCourses(participantId);
         List<EventRegistration> registrations = participantService.getRegisteredCourses(participantId);
-        Trainer trainer = participantService.getTrainer(participant.getId());
+        Trainer trainer = participantService.getTrainerByParticipantId(participant.getId());
 
         map.put("participant", participant);
         map.put("courses", courses);

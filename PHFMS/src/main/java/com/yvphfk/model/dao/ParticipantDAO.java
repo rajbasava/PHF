@@ -85,6 +85,8 @@ public interface ParticipantDAO extends CommonDAO
 
     public Trainer getTrainer (Integer trainerId);
 
+    public Trainer getTrainerByParticipantId (Integer participantId);
+
     public List<TrainerCourse> getTrainerCourses (Integer trainerId);
 
     public TrainerCourse addTrainerCourse(TrainerCourse trainerCourse);

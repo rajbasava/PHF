@@ -148,6 +148,11 @@ public class ParticipantServiceImpl implements ParticipantService
         return participantDAO.getTrainer(trainerId);
     }
 
+    public Trainer getTrainerByParticipantId (Integer participantId)
+    {
+        return participantDAO.getTrainerByParticipantId(participantId);
+    }
+
     public List<TrainerCourse> getTrainerCourses (Integer trainerId)
     {
         return participantDAO.getTrainerCourses(trainerId);
