@@ -51,7 +51,7 @@
 </head>
 <body>
 <div class="formdata">
-<div class="formtitle">Search Participants</div>
+<div class="formtitle">Manage Trainers</div>
 <div class="formbody">
 <form:form method="post" action="" commandName="trainerCriteria">
 <table align="center" cellspacing="2">
@@ -102,7 +102,7 @@
 <c:if  test="${!empty trainers}">
 <table width="100%" cellpadding="3" cellspacing="3">
     <tr style="background-color:#E8E8E8;">
-        <td>Events</td>
+        <td>Trainers</td>
     </tr>
     <tr>
         <td>

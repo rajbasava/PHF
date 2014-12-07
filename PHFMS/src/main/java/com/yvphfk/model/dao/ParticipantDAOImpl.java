@@ -1083,16 +1083,13 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
     {
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(Trainer.class);
+        criteria.createAlias("participant", "participant");
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         criteria.add(Restrictions.eq("active", true));
 
 
         if (trainerCriteria.getParticipantId() != null) {
             criteria.add(Restrictions.eq("participant.id", trainerCriteria.getParticipantId()));
-            List<Trainer> results = criteria.list();
-
-            session.close();
-            return results;
         }
 
         if (!Util.nullOrEmptyOrBlank(trainerCriteria.getName())) {
@@ -1107,14 +1104,16 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
             criteria.add(Restrictions.like("participant.mobile", "%" + trainerCriteria.getMobile() + "%"));
         }
 
+        boolean coursesFlag = false;
         if (trainerCriteria.getFoundationId() != null) {
             criteria.createAlias("courses", "courses");
+            coursesFlag = true;
             Integer foundationId = trainerCriteria.getFoundationId();
             criteria.add(Restrictions.eq("courses.foundation.id", foundationId));
         }
 
         if (trainerCriteria.getCourseTypeId() != null) {
-            if (criteria.getAlias() != null && !criteria.getAlias().equals("courses")) {
+            if (!coursesFlag) {
                 criteria.createAlias("courses", "courses");
             }
             criteria.add(Restrictions.eq("courses.courseType.id", trainerCriteria.getCourseTypeId()));
