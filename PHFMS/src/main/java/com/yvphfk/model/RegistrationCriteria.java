@@ -4,6 +4,7 @@
 */
 package com.yvphfk.model;
 
+import com.yvphfk.common.Util;
 import com.yvphfk.model.form.EventRegistration;
 
 import java.io.Serializable;
@@ -32,6 +33,7 @@ public class RegistrationCriteria implements Serializable
     private String status = EventRegistration.StatusRegistered;
     private Integer amountDue;
     private boolean includeInactive;
+    private int maxResults = Util.MaxResultCount;
 
     public Integer getParticipantId ()
     {
@@ -241,5 +243,15 @@ public class RegistrationCriteria implements Serializable
     public void setAmountDue (Integer amountDue)
     {
         this.amountDue = amountDue;
+    }
+
+    public int getMaxResults ()
+    {
+        return maxResults;
+    }
+
+    public void setMaxResults (int maxResults)
+    {
+        this.maxResults = maxResults;
     }
 }

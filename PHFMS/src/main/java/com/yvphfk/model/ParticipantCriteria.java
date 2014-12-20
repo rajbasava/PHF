@@ -5,6 +5,8 @@
 
 package com.yvphfk.model;
 
+import com.yvphfk.common.Util;
+
 public class ParticipantCriteria
 {
     private Integer participantId;
@@ -14,6 +16,7 @@ public class ParticipantCriteria
     private Integer foundationId;
     private boolean vip;
     private Integer courseTypeId;
+    private int maxResults = Util.MaxResultCount;
 
     public Integer getParticipantId ()
     {
@@ -83,5 +86,15 @@ public class ParticipantCriteria
     public void setCourseTypeId (Integer courseTypeId)
     {
         this.courseTypeId = courseTypeId;
+    }
+
+    public int getMaxResults ()
+    {
+        return maxResults;
+    }
+
+    public void setMaxResults (int maxResults)
+    {
+        this.maxResults = maxResults;
     }
 }

@@ -39,6 +39,7 @@ public class DownloadController extends CommonController
                                      RegistrationCriteria registrationCriteria)
     {
         registrationCriteria.setIncludeInactive(true);
+        registrationCriteria.setMaxResults(-1);
         downloadService.downloadRegistrationsReport(response, registrationCriteria);
     }
 
@@ -49,6 +50,7 @@ public class DownloadController extends CommonController
     {
         registrationCriteria.setConsolidated(true);
         registrationCriteria.setIncludeInactive(true);
+        registrationCriteria.setMaxResults(-1);
         downloadService.downloadRegistrationsReport(response, registrationCriteria);
     }
 
@@ -58,6 +60,7 @@ public class DownloadController extends CommonController
                                            RegistrationCriteria registrationCriteria)
     {
         registrationCriteria.setIncludeInactive(true);
+        registrationCriteria.setMaxResults(-1);
         downloadService.downloadRegistrationsReportForImport(response, registrationCriteria);
     }
 

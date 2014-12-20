@@ -633,6 +633,9 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         criteria.add(Restrictions.eq("active", true));
 
+        if (participantCriteria.getMaxResults() != -1) {
+            criteria.setMaxResults(participantCriteria.getMaxResults());
+        }
 
         if (participantCriteria.getParticipantId() != null) {
             criteria.add(Restrictions.eq("id", participantCriteria.getParticipantId()));
@@ -667,7 +670,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         }
 
         if (participantCriteria.getCourseTypeId() != null) {
-            if (criteria.getAlias() != null && !hasCourseAlias) {
+            if (!hasCourseAlias) {
                 criteria.createAlias("courses", "courses");
             }
             criteria.add(Restrictions.eq("courses.courseType.id", participantCriteria.getCourseTypeId()));
@@ -693,6 +696,10 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(EventRegistration.class);
         criteria.createAlias("event", "event");
+
+        if (registrationCriteria.getMaxResults() != -1) {
+            criteria.setMaxResults(registrationCriteria.getMaxResults());
+        }
 
         criteria.createAlias("participant", "participant");
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -1087,6 +1094,9 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         criteria.add(Restrictions.eq("active", true));
 
+        if (trainerCriteria.getMaxResults() != -1) {
+            criteria.setMaxResults(trainerCriteria.getMaxResults());
+        }
 
         if (trainerCriteria.getParticipantId() != null) {
             criteria.add(Restrictions.eq("participant.id", trainerCriteria.getParticipantId()));

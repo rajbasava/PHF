@@ -41,6 +41,8 @@ public class Util
 {
     public static final String DefaultDatePattern =  "dd/MM/yy";
 
+    public static final int MaxResultCount = 500;
+
     public static boolean nullOrEmptyOrBlank (String toValidate)
     {
         if (toValidate == null || toValidate.equalsIgnoreCase("")) {
