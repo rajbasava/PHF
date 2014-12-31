@@ -27,7 +27,7 @@
                 $("a#updateNSummary").css("font-size", "11px");
                 $("a#updateNSummary").click(function() {
                      $("#registeredParticipant").get(0).setAttribute('action', 'addRegistration.htm');
-                     $("#registeredParticipant").get(0).setAttribute('showSummary', 'true');
+                     $("#registeredParticipant input[name='showSummary']").val('true');
                      $("#registeredParticipant").submit();
                 });
 
