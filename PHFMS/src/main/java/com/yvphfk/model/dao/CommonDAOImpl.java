@@ -46,4 +46,23 @@ public class CommonDAOImpl implements CommonDAO
 
         return events.get(0);
     }
+
+    @Override
+    public PHFoundation getFoundation (String shortName)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(PHFoundation.class);
+
+        criteria.add(Restrictions.eq("shortName", shortName));
+        criteria.add(Restrictions.eq("active", true));
+        List<PHFoundation> events = criteria.list();
+
+        session.close();
+        if (events == null ||
+                events.isEmpty()) {
+            return null;
+        }
+
+        return events.get(0);
+    }
 }

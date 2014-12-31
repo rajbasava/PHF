@@ -172,6 +172,13 @@ public class EventServiceImpl implements EventService
 
     @Override
     @Transactional
+    public java.util.Map<String, String> allArhaticCourseTypes ()
+    {
+        return eventDAO.allArhaticCourseTypes();
+    }
+
+    @Override
+    @Transactional
     public void allocateSeats (Event event)
     {
         String seatingType = event.getSeatingType();

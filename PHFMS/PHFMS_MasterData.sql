@@ -50,8 +50,14 @@ INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligib
 INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (500,'Arhatic Yoga Preparation', 'Arhatic Prep',300, 400, 1,null,'system', now(), now(), '1');
 INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (510,'Kriyashakti', 'Kriyashakti',500, null, 1,null,'system', now(), now(), '1');
 INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (520,'Teachers Training Course', 'TTC',500, null, 1,null,'system', now(), now(), '1');
-
-
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (530,'Arhatic Yoga Level 1', 'AY L1',500, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (540,'Arhatic Yoga Level 2', 'AY L2',530, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (550,'Arhatic Yoga Level 3.1', 'AY L3.1',540, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (560,'Arhatic Yoga Level 3.2', 'AY L3.2',550, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (570,'Arhatic Yoga Level 4.1', 'AY L4.1',560, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (580,'Arhatic Yoga Level 4.2', 'AY L4.2',570, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (590,'Arhatic Yoga Level 5', 'AY L5',580, null, 1,null,'system', now(), now(), '1');
+INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (600,'Arhatic Yoga Level 6', 'AY L6',590, null, 1,null,'system', now(), now(), '1');
 
 INSERT INTO phk_volunteer(name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated) VALUES('Admin',   'admin@yvphfk.com',   'admin',   '9999999999',   'admin',   'admin',   'system',   now(),   now());
 

@@ -59,6 +59,8 @@ public interface EventService
 
     public Map<String, String> allCourseTypes ();
 
+    public java.util.Map<String, String> allArhaticCourseTypes ();
+
     public void allocateSeats (Event event);
 
     public ParticipantSeat nextSeat (Event event, EventRegistration registration);

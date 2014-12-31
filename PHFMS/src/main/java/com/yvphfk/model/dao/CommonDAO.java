@@ -13,4 +13,6 @@ public interface CommonDAO
     public void saveOrUpdate (BaseForm form);
 
     public PHFoundation getFoundation (Integer foundationId);
+
+    public PHFoundation getFoundation (String shortName);
 }

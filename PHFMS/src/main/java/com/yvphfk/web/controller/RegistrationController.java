@@ -81,7 +81,7 @@ public class RegistrationController extends CommonController
         registeredParticipant.setNewbie(newbie);
         map.put("participant", participant);
         map.put("registeredParticipant", registeredParticipant);
-        map.put("allParticipantCourseTypes", allCourseTypes());
+        map.put("allParticipantCourseTypes", allArhaticCourseTypes());
         map.put("allPaymentModes", PaymentMode.allPaymentModes());
         map.put("allFoundations", allFoundations());
         map.put("allEvents", getAllEventMap(eventService.allEvents()));
@@ -148,7 +148,7 @@ public class RegistrationController extends CommonController
 
         if (errors.hasErrors()) {
             map.put("participant", registeredParticipant.getParticipant());
-            map.put("allParticipantCourseTypes", allCourseTypes());
+            map.put("allParticipantCourseTypes", allArhaticCourseTypes());
             map.put("allPaymentModes", PaymentMode.allPaymentModes());
             map.put("allFoundations", allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));
@@ -187,12 +187,17 @@ public class RegistrationController extends CommonController
 
         EventRegistration registration = participantService.registerParticipant(registeredParticipant, login);
 
+        registeredParticipant = populateRegisteredParticipant(String.valueOf(registration.getId()));
+        map.put("registeredParticipant", registeredParticipant);
+
+        if (request.getParameter("showSummary") != null && request.getParameter("showSummary").equalsIgnoreCase("true")) {
+            return "summary";
+        }
+
         if (RegisteredParticipant.ActionUpdate.equals(action)) {
             return "redirect:/search.htm";
         }
 
-        registeredParticipant = populateRegisteredParticipant(String.valueOf(registration.getId()));
-        map.put("registeredParticipant", registeredParticipant);
         return "summary";
     }
 
@@ -204,7 +209,7 @@ public class RegistrationController extends CommonController
         if (registeredParticipant != null) {
             map.put("registeredParticipant", registeredParticipant);
             map.put("participant", registeredParticipant.getParticipant());
-            map.put("allCourseTypes", allCourseTypes());
+            map.put("allCourseTypes", allArhaticCourseTypes());
             map.put("allPaymentModes", PaymentMode.allPaymentModes());
             map.put("allFoundations", allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));
@@ -392,7 +397,7 @@ public class RegistrationController extends CommonController
     {
 
         map.put("participantCriteria", new ParticipantCriteria());
-        map.put("allParticipantCourseTypes", allCourseTypes());
+        map.put("allParticipantCourseTypes", allArhaticCourseTypes());
         map.put("allFoundations", allFoundations());
         map.put("page", "replaceRegistration");
 

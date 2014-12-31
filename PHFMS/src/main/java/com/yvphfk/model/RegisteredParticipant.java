@@ -36,6 +36,8 @@ public class RegisteredParticipant implements Serializable, Importable
     private String status;
     private boolean newbie;
     private EventPayment impPayment;  // need to merge currentPayment, impPayment, payment,allpayments
+    private String foundationShortName;
+    private String courseTypeShortName;
 
 
     public void initialize (String email)
@@ -240,5 +242,25 @@ public class RegisteredParticipant implements Serializable, Importable
     public void setNewbie (boolean newbie)
     {
         this.newbie = newbie;
+    }
+
+    public String getFoundationShortName ()
+    {
+        return foundationShortName;
+    }
+
+    public void setFoundationShortName (String foundationShortName)
+    {
+        this.foundationShortName = foundationShortName;
+    }
+
+    public String getCourseTypeShortName ()
+    {
+        return courseTypeShortName;
+    }
+
+    public void setCourseTypeShortName (String courseTypeShortName)
+    {
+        this.courseTypeShortName = courseTypeShortName;
     }
 }

@@ -87,6 +87,11 @@ public class CommonController
         return eventService.allCourseTypes();
     }
 
+    public java.util.Map<String, String> allArhaticCourseTypes ()
+    {
+        return eventService.allArhaticCourseTypes();
+    }
+
     public Event getDefaultEvent ()
     {
         List<Event> events = eventService.allEvents();

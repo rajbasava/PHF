@@ -85,6 +85,25 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
     }
 
     @Override
+    public CourseType getCourseType (String shortName)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(CourseType.class);
+
+        criteria.add(Restrictions.eq("shortName", shortName));
+        criteria.add(Restrictions.eq("active", true));
+        List<CourseType> courseTypes = criteria.list();
+
+        session.close();
+        if (courseTypes == null ||
+                courseTypes.isEmpty()) {
+            return null;
+        }
+
+        return courseTypes.get(0);
+    }
+
+    @Override
     public List<Event> allEvents ()
     {
         Session session = sessionFactory.openSession();
@@ -230,6 +249,51 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
         session.close();
 
         return eventFees;
+    }
+
+    @Override
+    public EventFee getBestEventFee (Integer eventId,
+                                     Boolean review,
+                                     Long amount,
+                                     CourseType courseType)
+    {
+        if (eventId == null) {
+            return null;
+        }
+
+        Event event = (Event) sessionFactory.getCurrentSession().load(
+                Event.class, eventId);
+
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(EventFee.class);
+
+        criteria.add(Restrictions.eq("event", event));
+        criteria.add(Restrictions.eq("active", true));
+
+        if (review != null) {
+            criteria.add(Restrictions.eq("review", review.booleanValue()));
+        }
+
+        if (amount != null) {
+            criteria.add(Restrictions.eq("amount", amount));
+        }
+
+        if (courseType != null) {
+            criteria.add(Restrictions.eq("courseType", courseType));
+        }
+
+        criteria.add(Restrictions.ge("cutOffDate", new Date()));
+        criteria.addOrder(Order.asc("timeCreated"));
+        List<EventFee> eventFees = criteria.list();
+
+        session.close();
+
+        if (eventFees == null ||
+                eventFees.isEmpty()) {
+            return null;
+        }
+
+        return eventFees.get(0);
     }
 
     @Override
@@ -445,6 +509,25 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
 
         Criteria criteria = session.createCriteria(CourseType.class);
         criteria.add(Restrictions.eq("active", true));
+        List<CourseType> courseTypes = criteria.list();
+        for (CourseType courseType : courseTypes) {
+            map.put(String.valueOf(courseType.getId()), courseType.getName());
+        }
+
+        session.flush();
+        session.close();
+
+        return map;
+    }
+
+    public java.util.Map<String, String> allArhaticCourseTypes ()
+    {
+        Session session = sessionFactory.openSession();
+        java.util.Map<String, String> map = new LinkedHashMap<String, String>();
+
+        Criteria criteria = session.createCriteria(CourseType.class);
+        criteria.add(Restrictions.eq("active", true));
+        criteria.add(Restrictions.ilike("name", "Arhatic Yoga", MatchMode.ANYWHERE));
         List<CourseType> courseTypes = criteria.list();
         for (CourseType courseType : courseTypes) {
             map.put(String.valueOf(courseType.getId()), courseType.getName());

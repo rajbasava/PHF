@@ -17,7 +17,8 @@ public class ImportObjectMeta
     public static ImportObjectMeta Registrations =
             new ImportObjectMeta(KeyRegistrations,
                     "com.yvphfk.model.RegisteredParticipant",
-                    "registerParticipant");
+                    "registerParticipant",
+                    "registeredParticipantImportableProcessor");
 
     public static ImportObjectMeta RowMeta =
             new ImportObjectMeta(KeyRowMeta,
@@ -37,13 +38,20 @@ public class ImportObjectMeta
     private String reportName;
     private String baseClass;
     private String methodName;
+    private String processorBean;
     private List<ImportObjectSheet> sheets = new ArrayList<ImportObjectSheet>();
 
     private ImportObjectMeta (String reportName, String baseClass, String methodName)
     {
+        this(reportName, baseClass, methodName, null);
+    }
+
+    private ImportObjectMeta (String reportName, String baseClass, String methodName, String processorBean)
+    {
         this.reportName = reportName;
         this.baseClass = baseClass;
         this.methodName = methodName;
+        this.processorBean = processorBean;
         this.initialize();
     }
 
@@ -80,21 +88,20 @@ public class ImportObjectMeta
         registrationFieldPaths.add("participant.email");
         registrationFieldPaths.add("participant.mobile");
         registrationFieldPaths.add("participant.home");
-        registrationFieldPaths.add("registration.foundation.shortName");
+        registrationFieldPaths.add("foundationShortName");
         registrationFieldPaths.add("participant.vip");
         registrationFieldPaths.add("participant.vipDesc");
 
         //{"AmountPayable","Review","Level","Reference","Application","Certificates","RegistrationDate","Comments"};
         registrationFieldPaths.add("registration.amountPayable");
         registrationFieldPaths.add("registration.review");
-        registrationFieldPaths.add("registration.courseType.shortName");
+        registrationFieldPaths.add("courseTypeShortName");
         registrationFieldPaths.add("registration.reference");
         registrationFieldPaths.add("registration.refOrder");
         registrationFieldPaths.add("registration.application");
         registrationFieldPaths.add("registration.certificates");
         registrationFieldPaths.add("registration.registrationDate");
         registrationFieldPaths.add("registration.status");
-        registrationFieldPaths.add("historyRecord ");
 
         return new ImportObjectSheet("Registrations", registrationFieldPaths, null, null);
     }
@@ -158,6 +165,16 @@ public class ImportObjectMeta
     public String getMethodName ()
     {
         return methodName;
+    }
+
+    public String getProcessorBean ()
+    {
+        return processorBean;
+    }
+
+    public void setProcessorBean (String processorBean)
+    {
+        this.processorBean = processorBean;
     }
 
     public List<ImportObjectSheet> getSheets ()

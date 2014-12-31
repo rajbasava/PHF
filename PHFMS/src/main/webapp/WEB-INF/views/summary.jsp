@@ -8,7 +8,25 @@
 	<title>Arhatic Yoga Retreat - Registered Participant Summary</title>
     <mytags:style/>
     <mytags:menu/>
-</head>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(function() {
+                $("a#nextRegistration").button();
+                $("a#nextRegistration").css("font-size", "11px");
+                $("a#nextRegistration").click(function() {
+                     $("#registrationSummary").get(0).setAttribute('action', 'register.htm');
+                     $("#registrationSummary").submit();
+                });
+
+                $("a#searchRegistration").button();
+                $("a#searchRegistration").css("font-size", "11px");
+                $("a#searchRegistration").click(function() {
+                     $("#registrationSummary").get(0).setAttribute('action', 'search.htm');
+                     $("#registrationSummary").submit();
+                });
+            });
+	    });
+    </script>
 </head>
 <body>
 <h2 align="center">Participant Summary</h2>
@@ -125,8 +143,9 @@
     <tr><td>&nbsp;<BR></td></tr>
 	<tr align="center">
 		<td align="center">
-            <form method="post" action="register.htm">
-			    <input type="submit" value="<spring:message code="label.nextRegistration"/>"/>
+            <form id="registrationSummary" method="post" action="">
+                <a id="nextRegistration" href="#">Next Registration</a>
+                <a id="searchRegistration" href="#">Search Registrations</a>
             </form>
 		</td>
 	</tr>

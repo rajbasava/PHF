@@ -23,6 +23,14 @@
                      $("#registeredParticipant").submit();
                 });
 
+                $("a#updateNSummary").button();
+                $("a#updateNSummary").css("font-size", "11px");
+                $("a#updateNSummary").click(function() {
+                     $("#registeredParticipant").get(0).setAttribute('action', 'addRegistration.htm');
+                     $("#registeredParticipant").get(0).setAttribute('showSummary', 'true');
+                     $("#registeredParticipant").submit();
+                });
+
                 $("a#showPayments").button();
                 $("a#showPayments").css("font-size", "11px");
                 $("a#showPayments").click(function() {
@@ -118,26 +126,7 @@
                     populateEventFee();
                 });
 
-                $('#tabs').tabs({ selected: 1 });
-
-                $("#registeredParticipant input[name='registration.foodCoupon']").click(function () {
-                     if ($("#registeredParticipant input[name='registration.foodCoupon']").prop('checked') &&
-                        $("#registeredParticipant input[name='registration.eventKit']").prop('checked')) {
-                            $("div#seatsDisplay").show();
-                    }
-                });
-
-                $("#registeredParticipant input[name='registration.eventKit']").click(function () {
-                     if ($("#registeredParticipant input[name='registration.foodCoupon']").prop('checked') &&
-                        $("#registeredParticipant input[name='registration.eventKit']").prop('checked')) {
-                            $("div#seatsDisplay").show();
-                    }
-                });
-
-                if ($("#registeredParticipant input[name='registration.foodCoupon']").prop('checked') &&
-                        $("#registeredParticipant input[name='registration.eventKit']").prop('checked')) {
-                    $("div#seatsDisplay").show();
-                }
+                $('#tabs').tabs({active: 1});
             });
 
             $("#results").flexigrid({
@@ -237,6 +226,7 @@
             <form:hidden path="registration.refOrder"/>
             <form:hidden path="registration.totalAmountPaid"/>
             <input id="access" name="access" type="hidden" value="<c:out value="${isInfoVolunteer || isRegVolunteer}"/>"/>
+            <input id="showSummary" name="showSummary" type="hidden" value=""/>
 			<table width="80%" cellspacing="1" cellpadding="1">
 				<tr>
 					<td>
@@ -365,23 +355,6 @@
                                 <td><form:label path="registration.eventKit"><spring:message code="label.eventKit"/></form:label></td>
                                 <td><form:checkbox path="registration.eventKit" onclick="return ${!isInfoVolunteer}"/></td>
                             </tr>
-                            <c:if test="${registeredParticipant.displaySeat}" >
-							<tr style="font-size:18px;color:#ff0000;">
-							    <td>
-                                    <div id="seatsDisplay" style="display:none;">
-                                        <c:if  test="${!empty registeredParticipant.registration.seats}">
-                                            <c:forEach items="${registeredParticipant.registration.seats}" var="seat">
-                                                <c:if  test="${seat.seat != null}">
-                                                    <ul class="tooltipBullet">
-                                                         <li><c:out value="${seat.levelName}"/>&nbsp;-&nbsp;<c:out value="${seat.alpha}"/>&nbsp;<c:out value="${seat.seat}"/></li>
-                                                    </ul>
-                                                </c:if>
-                                            </c:forEach>
-                                        </c:if>
-                                    </div>
-							    </td>
-							</tr>
-							</c:if>
                             <tr>
                                 <td><form:label path="registration.application"><spring:message code="label.application"/></form:label></td>
                                 <td><form:checkbox path="registration.application" onclick="return ${isSpotRegVolunteer || isAdmin }"/></td>
@@ -408,9 +381,11 @@
                             <c:choose>
                                 <c:when test="${user.access.admin}" >
                                     <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
+                                    <a id="updateNSummary" href="#">Update and Show Summary</a>
                                 </c:when>
                                 <c:when test="${!registeredParticipant.registration.eventKit}" >
                                     <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
+                                    <a id="updateNSummary" href="#">Update and Show Summary</a>
                                 </c:when>
                             </c:choose>
                             <c:if test="${isAdmin}" >

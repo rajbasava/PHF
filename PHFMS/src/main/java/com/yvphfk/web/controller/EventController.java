@@ -452,6 +452,10 @@ public class EventController extends CommonController
     {
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
         eventFee.initialize(login.getEmail());
+        if (eventFee.getCourseTypeId() != null) {
+            CourseType courseType = eventService.getCourseType(eventFee.getCourseTypeId());
+            eventFee.setCourseType(courseType);
+        }
         eventService.addEventFee(eventFee, eventFee.getEventId());
         request.setAttribute("eventId", String.valueOf(eventFee.getEventId()));
         request.setAttribute("isForward", "true");

@@ -24,6 +24,8 @@ public interface EventDAO extends CommonDAO
 
     public CourseType getCourseType (Integer courseTypeId);
 
+    public CourseType getCourseType (String shortName);
+
     public List<Event> allEvents ();
 
     public List<Event> searchEvents (EventCriteria eventCriteria);
@@ -35,6 +37,8 @@ public interface EventDAO extends CommonDAO
     public List<EventFee> getEventFees (Integer eventId);
 
     public List<EventFee> getEventFees (Integer eventId, Boolean review);
+
+    public EventFee getBestEventFee (Integer eventId, Boolean review, Long amount, CourseType courseType);
 
     public void removeEventFee (Integer eventFeeId);
 
@@ -59,6 +63,8 @@ public interface EventDAO extends CommonDAO
     public java.util.Map<String, String> getAllFoundations ();
 
     public Map<String, String> allCourseTypes ();
+
+    public java.util.Map<String, String> allArhaticCourseTypes ();
 
     public void addRowMeta (RowMeta rowMeta);
 

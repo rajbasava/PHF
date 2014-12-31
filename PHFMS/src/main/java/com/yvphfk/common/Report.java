@@ -77,7 +77,7 @@ public class Report
         paymentFieldPaths.add("registration.participant.name");
         paymentFieldPaths.add("registration.courseType.shortName");
         paymentFieldPaths.add("event.name");
-        paymentFieldPaths.add("level");
+        paymentFieldPaths.add("courseType.shortName");
         paymentFieldPaths.add("alpha");
         paymentFieldPaths.add("seat");
         paymentFieldPaths.add("custom");
@@ -137,7 +137,7 @@ public class Report
         registrationFieldPaths.add("amountDue");
         registrationFieldPaths.add("pendingPdc");
         registrationFieldPaths.add("review");
-        registrationFieldPaths.add("level");
+        registrationFieldPaths.add("courseType.ShortName");
         registrationFieldPaths.add("reference");
         registrationFieldPaths.add("application");
         registrationFieldPaths.add("certificates");
@@ -162,7 +162,7 @@ public class Report
         registrationFieldPaths.add("participant.vipDesc");
         registrationFieldPaths.add("amountPayable");
         registrationFieldPaths.add("review");
-        registrationFieldPaths.add("level");
+        registrationFieldPaths.add("courseType.shortName");
         registrationFieldPaths.add("reference");
         registrationFieldPaths.add("refOrder");
         registrationFieldPaths.add("application");

@@ -7,6 +7,7 @@ package com.yvphfk.service;
 
 import com.yvphfk.common.ApplicationContextUtils;
 import com.yvphfk.common.ImportObjectMeta;
+import com.yvphfk.common.ImportableProcessor;
 import com.yvphfk.common.Util;
 import com.yvphfk.model.dao.EventDAO;
 import com.yvphfk.model.dao.ParticipantDAO;
@@ -122,7 +123,7 @@ public class ImportServiceImpl implements ImportService
         }
         int i = 0;
         while (itr.hasNext()) {
-            Integer key = (Integer) itr.next();
+            String key = (String) itr.next();
             ArrayList list = (ArrayList) mergedMap.get(key);
             Map map = new HashMap();
 
@@ -147,6 +148,12 @@ public class ImportServiceImpl implements ImportService
             ApplicationContext context = ApplicationContextUtils.getApplicationContext();
             Object daoObj = context.getBean(ImportableService.class);
             try {
+                String processorBean = meta.getProcessorBean();
+                if (!Util.nullOrEmptyOrBlank(processorBean)) {
+                    ImportableProcessor processor = (ImportableProcessor) context.getBean(processorBean);
+                    processor.preLoad(importable);
+                }
+
                 Method method = daoObj.getClass().getDeclaredMethod(meta.getMethodName(), importable.getClass());
                 method.invoke(daoObj, importable);
             } catch (NoSuchMethodException e) {
@@ -172,11 +179,11 @@ public class ImportServiceImpl implements ImportService
                 processFields((List) map.get(sheet.getSheetName()), importable, sheet);
             }
         } catch (InvocationTargetException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         } catch (IllegalAccessException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         } catch (InstantiationException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
     }
 
@@ -187,13 +194,23 @@ public class ImportServiceImpl implements ImportService
             throws InvocationTargetException, IllegalAccessException, InstantiationException
     {
         List<String> fields = sheet.getFieldPaths();
+
+        // if the sheet has no data, importable object is set to null. e.g. if there are no payments,
+        // payment sheet will empty.
+        if (data == null) {
+            importable = null;
+            return;
+        }
+
         for (int i = 0; i < data.size(); i++) {
             List row = (List) data.get(i);
             for (int j = 0; j < fields.size(); j++) {
                 Cell cell = (Cell) row.get(j + 1); // to avoid the look up id field
                 String fieldName = fields.get(j);
                 if (fieldName.indexOf("Date") >= 0) {
-                    Util.setDottedFieldValue(fields.get(j), importable, cell.getDateCellValue());
+                    if (!Util.nullOrEmptyOrBlank(cell.toString())) {
+                        Util.setDottedFieldValue(fields.get(j), importable, cell.getDateCellValue());
+                    }
                 }
                 else if (fieldName.indexOf("amount") >= 0) {
                     Util.setDottedFieldValue(fields.get(j), importable, new Long((long) cell.getNumericCellValue()));
@@ -243,7 +260,7 @@ public class ImportServiceImpl implements ImportService
         Set firstMapKeys = firstMap.keySet();
         Iterator firstMapItr = firstMapKeys.iterator();
         while (firstMapItr.hasNext()) {
-            Integer key = (Integer) firstMapItr.next();
+            String key = (String) firstMapItr.next();
             ArrayList list = new ArrayList();
             list.add(firstMap.get(key));
             if (availableMapsToMerge) {
@@ -272,8 +289,10 @@ public class ImportServiceImpl implements ImportService
             Cell cell = (Cell) singleRow.get(0);
 
             if (!first) {
-                Integer key = new Integer((int) cell.getNumericCellValue());
-                if (key.intValue() > 0) {
+                String key = cell.getStringCellValue();
+//                Integer key = new Integer((int) cell.getNumericCellValue());
+//                if (key.intValue() > 0) {
+                if (!Util.nullOrEmptyOrBlank(key)) {
                     if (dataMap.containsKey(key)) {
                         LinkedHashMap tempMap = (LinkedHashMap) dataMap.get(key);
                         ArrayList listRows = (ArrayList) tempMap.get(keyStr);
