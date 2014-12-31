@@ -88,6 +88,7 @@ public class ImportObjectMeta
         registrationFieldPaths.add("participant.email");
         registrationFieldPaths.add("participant.mobile");
         registrationFieldPaths.add("participant.home");
+        registrationFieldPaths.add("participant.address");
         registrationFieldPaths.add("foundationShortName");
         registrationFieldPaths.add("participant.vip");
         registrationFieldPaths.add("participant.vipDesc");
