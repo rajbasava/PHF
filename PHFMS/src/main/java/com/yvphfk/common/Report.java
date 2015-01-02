@@ -157,6 +157,7 @@ public class Report
         registrationFieldPaths.add("participant.email");
         registrationFieldPaths.add("participant.mobile");
         registrationFieldPaths.add("participant.home");
+        registrationFieldPaths.add("participant.address");
         registrationFieldPaths.add("foundation.shortName");
         registrationFieldPaths.add("participant.vip");
         registrationFieldPaths.add("participant.vipDesc");
