@@ -215,6 +215,9 @@ public class ImportServiceImpl implements ImportService
                 else if (fieldName.indexOf("amount") >= 0) {
                     Util.setDottedFieldValue(fields.get(j), importable, new Long((long) cell.getNumericCellValue()));
                 }
+                else if (fieldName.indexOf("refOrder") >= 0) {
+                    Util.setDottedFieldValue(fields.get(j), importable, cell.getNumericCellValue());
+                }
                 else if (fieldName.indexOf("review") >= 0 ||
                         fieldName.indexOf("vip") >= 0 ||
                         fieldName.indexOf("application") >= 0 ||
