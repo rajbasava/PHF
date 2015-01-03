@@ -37,6 +37,8 @@ public interface EventService
 
     public List<EventFee> getEventFees (Integer eventId);
 
+    public List<EventFee> getAllEventFees (Integer eventId);
+
     public List<EventFee> getEventFees (Integer eventId, Boolean review);
 
     public void removeEventFee (Integer eventFeeId);

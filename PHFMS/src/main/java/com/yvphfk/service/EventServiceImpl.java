@@ -95,6 +95,13 @@ public class EventServiceImpl implements EventService
 
     @Override
     @Transactional
+    public List<EventFee> getAllEventFees (Integer eventId)
+    {
+        return eventDAO.getAllEventFees(eventId);
+    }
+
+    @Override
+    @Transactional
     public List<EventFee> getEventFees (Integer eventId, Boolean review)
     {
         return eventDAO.getEventFees(eventId, review);

@@ -36,6 +36,8 @@ public interface EventDAO extends CommonDAO
 
     public List<EventFee> getEventFees (Integer eventId);
 
+    public List<EventFee> getAllEventFees (Integer eventId);
+
     public List<EventFee> getEventFees (Integer eventId, Boolean review);
 
     public EventFee getBestEventFee (Integer eventId, Boolean review, Long amount, CourseType courseType);

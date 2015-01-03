@@ -213,7 +213,7 @@ public class RegistrationController extends CommonController
             map.put("allPaymentModes", PaymentMode.allPaymentModes());
             map.put("allFoundations", allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));
-            map.put("allEventFees", getAllEventFees(registeredParticipant.getEventId(), null));
+            map.put("allEventFees", getAllEventFees(registeredParticipant.getEventId(), null, Boolean.TRUE));
             map.put("allReferenceGroups", getAllReferenceGroups(eventService.listReferenceGroups()));
             return "registerTab";
         }

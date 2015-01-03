@@ -145,7 +145,7 @@ public class EventController extends CommonController
         map.put("event", event);
         map.put("isEdit", isEdit);
         map.put("eventList", eventService.allEvents());
-        map.put("eventFeeList", eventService.getEventFees(eventId));
+        map.put("eventFeeList", eventService.getAllEventFees(eventId));
         map.put("allParticipantCourseTypes", allCourseTypes());
         map.put("allSeatingTypes", SeatingType.allSeatingTypes());
         map.put("allFoundations", allFoundations());
