@@ -31,6 +31,9 @@ public class AppProperties
     @Value("${default.foundationId}")
     private Integer defaultFoundationId;
 
+    @Value("${UI.displaySeatDays}")
+    private Integer displaySeatDays;
+
     public String getFromAddress ()
     {
         return fromAddress;
@@ -54,5 +57,10 @@ public class AppProperties
     public Integer getDefaultFoundationId ()
     {
         return defaultFoundationId;
+    }
+
+    public Integer getDisplaySeatDays ()
+    {
+        return displaySeatDays;
     }
 }

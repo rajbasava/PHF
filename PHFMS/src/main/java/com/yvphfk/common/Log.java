@@ -20,4 +20,6 @@ public class Log
     public static final Logger trainer = Logger.getLogger("com.yvphfk.trainer");
 
     public static final Logger email = Logger.getLogger("com.yvphfk.email");
+
+    public static final Logger load = Logger.getLogger("com.yvphfk.import");
 }

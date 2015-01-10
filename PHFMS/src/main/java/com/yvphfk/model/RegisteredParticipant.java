@@ -4,12 +4,15 @@
 */
 package com.yvphfk.model;
 
+import com.yvphfk.common.AppProperties;
+import com.yvphfk.common.ApplicationContextUtils;
 import com.yvphfk.model.form.Event;
 import com.yvphfk.model.form.EventPayment;
 import com.yvphfk.model.form.EventRegistration;
 import com.yvphfk.model.form.HistoryRecord;
 import com.yvphfk.model.form.Participant;
 import com.yvphfk.model.form.ParticipantSeat;
+import org.springframework.context.ApplicationContext;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -227,11 +230,31 @@ public class RegisteredParticipant implements Serializable, Importable
 
     public boolean isDisplaySeat ()
     {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.DATE, 2);
-        Date validToShow = calendar.getTime();
-        return validToShow.after(getRegistration().getEvent().getStartDate());
+        ApplicationContext context = ApplicationContextUtils.getApplicationContext();
+
+        if (context == null) {
+            return false;
+        }
+
+        AppProperties appProperties =
+                (AppProperties) context.getBean("appProperties");
+        if (appProperties != null) {
+            int days = appProperties.getDisplaySeatDays().intValue();
+
+            if (days < 1) {
+                return true;
+            }
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.DATE, days);
+            Date validToShow = calendar.getTime();
+            return validToShow.after(getRegistration().getEvent().getStartDate());
+        }
+
+        return false;
+
+
     }
 
     public boolean isNewbie ()

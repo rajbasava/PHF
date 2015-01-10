@@ -831,9 +831,9 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
         switch (countryCode) {
             case Indians: {
-                Criterion forgnCond = Restrictions.ne("participant.country", "India");
-                Criterion notNullCond = Restrictions.isNotNull("participant.country");
-                criteria.add(Restrictions.or(forgnCond, notNullCond));
+                Criterion indCond = Restrictions.eq("participant.country", "India");
+                Criterion nullCond = Restrictions.isNull("participant.country");
+                criteria.add(Restrictions.or(indCond, nullCond));
                 break;
             }
             case NonIndians: {

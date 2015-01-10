@@ -35,7 +35,10 @@ public class ParticipantSeat extends BaseForm
     @JoinColumn(name = "EVENTID")
     private Event event;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    // removed cascade here to avoid org.hibernate.NonUniqueObjectException: a different object with the same
+    // identifier value was already associated with the session:
+    // link :http://stackoverflow.com/questions/16246675/hibernate-error-a-different-object-with-the-same-identifier-value-was-already-a
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "coursetype")
     private CourseType courseType;
 
@@ -157,5 +160,51 @@ public class ParticipantSeat extends BaseForm
     public void setRegistrationId (Integer registrationId)
     {
         this.registrationId = registrationId;
+    }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ParticipantSeat)) {
+            return false;
+        }
+
+        ParticipantSeat that = (ParticipantSeat) o;
+
+        if (alpha != null ? !alpha.equals(that.alpha) : that.alpha != null) {
+            return false;
+        }
+        if (courseType != null ? !courseType.equals(that.courseType) : that.courseType != null) {
+            return false;
+        }
+        if (event != null ? !event.equals(that.event) : that.event != null) {
+            return false;
+        }
+        if (!id.equals(that.id)) {
+            return false;
+        }
+        if (registration != null ? !registration.equals(that.registration) : that.registration != null) {
+            return false;
+        }
+        if (seat != null ? !seat.equals(that.seat) : that.seat != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode ()
+    {
+        int result = id.hashCode();
+        result = 31 * result + (registration != null ? registration.hashCode() : 0);
+        result = 31 * result + (event != null ? event.hashCode() : 0);
+        result = 31 * result + (courseType != null ? courseType.hashCode() : 0);
+        result = 31 * result + (seat != null ? seat.hashCode() : 0);
+        result = 31 * result + (alpha != null ? alpha.hashCode() : 0);
+        return result;
     }
 }

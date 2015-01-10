@@ -292,6 +292,7 @@ public class ImportServiceImpl implements ImportService
             Cell cell = (Cell) singleRow.get(0);
 
             if (!first) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 String key = cell.getStringCellValue();
 //                Integer key = new Integer((int) cell.getNumericCellValue());
 //                if (key.intValue() > 0) {

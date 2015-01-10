@@ -83,3 +83,7 @@ Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contr
 Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1015,1000,500,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
 Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1016,1000,510,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
 Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1017,1000,520,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
+
+update phk_foundation SET name = 'MCKS Yoga Vidya Pranic Healing Foundation Trust-Tamilnadu',shortname = 'MCKS YVPHFT TN' where id = 170;
+update phk_foundation SET name = 'Yoga Vidya Pranic Healing Foundation, Mumbai',shortname = 'YVPHF Mumbai' where id = 130;
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('420','Yoga Vidya Pranic Healing Foundation Trust of Maharashtra – Mumbai North','YVPHFT Mumbai North','Mumbai','Maharashtra','India','system', now(), now(), '1');

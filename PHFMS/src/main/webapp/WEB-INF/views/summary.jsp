@@ -96,8 +96,8 @@
                 <td>Seat No</td>
             </tr>
             <c:forEach items="${registeredParticipant.registration.seats}" var="seat">
-                <c:if  test="${seat.level != null}">
-                    <tr style="font-size:20px;color:#ff0000;">
+                <c:if  test="${seat.levelName != null}">
+                    <tr style="font-size:24px;color:#ff0000;font-weight:bold;">
                         <td>
                             <c:if  test="${!empty registeredParticipant.registration.seats}">
                                 <c:forEach items="${registeredParticipant.registration.seats}" var="seat">
