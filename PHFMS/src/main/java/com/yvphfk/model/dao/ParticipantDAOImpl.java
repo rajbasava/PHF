@@ -244,6 +244,32 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
             records.add(record);
             session.update(registration);
         }
+
+        transaction.commit();
+
+        session.flush();
+        session.close();
+
+        updateKits(login, registration);
+
+        addHistoryRecords(records, registration);
+
+        List<EventPayment> payments = registeredParticipant.getAllPayments();
+        for (EventPayment payment : payments) {
+            processPayment(payment, registration.getId(), true);
+        }
+
+        if (payments.isEmpty()) {
+            updateTotalPayments(registration);
+            updatePDCCount(registration);
+        }
+
+        return registration;
+    }
+
+    private void updateKits (Login login, EventRegistration registration)
+    {
+        Session session = sessionFactory.openSession();
         // local = false and eventKit = true update else event kit dont do anything
         // local = true and eventKit = false update event kit else dont do anything
         if (login != null && (registration.isEventKit() ^ registration.isLocalEventKitStatus())) {
@@ -267,24 +293,9 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
             }
         }
 
-        transaction.commit();
-
         session.flush();
         session.close();
 
-        addHistoryRecords(records, registration);
-
-        List<EventPayment> payments = registeredParticipant.getAllPayments();
-        for (EventPayment payment : payments) {
-            processPayment(payment, registration.getId(), true);
-        }
-
-        if (payments.isEmpty()) {
-            updateTotalPayments(registration);
-            updatePDCCount(registration);
-        }
-
-        return registration;
     }
 
     private VolunteerKit getVolunteerKit (Session session, String email, String eventId)

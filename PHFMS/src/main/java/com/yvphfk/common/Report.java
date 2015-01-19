@@ -77,7 +77,7 @@ public class Report
         paymentFieldPaths.add("registration.participant.name");
         paymentFieldPaths.add("registration.courseType.shortName");
         paymentFieldPaths.add("event.name");
-        paymentFieldPaths.add("courseType.shortName");
+        paymentFieldPaths.add("registration.foundation.shortName");
         paymentFieldPaths.add("alpha");
         paymentFieldPaths.add("seat");
         paymentFieldPaths.add("custom");

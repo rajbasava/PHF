@@ -87,3 +87,7 @@ Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contr
 update phk_foundation SET name = 'MCKS Yoga Vidya Pranic Healing Foundation Trust-Tamilnadu',shortname = 'MCKS YVPHFT TN' where id = 170;
 update phk_foundation SET name = 'Yoga Vidya Pranic Healing Foundation, Mumbai',shortname = 'YVPHF Mumbai' where id = 130;
 Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('420','Yoga Vidya Pranic Healing Foundation Trust of Maharashtra – Mumbai North','YVPHFT Mumbai North','Mumbai','Maharashtra','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('430','MCKS Pranic Healing UK Ireland','MCKS PH UK & Ireland','Mumbai','Maharashtra','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('440','GMCKS Pranic Healing Foundation East Africa','GMCKS PHF East Africa','Mumbai','Maharashtra','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('450','Pranic Healing Center USA','PHC USA','Mumbai','Maharashtra','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('460','Pranic Healing London UK','PH London','Mumbai','Maharashtra','India','system', now(), now(), '1');
