@@ -57,6 +57,9 @@ public class ParticipantSeat extends BaseForm
     @Transient
     private Integer registrationId;
 
+    @Transient
+    private String courseTypeShortName;
+
     public Integer getId ()
     {
         return id;
@@ -160,6 +163,16 @@ public class ParticipantSeat extends BaseForm
     public void setRegistrationId (Integer registrationId)
     {
         this.registrationId = registrationId;
+    }
+
+    public String getCourseTypeShortName ()
+    {
+        return courseTypeShortName;
+    }
+
+    public void setCourseTypeShortName (String courseTypeShortName)
+    {
+        this.courseTypeShortName = courseTypeShortName;
     }
 
     @Override

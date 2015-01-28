@@ -95,21 +95,17 @@
             <tr>
                 <td>Seat No</td>
             </tr>
-            <c:forEach items="${registeredParticipant.registration.seats}" var="seat">
-                <c:if  test="${seat.levelName != null}">
+            <c:if  test="${!empty registeredParticipant.registration.seats}">
+                <c:forEach items="${registeredParticipant.registration.seats}" var="seat">
+                    <c:if  test="${seat.seat != null}">
                     <tr style="font-size:24px;color:#ff0000;font-weight:bold;">
                         <td>
-                            <c:if  test="${!empty registeredParticipant.registration.seats}">
-                                <c:forEach items="${registeredParticipant.registration.seats}" var="seat">
-                                    <c:if  test="${seat.seat != null}">
-                                        <c:out value="${seat.levelName}"/>&nbsp;-&nbsp;<c:out value="${seat.alpha}"/>&nbsp;<c:out value="${seat.seat}"/>
-                                    </c:if>
-                                </c:forEach>
-                            </c:if>
+                            <c:out value="${seat.levelName}"/>&nbsp;-&nbsp;<c:out value="${seat.alpha}"/>&nbsp;<c:out value="${seat.seat}"/>
                         </td>
                     </tr>
-                </c:if>
-            </c:forEach>
+                    </c:if>
+                </c:forEach>
+            </c:if>
             </table>
             </c:if>
             </td>

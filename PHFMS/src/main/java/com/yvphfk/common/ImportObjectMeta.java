@@ -28,7 +28,8 @@ public class ImportObjectMeta
     public static ImportObjectMeta CustomSeats =
             new ImportObjectMeta(KeyCustomSeats,
                     "com.yvphfk.model.form.ParticipantSeat",
-                    "addParticipantSeat");
+                    "addParticipantSeat",
+                    "participantSeatImportableProcessor");
 
     public static ImportObjectMeta RegistrationsUpdate =
             new ImportObjectMeta(KeyRegistrationsUpdate,
@@ -138,7 +139,7 @@ public class ImportObjectMeta
         //{"Name","Email","Mobile","Home","Foundation","Vip","VipDesc"};
         List<String> rowMetaFieldPaths = new ArrayList<String>();
         rowMetaFieldPaths.add("registrationId");
-        rowMetaFieldPaths.add("level");
+        rowMetaFieldPaths.add("CourseTypeShortName");
         rowMetaFieldPaths.add("alpha");
         rowMetaFieldPaths.add("seat");
         rowMetaFieldPaths.add("custom");

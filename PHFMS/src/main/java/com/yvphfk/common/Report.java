@@ -75,7 +75,7 @@ public class Report
         List<String> paymentFieldPaths = new ArrayList<String>();
         paymentFieldPaths.add("registration.id");
         paymentFieldPaths.add("registration.participant.name");
-        paymentFieldPaths.add("registration.courseType.shortName");
+        paymentFieldPaths.add("courseType.shortName");
         paymentFieldPaths.add("event.name");
         paymentFieldPaths.add("registration.foundation.shortName");
         paymentFieldPaths.add("alpha");
