@@ -21,18 +21,14 @@
             });
             $("#results").flexigrid({
 					colModel : [
-                        {display: '<spring:message code="label.id"/>', width : 18, align: 'left'},
-                        {display: '<spring:message code="label.name"/>', width : 200, align: 'left'},
-                        {display: '<spring:message code="label.mobile"/>', width : 75, align: 'left'},
-                        {display: '<spring:message code="label.foundation"/>', width : 350, align: 'left'},
-                        {display: 'Event', width : 150, align: 'left'},
-                        {display: '<spring:message code="label.courseType"/>', width : 50, align: 'left'},
-                        {display: 'Amount Paid', width : 60, align: 'left'},
-                        {display: '<spring:message code="label.amountDue"/>', width : 60, align: 'left'},
-                        {display: 'Coupon', width : 50, align: 'left'},
-                        {display: 'Kit', width : 40, align: 'left'},
-                        {display: '<spring:message code="label.status"/>', width : 50, align: 'left'},
-                        {display: '<spring:message code="label.email"/>', width : 100, align: 'left'}
+                        {display: 'Reg.Id', width : 40, align: 'left'},
+                        {display: '<spring:message code="label.name"/>', width : 250, align: 'left'},
+                        {display: '<spring:message code="label.mobile"/>', width : 100, align: 'left'},
+                        {display: '<spring:message code="label.email"/>', width : 200, align: 'left'},
+                        {display: '<spring:message code="label.foundation"/>', width : 190, align: 'left'},
+                        {display: '<spring:message code="label.event"/>', width : 150, align: 'left'},
+                        {display: 'Details', width : 200, align: 'left'},
+                        {display: 'Action', width : 75, align: 'left'}
 					],
 					useRp: true,
 					rp: 10,
@@ -84,87 +80,32 @@
 					<td ><form:label path="mobile"><spring:message code="label.mobile"/></form:label></td>
 					<td ><form:input path="mobile" /></td>
 				</tr>
-				<tr>
-					<td ><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
-					<td >
-						<form:select path="eventId">
-							<form:option value="" label="--- Select ---"/>
-							<form:options items="${allEvents}" />
-						</form:select>
-					</td>
-				</tr>
-				<tr>
-					<td ><form:label path="foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
-					<td >
-						<form:radiobutton path="foodCoupon" value="true"/>True &nbsp;
-						<form:radiobutton path="foodCoupon" value="false"/>False &nbsp;
-						<form:radiobutton path="foodCoupon" value=""/>Both
-					</td>
-				</tr>
-				<tr>
-					<td ><spring:message code="label.registrationDate"/></td>
-					<td >
-						<table width="100%">
-							<tr>
-								<td>From: </td><td><form:input path="fromRegistrationDate"/></td>
-							</tr>
-							<tr>
-								<td>To: </td><td><form:input path="toRegistrationDate"/></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
 			</table>
 		</td>
 		<td>
 			<table>
 				<tr>
-					<td ><form:label path="foundationId">
-					        <spring:message code="label.foundation"/></form:label></td>
-					<td >
+					<td><form:label path="foundationId"><spring:message code="label.foundation"/></form:label></td>
+					<td>
 						<form:select path="foundationId">
-						<form:option value="" label="--- Select ---"/>
-						<form:options items="${allFoundations}" />
+                            <form:option value="" label="--- Select ---"/>
+                            <form:options items="${allFoundations}" />
 						</form:select>
 					</td>
 				</tr>
-					<td ><form:label path="courseTypeId"><spring:message code="label.courseType"/></form:label></td>
-					<td >
-						<form:select path="courseTypeId">
-							<form:option value="" label="--- Select ---"/>
-							<form:options items="${allParticipantCourseTypes}" />
-						</form:select>
-					</td>
-				<tr>
-					<td ><form:label path="vip"><spring:message code="label.vip"/></form:label></td>
-					<td ><form:checkbox path="vip"/></td>
-				</tr>
-				<tr>
-					<td ><form:label path="eventKit"><spring:message code="label.eventKit"/></form:label></td>
-					<td >
-						<form:radiobutton path="eventKit" value="true"/>True &nbsp;
-						<form:radiobutton path="eventKit" value="false"/>False &nbsp;
-						<form:radiobutton path="eventKit" value=""/>Both
-					</td>
-				</tr>
                 <tr>
-                    <td ><form:label path="status"><spring:message code="label.status"/></form:label></td>
+                    <td ><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
                     <td >
-                        <form:select path="status">
+                        <form:select path="eventId">
                             <form:option value="" label="--- Select ---"/>
-                            <form:options items="${allStatuses}" />
+                            <form:options items="${allEvents}" />
                         </form:select>
                     </td>
                 </tr>
-                <tr>
-                    <td ><form:label path="reference"><spring:message code="label.reference"/></form:label></td>
-                    <td >
-                        <form:select path="reference">
-                            <form:option value="" label="--- Select ---"/>
-                            <form:options items="${allReferenceGroups}" />
-                        </form:select>
-                    </td>
-                </tr>
+				<tr>
+					<td ><form:label path="id">Reg. Id</form:label></td>
+					<td ><form:input path="id" /></td>
+				</tr>
 			</table>
 		</td>
 	</tr>
@@ -202,28 +143,49 @@
                                 </a>
                             </form>
                         </td>
-
                         <td><c:out value="${registration.participant.mobile}"/></td>
+                        <td><c:out value="${registration.participant.email}"/></td>
                         <td><c:out value="${registration.foundation.shortName}"/></td>
                         <td><c:out value="${registration.event.name}"/></td>
-                        <td><c:out value="${registration.courseType.shortName}"/></td>
                         <td>
-                            <c:out value="${registration.totalAmountPaid}"/>
+							<div>
+								<p style="display:inline;font-weight:bold; color:lightblue; font-size:16px; border:1px blue solid; border-radius: 5px; padding: 2px">
+								    <c:out value="${registration.getLevelName()}"/>
+                                </p>
+							    <c:if  test="${registration.isRegistered()}">
+								    <p style="display:inline;font-weight:bold; color:green; font-size:16px; border:1px green solid; border-radius: 5px; padding:2px; margin-left:4px;">R</p>
+								</c:if>
+                                <c:if  test="${registration.isAttend()}">
+                                    <p style="display:inline;font-weight:bold; color:lightgreen; font-size:16px; border:1px green solid; border-radius: 5px; padding: 2px; background-color: lightgreen; margin-right:4px;">
+                                        &nbsp;
+                                    </p>
+								</c:if>
+							    <c:if  test="${registration.isAmountDue()}">
+								    <p style="display:inline;font-weight:bold; color:red; font-size:16px; border:1px red solid; border-radius: 5px; padding: 2px">$</p>
+								</c:if>
+								<c:if  test="${registration.isJainFood()}">
+								    <p style="display:inline;font-weight:bold; color:violet; font-size:16px; border:1px violet solid; border-radius: 5px; padding: 2px">J</p>
+								</c:if>
+								<c:if  test="${registration.isVIP()}">
+								    <p style="display:inline;font-weight:bold; color:gold; font-size:16px; border:1px gold solid; border-radius: 5px; padding: 2px">&#9733;</p>
+								</c:if>
+							</div>
                         </td>
-                        <td><c:out value="${registration.amountDue}"/></td>
-                        <td><c:out value="${registration.foodCoupon}"/></td>
-                        <c:if  test="${registration.eventKit}">
-                            <td style="font-weight:bold; color:green; font-size:20px;">
-                                <c:out value="${registration.eventKit}"/>
-                            </td>
-                        </c:if>
-                        <c:if  test="${!registration.eventKit}">
-                            <td width="6%">
-                                <c:out value="${registration.foodCoupon}"/>
-                            </td>
-                        </c:if>
-                        <td><c:out value="${registration.status}"/></td>
-                        <td><c:out value="${registration.participant.email}"/></td>
+                        <td>
+                            <div>
+                                <form id="attendPart<c:out value="${registration.id}"/>" method="post" action="attendRegistration.htm">
+                                    <input type="hidden" name="registrationId" value="<c:out value="${registration.id}"/>" />
+                                        <c:choose>
+                                            <c:when test="${user.access.infoVolunteer || registration.isAmountDue() || registration.isAttend()}">
+                                                <input type="button" value="Attend" onclick="document.getElementById('attendPart<c:out value="${registration.id}"/>').submit();" disabled/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <input type="button" value="Attend" onclick="document.getElementById('attendPart<c:out value="${registration.id}"/>').submit();" />
+                                            </c:otherwise>
+                                        </c:choose>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
                 </c:forEach>
                 <tbody>

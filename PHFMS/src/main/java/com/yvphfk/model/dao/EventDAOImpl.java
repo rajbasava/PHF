@@ -16,6 +16,7 @@ import com.yvphfk.model.form.PHFoundation;
 import com.yvphfk.model.form.ReferenceGroup;
 import com.yvphfk.model.form.RowMeta;
 import com.yvphfk.model.form.VolunteerKit;
+import com.yvphfk.model.form.WorkshopLevel;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Query;
@@ -85,6 +86,25 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
     }
 
     @Override
+    public WorkshopLevel getWorkshopLevel (Integer workshopLevelId)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(WorkshopLevel.class);
+
+        criteria.add(Restrictions.eq("id", workshopLevelId));
+        criteria.add(Restrictions.eq("active", true));
+        List<WorkshopLevel> workshopLevels = criteria.list();
+
+        session.close();
+        if (workshopLevels == null ||
+                workshopLevels.isEmpty()) {
+            return null;
+        }
+
+        return workshopLevels.get(0);
+    }
+
+    @Override
     public CourseType getCourseType (String shortName)
     {
         Session session = sessionFactory.openSession();
@@ -101,6 +121,26 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
         }
 
         return courseTypes.get(0);
+    }
+
+    @Override
+    public WorkshopLevel getWorkshopLevel (String courseShortName)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(WorkshopLevel.class);
+        criteria.createAlias("courseType", "courseType");
+
+        criteria.add(Restrictions.eq("courseType.shortName", courseShortName));
+        criteria.add(Restrictions.eq("active", true));
+        List<WorkshopLevel> workshopLevels = criteria.list();
+
+        session.close();
+        if (workshopLevels == null ||
+                workshopLevels.isEmpty()) {
+            return null;
+        }
+
+        return workshopLevels.get(0);
     }
 
     @Override
@@ -218,13 +258,38 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
     }
 
     @Override
-    public List<EventFee> getEventFees (Integer eventId)
+    public void addWorkshopLevel (WorkshopLevel workshopLevel, Integer eventId)
     {
-        return getEventFees(eventId, null);
+        if (eventId == null) {
+            return;
+        }
+        Session session = sessionFactory.openSession();
+
+        Event event = (Event) session.load(Event.class, eventId);
+
+        if (event == null) {
+            return;
+        }
+
+        CourseType courseType = (CourseType) session.load(CourseType.class,
+                workshopLevel.getCourseTypeId());
+
+        workshopLevel.setCourseType(courseType);
+        workshopLevel.setEvent(event);
+        workshopLevel.setName(courseType.getShortName());
+        session.save(workshopLevel);
+
+        session.close();
     }
 
     @Override
-    public List<EventFee> getEventFees (Integer eventId, Boolean review)
+    public List<EventFee> getEventFees (Integer eventId)
+    {
+        return getEventFees(eventId, null, null);
+    }
+
+    @Override
+    public List<EventFee> getEventFees (Integer eventId, Boolean review, Integer workshopLevelId)
     {
         if (eventId == null) {
             return null;
@@ -238,6 +303,12 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
 
         criteria.add(Restrictions.eq("event", event));
         criteria.add(Restrictions.eq("active", true));
+
+        if (workshopLevelId != null) {
+            WorkshopLevel workshopLevel = (WorkshopLevel) sessionFactory.getCurrentSession().load(
+                    WorkshopLevel.class, workshopLevelId);
+            criteria.add(Restrictions.eq("workshopLevel", workshopLevel));
+        }
 
         if (review != null) {
             criteria.add(Restrictions.eq("review", review.booleanValue()));
@@ -272,10 +343,31 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
     }
 
     @Override
+    public List<WorkshopLevel> getAllWorkshopLevels (Integer eventId)
+    {
+        if (eventId == null) {
+            return null;
+        }
+
+        Event event = (Event) sessionFactory.getCurrentSession().load(
+                Event.class, eventId);
+
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(WorkshopLevel.class);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.add(Restrictions.eq("event", event));
+        criteria.addOrder(Order.asc("levelOrder"));
+        List<WorkshopLevel> workshopLevels = criteria.list();
+        session.close();
+
+        return workshopLevels;
+    }
+
+    @Override
     public EventFee getBestEventFee (Integer eventId,
                                      Boolean review,
                                      Long amount,
-                                     CourseType courseType)
+                                     WorkshopLevel workshopLevel)
     {
         if (eventId == null) {
             return null;
@@ -297,8 +389,8 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
             criteria.add(Restrictions.eq("amount", amount));
         }
 
-        if (courseType != null) {
-            criteria.add(Restrictions.eq("courseType", courseType));
+        if (workshopLevel != null) {
+            criteria.add(Restrictions.eq("workshopLevel", workshopLevel));
         }
 
         criteria.addOrder(Order.asc("timeCreated"));
@@ -596,4 +688,64 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
         return referenceGroups;
     }
 
+    public List getAttendeesPivot (Integer eventId)
+    {
+        /**
+         select foundation.shortname,
+         count(reg.id),
+         (select count(id) from phk_eventregstrn where attend = 1 and foundation = reg.foundation) as Attendees,
+         (select count(id) from phk_eventregstrn where attend = 0 and foundation = reg.foundation) as Absentees
+         from phk_eventregstrn as reg, phk_foundation as foundation where reg.foundation = foundation.id
+         group by foundation.id
+
+         */
+
+        String strQuery = "select foundation.shortname, " +
+                " (select count(id) from phk_eventregstrn " +
+                "   where attend = 1 and foundation = reg.foundation and eventid = :eventId) as Attendees, " +
+                " (select count(id) from phk_eventregstrn " +
+                "   where attend = 0 and foundation = reg.foundation and eventid = :eventId) as Absentees, " +
+                " count(reg.id) " +
+                " from phk_eventregstrn as reg, phk_foundation as foundation " +
+                " where reg.foundation = foundation.id and reg.eventid = :eventId" +
+                " group by foundation.id ";
+
+        Session session = sessionFactory.openSession();
+
+        Query query = session.createSQLQuery(strQuery);
+        query.setInteger("eventId", eventId);
+        List results = query.list();
+
+        session.flush();
+        session.close();
+
+        return results;
+    }
+
+    public Object getTotalAttendeesPivot (Integer eventId)
+    {
+        /**
+            select count(reg.id),
+            (select count(id) from phk_eventregstrn where attend = 1) as Attendees,
+            (select count(id) from phk_eventregstrn where attend = 0) as Absentees
+            from phk_eventregstrn as reg
+         */
+
+        String strQuery = "select " +
+                " (select count(id) from phk_eventregstrn where attend = 1 and eventid = :eventId) as Attendees, " +
+                " (select count(id) from phk_eventregstrn where attend = 0 and eventid = :eventId) as Absentees,  " +
+                " count(reg.id)  "+
+                " from phk_eventregstrn as reg where reg.eventid = :eventId";
+
+        Session session = sessionFactory.openSession();
+
+        Query query = session.createSQLQuery(strQuery);
+        query.setInteger("eventId", eventId);
+        Object result = query.uniqueResult();
+
+        session.flush();
+        session.close();
+
+        return result;
+    }
 }

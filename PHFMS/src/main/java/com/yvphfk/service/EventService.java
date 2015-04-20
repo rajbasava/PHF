@@ -15,6 +15,7 @@ import com.yvphfk.model.form.PHFoundation;
 import com.yvphfk.model.form.ParticipantSeat;
 import com.yvphfk.model.form.ReferenceGroup;
 import com.yvphfk.model.form.VolunteerKit;
+import com.yvphfk.model.form.WorkshopLevel;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,8 @@ public interface EventService
 
     public CourseType getCourseType (Integer courseTypeId);
 
+    public WorkshopLevel getWorkshopLevel (Integer workshopLevelId);
+
     public List<Event> allEvents ();
 
     public List<Event> searchEvents (EventCriteria eventCriteria);
@@ -35,11 +38,15 @@ public interface EventService
 
     public void addEventFee (EventFee fee, Integer eventId);
 
+    public void addWorkshopLevel (WorkshopLevel workshopLevel, Integer eventId);
+
     public List<EventFee> getEventFees (Integer eventId);
 
     public List<EventFee> getAllEventFees (Integer eventId);
 
-    public List<EventFee> getEventFees (Integer eventId, Boolean review);
+    public List<WorkshopLevel> getAllWorkshopLevels (Integer eventId);
+
+    public List<EventFee> getEventFees (Integer eventId, Boolean review, Integer workshopLevelId);
 
     public void removeEventFee (Integer eventFeeId);
 
@@ -74,5 +81,10 @@ public interface EventService
     public List<ReferenceGroup> listReferenceGroups ();
 
     public PHFoundation getFoundation (Integer foundationId);
+
+    public List getAttendeesPivot (Integer eventId);
+
+    public Object getTotalAttendeesPivot (Integer eventId);
+
 
 }

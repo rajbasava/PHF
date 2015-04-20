@@ -48,12 +48,28 @@ public class RegistrationValidator implements Validator
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "eventId", "eventId");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "registration.foundationId", "registration.foundationId");
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "registration.level", "registration.level");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "registration.eventFee", "registration.eventFee");
+        if (registeredParticipant.getRegistration() != null &&
+                registeredParticipant.getRegistration().getEvent() != null &&
+                registeredParticipant.getRegistration().getEvent().isWorkshop() &&
+                (registeredParticipant.getRegistration().getWorkshopLevelId() == null ||
+                registeredParticipant.getRegistration().getWorkshopLevelId() < 0)){
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "registration.workshopLevelId", "registration.workshopLevelId");
+        }
 
         if (registeredParticipant.getRegistration().getAmountPayable() == null ||
                 registeredParticipant.getRegistration().getAmountPayable() <= 0) {
             errors.reject("registration.amountPayable", "registration.amountPayable");
+        }
+
+        if (RegisteredParticipant.ActionRegister.equals(
+                registeredParticipant.getAction()) &&
+                registeredParticipant.isNewbie()) {
+            if (registeredParticipant.getCurrentPayment() == null ||
+                    registeredParticipant.getCurrentPayment().getAmountPaid() == null ||
+                    registeredParticipant.getCurrentPayment().getAmountPaid() <= 0) {
+                errors.reject("currentPayment.amountPaid", "currentPayment.amountPaid");
+            }
         }
 
         Login login = Util.getCurrentUser();

@@ -54,6 +54,12 @@ public class ParticipantSeat extends BaseForm
     @Column(name = "CUSTOM")
     private boolean custom;
 
+    @Column(name = "GATE")
+    private String gate;
+
+    @Column(name = "foodcounter")
+    private String foodCounter;
+
     @Transient
     private Integer registrationId;
 
@@ -153,6 +159,26 @@ public class ParticipantSeat extends BaseForm
     public void setCustom (boolean custom)
     {
         this.custom = custom;
+    }
+
+    public String getGate ()
+    {
+        return gate;
+    }
+
+    public void setGate (String gate)
+    {
+        this.gate = gate;
+    }
+
+    public String getFoodCounter ()
+    {
+        return foodCounter;
+    }
+
+    public void setFoodCounter (String foodCounter)
+    {
+        this.foodCounter = foodCounter;
     }
 
     public Integer getRegistrationId ()

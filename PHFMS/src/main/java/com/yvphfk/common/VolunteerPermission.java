@@ -9,6 +9,7 @@ import java.util.Map;
 
 public enum VolunteerPermission
 {
+    NoAccess("noaccess", "No Access"),
     Admin("admin", "Administrator"),
     RegVol("regtvoln", "Registration Volunteer"),
     SptRegVol("sptregtvoln", "Spot Registration Volunteer"),
@@ -40,6 +41,8 @@ public enum VolunteerPermission
         if (allVolunteerPermissions == null) {
             allVolunteerPermissions = new LinkedHashMap<String, String>();
 
+            allVolunteerPermissions.put(VolunteerPermission.NoAccess.getKey(),
+                    VolunteerPermission.NoAccess.getName());
             allVolunteerPermissions.put(VolunteerPermission.Admin.getKey(),
                     VolunteerPermission.Admin.getName());
             allVolunteerPermissions.put(VolunteerPermission.SptRegVol.getKey(),
@@ -56,6 +59,11 @@ public enum VolunteerPermission
     public static String getName (String key)
     {
         return allVolunteerPermissions().get(key);
+    }
+
+    public static boolean hasNoAccess (String permission)
+    {
+        return VolunteerPermission.NoAccess.getKey().equalsIgnoreCase(permission);
     }
 
     public static boolean isAdmin (String permission)

@@ -7,6 +7,7 @@ package com.yvphfk.model.dao;
 import com.yvphfk.model.ParticipantCourseForm;
 import com.yvphfk.model.ParticipantCriteria;
 import com.yvphfk.model.TrainerCriteria;
+import com.yvphfk.model.form.BaseForm;
 import com.yvphfk.model.form.Event;
 import com.yvphfk.model.form.EventPayment;
 import com.yvphfk.model.form.EventRegistration;
@@ -50,6 +51,8 @@ public interface ParticipantDAO extends CommonDAO
     public List<EventRegistration> listRegistrations (RegistrationCriteria registrationCriteria);
 
     public List<EventRegistration> allUnallocatedRegistrations (Event event, boolean vip, int countryCode);
+
+    public List<EventRegistration> allRefOrderBasedUnallocatedRegistrations (Event event, boolean vip);
 
     public List<EventPayment> listPayments (PaymentCriteria paymentCriteria);
 

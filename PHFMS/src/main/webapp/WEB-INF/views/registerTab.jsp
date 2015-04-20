@@ -23,14 +23,36 @@
                      $("#registeredParticipant").submit();
                 });
 
-                $("a#updateNSummary").button();
-                $("a#updateNSummary").css("font-size", "11px");
-                $("a#updateNSummary").click(function() {
+                $("a#updateNAttend").button();
+                $("a#updateNAttend").css("font-size", "11px");
+                $("a#updateNAttend").click(function() {
                      $("#registeredParticipant").get(0).setAttribute('action', 'addRegistration.htm');
-                     $("#registeredParticipant input[name='showSummary']").val('true');
+                     $("#registeredParticipant input[name='attend']").val('true');
                      $("#registeredParticipant").submit();
                 });
 
+                $("a#attend").button();
+                $("a#attend").css("font-size", "11px");
+                $("a#attend").click(function() {
+                    jQuery('<form>', {
+                            'action': 'attendRegistration.htm',
+                        }).append(jQuery('<input>', {
+                            'name': 'registrationId',
+                            'value': '<c:out value="${registeredParticipant.registration.id}"/>',
+                            'type': 'hidden'
+                        })).submit();
+                });
+                $("a#summary").button();
+                $("a#summary").css("font-size", "11px");
+                $("a#summary").click(function() {
+                    jQuery('<form>', {
+                            'action': 'showAttendanceSummary.htm',
+                        }).append(jQuery('<input>', {
+                            'name': 'registrationId',
+                            'value': '<c:out value="${registeredParticipant.registration.id}"/>',
+                            'type': 'hidden'
+                        })).submit();
+                });
                 $("a#showPayments").button();
                 $("a#showPayments").css("font-size", "11px");
                 $("a#showPayments").click(function() {
@@ -226,7 +248,7 @@
             <form:hidden path="registration.refOrder"/>
             <form:hidden path="registration.totalAmountPaid"/>
             <input id="access" name="access" type="hidden" value="<c:out value="${isInfoVolunteer || isRegVolunteer}"/>"/>
-            <input id="showSummary" name="showSummary" type="hidden" value=""/>
+            <input id="attend" name="attend" type="hidden" value=""/>
 			<table width="80%" cellspacing="1" cellpadding="1">
 				<tr>
 					<td>
@@ -255,19 +277,19 @@
                                 <td><form:checkbox path="registration.review" onclick="return ${isSpotRegVolunteer || isAdmin}"/></td>
                             </tr>
                             <tr>
-                                <td><form:label path="registration.courseTypeId"><spring:message code="label.courseType"/></form:label></td>
+                                <td><form:label path="registration.workshopLevelId"><spring:message code="label.workshopLevel"/></form:label></td>
                                 <td>
                                 	<c:choose>
 										<c:when test="${isInfoVolunteer || isRegVolunteer}">
-		                                    <form:select path="registration.courseTypeId" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
+		                                    <form:select path="registration.workshopLevelId" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
 		                                        <form:option value="-1" label="--- Select ---"/>
-		                                        <form:options items="${allCourseTypes}" />
+		                                        <form:options items="${workshopLevels}" />
 		                                    </form:select>										
 										</c:when>
 										<c:otherwise>
-		                                    <form:select path="registration.courseTypeId">
+		                                    <form:select path="registration.workshopLevelId">
 		                                        <form:option value="-1" label="--- Select ---"/>
-		                                        <form:options items="${allCourseTypes}" />
+		                                        <form:options items="${workshopLevels}" />
 		                                    </form:select>										
 										</c:otherwise>
 									</c:choose>
@@ -303,7 +325,7 @@
                             </tr>
                             <tr>
                                 <td><spring:message code="label.amountDue"/></td>
-                                <td><c:out value="${registeredParticipant.registration.amountDue}"/></td>
+                                <td><c:out value="${registeredParticipant.registration.getAmountDue()}"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.reference"><spring:message code="label.reference"/></form:label></td>
@@ -378,23 +400,27 @@
                     </tr>
                     <tr style="background-color:#DFDFDF;">
                         <td align="center">
+                        <c:if test="${registeredParticipant.registration.isAmountDue()}" var="isAmountDue" />
+                        <c:if test="${registeredParticipant.registration.isAttend()}" var="isAttend" />
+                        <c:if test="${isSpotRegVolunteer || isRegVolunteer}">
                             <c:choose>
-                                <c:when test="${user.access.admin}" >
-                                    <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
-                                    <a id="updateNSummary" href="#">Update and Show Summary</a>
+                                <c:when test="${!isAttend && !isAmountDue}">
+                                    <a id="attend" href="#">Attend</a>
                                 </c:when>
-                                <c:when test="${!registeredParticipant.registration.eventKit}" >
-                                    <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
-                                    <a id="updateNSummary" href="#">Update and Show Summary</a>
+                                <c:when test="${isAttend}">
+                                    <a id="attend" href="#">Summary</a>
                                 </c:when>
                             </c:choose>
-                            <c:if test="${isAdmin}" >
-                                <a id="cancelRegistration" href="#">Cancel Registration</a>
-                                <a id="onHoldRegistration" href="#">On Hold</a>
-                                <a id="changeToRegistered" href="#">Change To Registered</a>
-                                <a id="replaceRegistration" href="#">Replace</a>
-                            </c:if>
-                            <a id="back" href="#">Back</a>
+                        </c:if>
+                        <c:if test="${isAdmin}" >
+                            <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
+                            <a id="updateNAttend" href="#">Update and Attend</a>
+                            <a id="cancelRegistration" href="#">Cancel Registration</a>
+                            <a id="onHoldRegistration" href="#">On Hold</a>
+                            <a id="changeToRegistered" href="#">Change To Registered</a>
+                            <a id="replaceRegistration" href="#">Replace</a>
+                        </c:if>
+                        <a id="back" href="#">Back</a>
                         </td>
                     </tr>
                 </table>
@@ -424,13 +450,20 @@
                                             <td><c:out value="${payment.pdcDate}"/></td>
                                             <td><c:out value="${payment.remarks}"/></td>
                                             <td class="YLink">
-                                                <form id="editPay<c:out value="${payment.id}"/>For<c:out value="${registeredParticipant.registration.id}"/>" method="post" action="showPayments.htm">
-                                                    <input type="hidden" name="paymentId" value="<c:out value="${payment.id}"/>" />
-                                                    <input type="hidden" name="registration.id" value="<c:out value="${registeredParticipant.registration.id}"/>" />
-                                                    <a href="#" onclick="document.getElementById('editPay<c:out value="${payment.id}"/>For<c:out value="${registeredParticipant.registration.id}"/>').submit();">
-                                                        Edit
-                                                    </a>
-                                                </form>
+                                                <c:choose>
+                                                    <c:when test="${isAdmin}">
+                                                        <form id="editPay<c:out value="${payment.id}"/>For<c:out value="${registeredParticipant.registration.id}"/>" method="post" action="showPayments.htm">
+                                                            <input type="hidden" name="paymentId" value="<c:out value="${payment.id}"/>" />
+                                                            <input type="hidden" name="registration.id" value="<c:out value="${registeredParticipant.registration.id}"/>" />
+                                                            <a href="#" onclick="document.getElementById('editPay<c:out value="${payment.id}"/>For<c:out value="${registeredParticipant.registration.id}"/>').submit();">
+                                                                Edit
+                                                            </a>
+                                                        </form>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        &nbsp;
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </td>
                                         </tr>
                                     </c:forEach>

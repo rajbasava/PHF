@@ -48,6 +48,9 @@ public class PaymentValidator implements Validator
                 ValidationUtils.rejectIfEmptyOrWhitespace(errors,
                         "currentPayment.receiptDate",
                         "currentPayment.receiptDate");
+                ValidationUtils.rejectIfEmptyOrWhitespace(errors,
+                        "currentPayment.mode",
+                        "currentPayment.mode");
             }
 
             if (participant.getCurrentPayment() != null

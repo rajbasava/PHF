@@ -6,7 +6,9 @@ package com.yvphfk.service;
 
 import com.yvphfk.model.dao.VolunteerDAO;
 import com.yvphfk.model.Login;
+import com.yvphfk.model.form.AccessControl;
 import com.yvphfk.model.form.Volunteer;
+import com.yvphfk.model.form.AccessFilter;
 import com.yvphfk.model.form.VolunteerKit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class VolunteerServiceImpl implements VolunteerService
+public class VolunteerServiceImpl extends CommonServiceImpl implements VolunteerService
 {
     @Autowired
     private VolunteerDAO volunteerDAO;
@@ -52,7 +54,7 @@ public class VolunteerServiceImpl implements VolunteerService
     }
 
     @Transactional
-    public boolean processLogin (Login login)
+    public int processLogin (Login login)
     {
         return volunteerDAO.processLogin(login);
     }
@@ -67,5 +69,17 @@ public class VolunteerServiceImpl implements VolunteerService
     public Volunteer getVolunteer (Integer volunteerId)
     {
         return volunteerDAO.getVolunteer(volunteerId);
+    }
+
+    @Transactional
+    public List<AccessFilter> getAccessFilterList (Integer volunteerId)
+    {
+        return volunteerDAO.getAccessFilterList(volunteerId);
+    }
+
+    @Transactional
+    public List<AccessControl> getAccessControlList (Integer volunteerId)
+    {
+        return volunteerDAO.getAccessControlList(volunteerId);
     }
 }

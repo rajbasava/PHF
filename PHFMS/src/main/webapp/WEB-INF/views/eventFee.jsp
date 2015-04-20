@@ -34,11 +34,11 @@
         <td><form:checkbox path="review" /></td>
 	</tr>
     <tr>
-        <td><form:label path="courseTypeId"><spring:message code="label.courseType"/></form:label></td>
+        <td><form:label path="workshopLevelId"><spring:message code="label.workshopLevel"/></form:label></td>
         <td>
-            <form:select path="courseTypeId">
+            <form:select path="workshopLevelId">
                 <form:option value="0" label="--- Select ---"/>
-                <form:options items="${allParticipantCourseTypes}" />
+                <form:options items="${workshopLevels}" />
             </form:select>
         </td>
 	</tr>

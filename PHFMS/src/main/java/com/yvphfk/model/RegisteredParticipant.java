@@ -242,19 +242,18 @@ public class RegisteredParticipant implements Serializable, Importable
             int days = appProperties.getDisplaySeatDays().intValue();
 
             if (days < 1) {
-                return true;
+                return getRegistration().isAttend() && true;
             }
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             calendar.add(Calendar.DATE, days);
             Date validToShow = calendar.getTime();
-            return validToShow.after(getRegistration().getEvent().getStartDate());
+            return getRegistration().isAttend()
+                    && validToShow.after(getRegistration().getEvent().getStartDate());
         }
 
         return false;
-
-
     }
 
     public boolean isNewbie ()

@@ -39,6 +39,12 @@ public class RowMeta extends BaseForm
     @Column(name = "ROWFULL")
     private boolean rowFull;
 
+    @Column(name = "gate")
+    private String gate;
+
+    @Column(name = "foodcounter")
+    private String foodCounter;
+
     @Column(name = "PREPAREDBY", updatable = false)
     private String preparedBy;
 
@@ -166,4 +172,23 @@ public class RowMeta extends BaseForm
         initialize(email);
     }
 
+    public String getGate ()
+    {
+        return gate;
+    }
+
+    public void setGate (String gate)
+    {
+        this.gate = gate;
+    }
+
+    public String getFoodCounter ()
+    {
+        return foodCounter;
+    }
+
+    public void setFoodCounter (String foodCounter)
+    {
+        this.foodCounter = foodCounter;
+    }
 }

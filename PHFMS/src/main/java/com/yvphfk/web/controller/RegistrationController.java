@@ -13,16 +13,19 @@ import com.yvphfk.model.RegisteredParticipant;
 import com.yvphfk.model.RegistrationCriteria;
 import com.yvphfk.model.RegistrationPayments;
 import com.yvphfk.model.form.Event;
+import com.yvphfk.model.form.EventFee;
 import com.yvphfk.model.form.EventPayment;
 import com.yvphfk.model.form.EventRegistration;
 import com.yvphfk.model.form.HistoryRecord;
 import com.yvphfk.model.form.Participant;
 import com.yvphfk.model.form.ParticipantSeat;
+import com.yvphfk.model.form.WorkshopLevel;
 import com.yvphfk.model.form.validator.PaymentValidator;
 import com.yvphfk.model.form.validator.RegistrationValidator;
 import com.yvphfk.service.EventService;
 import com.yvphfk.service.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +45,9 @@ public class RegistrationController extends CommonController
 
     @Autowired
     private EventService eventService;
+
+    @Autowired
+    private ReloadableResourceBundleMessageSource messageSource;
 
     @RequestMapping(value = "/registerTab", method = RequestMethod.GET)
     public String register ()
@@ -129,14 +135,22 @@ public class RegistrationController extends CommonController
         String action = registeredParticipant.getAction();
 
         EventRegistration eventRegistration = registeredParticipant.getRegistration();
-        eventRegistration.setEvent(
-                eventService.getEvent(registeredParticipant.getEventId()));
-        eventRegistration.setCourseType(
-                eventService.getCourseType(eventRegistration.getCourseTypeId()));
+        Event event = eventService.getEvent(registeredParticipant.getEventId());
+        eventRegistration.setEvent(event);
+
+        WorkshopLevel workshopLevel = eventService.getWorkshopLevel(eventRegistration.getWorkshopLevelId());
+        eventRegistration.setWorkshopLevel(workshopLevel);
+        eventRegistration.setWorkshopLevelId(workshopLevel.getId());
+
         eventRegistration.setFoundation(
                 eventService.getFoundation(eventRegistration.getFoundationId()));
-        eventRegistration.setEventFee(
-                eventService.getEventFee(registeredParticipant.getEventFeeId()));
+
+        EventFee eventFee = eventService.getEventFee(registeredParticipant.getEventFeeId());
+        if (eventFee != null) {
+            eventRegistration.setEventFee(eventFee);
+            eventRegistration.setEventFeeId(eventFee.getEventId());
+        }
+
         Participant participant = null;
         if (registeredParticipant.getParticipant().getId() != null) {
             participant = participantService.getParticipant(registeredParticipant.getParticipant().getId());
@@ -148,7 +162,12 @@ public class RegistrationController extends CommonController
 
         if (errors.hasErrors()) {
             map.put("participant", registeredParticipant.getParticipant());
-            map.put("allParticipantCourseTypes", allArhaticCourseTypes());
+            if (event != null) {
+                map.put("workshopLevels", getWorkshopLevelMap(event.getId()));
+                map.put("allEventFees", getAllEventFees(registeredParticipant.getEventId(),
+                        eventRegistration.isReview(),
+                        eventRegistration.getWorkshopLevelId(), Boolean.FALSE));
+            }
             map.put("allPaymentModes", PaymentMode.allPaymentModes());
             map.put("allFoundations", allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));
@@ -170,6 +189,19 @@ public class RegistrationController extends CommonController
                 return "registerTab";
             }
         }
+        
+        String returnPage = "summary";
+
+        boolean isAttend =  request.getParameter("attend") != null &&
+                request.getParameter("attend").equalsIgnoreCase("true");
+
+        if (isAttend) {
+            registeredParticipant.getRegistration().setAttend(true);
+            returnPage = "summary";
+        }
+        else if (RegisteredParticipant.ActionUpdate.equals(action)) {
+            returnPage = "redirect:/search.htm";
+        }
 
         if (RegisteredParticipant.ActionRegister.equals(action)) {
             registeredParticipant.getRegistration().setRefOrder(1);
@@ -187,18 +219,19 @@ public class RegistrationController extends CommonController
 
         EventRegistration registration = participantService.registerParticipant(registeredParticipant, login);
 
+        if (isAttend) {
+            participantService.createAndAddHistoryRecord(
+                    messageSource.getMessage("key.registrationAttend",
+                            new Object[]{registration.getId()}, null),
+                    login.getEmail(),
+                    registration
+            );
+        }
+
         registeredParticipant = populateRegisteredParticipant(String.valueOf(registration.getId()));
         map.put("registeredParticipant", registeredParticipant);
 
-        if (request.getParameter("showSummary") != null && request.getParameter("showSummary").equalsIgnoreCase("true")) {
-            return "summary";
-        }
-
-        if (RegisteredParticipant.ActionUpdate.equals(action)) {
-            return "redirect:/search.htm";
-        }
-
-        return "summary";
+        return returnPage;
     }
 
     @RequestMapping("/updateRegistration")
@@ -209,11 +242,11 @@ public class RegistrationController extends CommonController
         if (registeredParticipant != null) {
             map.put("registeredParticipant", registeredParticipant);
             map.put("participant", registeredParticipant.getParticipant());
-            map.put("allCourseTypes", allArhaticCourseTypes());
+            map.put("workshopLevels", getWorkshopLevelMap(registeredParticipant.getEventId()));
             map.put("allPaymentModes", PaymentMode.allPaymentModes());
             map.put("allFoundations", allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));
-            map.put("allEventFees", getAllEventFees(registeredParticipant.getEventId(), null, Boolean.TRUE));
+            map.put("allEventFees", getAllEventFees(registeredParticipant.getEventId(), null, null, Boolean.TRUE));
             map.put("allReferenceGroups", getAllReferenceGroups(eventService.listReferenceGroups()));
             return "registerTab";
         }
@@ -226,8 +259,8 @@ public class RegistrationController extends CommonController
             Integer registrationId = Integer.parseInt(strRegistrationId);
             EventRegistration registration = participantService.getEventRegistration(registrationId);
 
-            if (registration.getCourseType() != null) {
-                registration.setCourseTypeId(registration.getCourseType().getId());
+            if (registration.getWorkshopLevel() != null) {
+                registration.setWorkshopLevelId(registration.getWorkshopLevel().getId());
             }
 
             registration.setFoundationId(registration.getFoundation().getId());
@@ -389,6 +422,52 @@ public class RegistrationController extends CommonController
                     registeredParticipant.getCurrentHistoryRecord());
         }
         return "redirect:/search.htm";
+    }
+
+    @RequestMapping("/attendRegistration")
+    public String attendRegistration (Map<String, Object> map,
+                                      HttpServletRequest request)
+    {
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+
+        String strRegistrationId = request.getParameter("registrationId");
+        Integer registrationId = Integer.parseInt(strRegistrationId);
+
+        EventRegistration registration = participantService.getEventRegistration(registrationId);
+        registration.initializeForUpdate(login.getEmail());
+        registration.setAttend(true);
+
+        participantService.saveOrUpdate(registration);
+
+        participantService.createAndAddHistoryRecord(
+                messageSource.getMessage("key.registrationAttend",
+                        new Object[]{registration.getId()}, null),
+                login.getEmail(),
+                registration);
+
+        RegisteredParticipant registeredParticipant =
+                populateRegisteredParticipant(String.valueOf(registration.getId()));
+        map.put("registeredParticipant", registeredParticipant);
+
+        return "summary";
+    }
+
+    @RequestMapping("/showAttendanceSummary")
+    public String showAttendanceSummary (Map<String, Object> map,
+                                         HttpServletRequest request)
+    {
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+
+        String strRegistrationId = request.getParameter("registrationId");
+        Integer registrationId = Integer.parseInt(strRegistrationId);
+
+        EventRegistration registration = participantService.getEventRegistration(registrationId);
+
+        RegisteredParticipant registeredParticipant =
+                populateRegisteredParticipant(String.valueOf(registration.getId()));
+        map.put("registeredParticipant", registeredParticipant);
+
+        return "summary";
     }
 
     @RequestMapping("/showReplaceRegistration")

@@ -26,126 +26,110 @@
                 });
             });
 	    });
-    </script>
+	</script>	
 </head>
 <body>
-<h2 align="center">Participant Summary</h2>
+<h2 align="center">Registration Summary</h2>
 
-<table align="center" cellspacing="2" cellpadding="2" width="50%">
+<table align="center" cellspacing="2" cellpadding="2" width="60%" style="border:2px violet solid; border-radius: 15px; padding: 2px">
     <tr>
-		<td><spring:message code="label.id"/></td>
-		<td><b><c:out value="${registeredParticipant.registration.id}"/></b></td>
-	</tr>
-    <tr>
-		<td><spring:message code="label.name"/></td>
-		<td><c:out value="${registeredParticipant.registration.participant.name}"/></td>
-		<td><spring:message code="label.mobile"/></td>
-		<td><c:out value="${registeredParticipant.registration.participant.mobile}"/></td>
+		<td style="font-family: verdana; color:red; font-size:30px; text-align:center; border-bottom:1px violet solid; padding:10px">
+			<c:out value="${registeredParticipant.registration.event.name}"/>
+		</td>
 	</tr>
 	<tr>
-		<td><spring:message code="label.email"/></td>
-		<td><c:out value="${registeredParticipant.registration.participant.email}"/></td>
-		<td><spring:message code="label.home"/></td>
-		<td><c:out value="${registeredParticipant.registration.participant.home}"/></td>
+		<td style="display:inline; font-family: verdana; color:green; font-size:20px; text-align:center; padding: 2px">
+			<c:out value="${registeredParticipant.registration.participant.name}"/>
+			<c:if  test="${registeredParticipant.registration.isVIP()}">
+				<p style="display:inline; font-family: verdana; font-weight:bold; color:gold; font-size:26px; border:1px gold solid; border-radius: 5px; padding: 2px">&#9733;</p>
+			</c:if>
+		</td>
 	</tr>
+	<c:if  test="${not empty registeredParticipant.registration.participant.email}">
+		<tr>  			
+			<td style="display:inline; font-family: verdana;  color:green; font-size:20px; text-align:center; padding: 2px">
+				&#9993;&nbsp;<c:out value="${registeredParticipant.registration.participant.email}"/>
+			</td>
+		</tr>	
+	</c:if>
+	<c:if  test="${not empty registeredParticipant.registration.participant.mobile}">
+		<tr>  			
+			<td style="display:inline; font-family: verdana; color:green; font-size:20px; text-align:center; padding: 2px">
+				&#9742;&nbsp;<c:out value="${registeredParticipant.registration.participant.mobile}"/>
+			</td>
+		</tr>	
+	</c:if>
+	<tr>  			
+		<td style="font-family: verdana; color:green; font-size:20px; text-align:center; padding: 2px; border-bottom:1px violet solid; ">
+			<c:out value="${registeredParticipant.registration.foundation.shortName}"/>
+		</td>
+	</tr>	
 	<tr>
-		<td><spring:message code="label.foundation"/></td>
-		<td><c:out value="${registeredParticipant.registration.foundation.shortName}"/></td>
+		<td>
+			<table width="100%">	
+				<tr>
+					<td width="50%" style="display:inline; font-family: verdana; color:green; font-size:20px; text-align:center; padding: 2px">
+						Reg.Id#<c:out value="${registeredParticipant.registration.id}"/>
+					</td>
+					<td style="font-weight:bold; font-family: verdana; color:green; font-size:20px; text-align:center; padding: 2px">
+						
+						<c:out value="${registeredParticipant.registration.getLevelName()}"/>
+
+					</td>
+				</tr>
+			</table>
+		</td>
 	</tr>
-	<tr>
-		<td><spring:message code="label.eventId"/></td>
-		<td><c:out value="${registeredParticipant.registration.event.name}"/></td>
-        <td><spring:message code="label.review"/></td>
-        <td><c:out value="${registeredParticipant.registration.review}"/></td>
+	<tr> 
+		<td>
+			<table align="center" cellpadding="1" cellspacing="1" width="40%" style="border:3px violet solid; border-radius: 15px; padding: 2px">
+				<tr style="font-family: verdana; font-size:24px;color:#ff0000; text-align:center;">
+					<td>
+						<c:out value="${registeredParticipant.registration.foodType()}"/>
+					</td>
+				</tr>
+				<c:if  test="${!empty registeredParticipant.registration.seats}">
+					<c:if test="${registeredParticipant.displaySeat}" >
+						<c:forEach items="${registeredParticipant.registration.seats}" var="seat">
+							<c:if  test="${seat.seat != null}">
+							<tr style="font-family: verdana; font-size:24px;color:#ff0000; text-align:center;">
+								<td>
+									<c:out value="${seat.levelName}"/>&nbsp;-&nbsp;<c:out value="${seat.alpha}"/>&nbsp;<c:out value="${seat.seat}"/>
+								</td>
+							</tr>
+							<tr style="font-family: verdana; font-size:24px;color:#ff0000; text-align:center;">
+								<td>
+									<c:out value="${seat.gate}"/>
+								</td>
+							</tr>
+							<tr style="font-family: verdana; font-size:24px;color:#ff0000; text-align:center;">
+								<td>
+									<c:out value="${seat.foodCounter}"/>                        
+								</td>
+							</tr>
+							</c:if>
+						</c:forEach>
+					</c:if>
+				</c:if>
+			</table>
+		</td>
 	</tr>
-	<tr>
-		<td><spring:message code="label.courseType"/></td>
-		<td><c:out value="${registeredParticipant.registration.courseType.shortName}"/></td>
-	</tr>
-    <tr>
-        <td><spring:message code="label.foodCoupon"/></td>
-        <td><c:out value="${registeredParticipant.registration.foodCoupon}"/></td>
-        <td><spring:message code="label.eventKit"/></td>
-        <td><c:out value="${registeredParticipant.registration.eventKit}"/></td>
-    </tr>
-    <tr>
-        <td><spring:message code="label.application"/></td>
-        <td><c:out value="${registeredParticipant.registration.application}"/></td>
-        <td><spring:message code="label.certificates"/></td>
-        <td><c:out value="${registeredParticipant.registration.certificates}"/></td>
-    </tr>
-    <tr>
-        <td><spring:message code="label.amountPayable"/></td>
-        <td><c:out value="${registeredParticipant.registration.amountPayable}"/></td>
-        <td><spring:message code="label.amountDue"/></td>
-        <td><c:out value="${registeredParticipant.registration.amountDue}"/></td>
-    </tr>
-    </table>
-    <table cellspacing="1" cellpadding="1" width="100%">
-    <c:if  test="${registeredParticipant.registration.eventKit}">
-    <c:if  test="${!empty registeredParticipant.registration.seats}">
-        <tr align="left">
-            <td>
-                <b>Seats:</b>
-            </td>
-        </tr>
-        <tr> <td>
-            <c:if test="${registeredParticipant.displaySeat}" >
-            <table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
-            <tr>
-                <td>Seat No</td>
-            </tr>
-            <c:if  test="${!empty registeredParticipant.registration.seats}">
-                <c:forEach items="${registeredParticipant.registration.seats}" var="seat">
-                    <c:if  test="${seat.seat != null}">
-                    <tr style="font-size:24px;color:#ff0000;font-weight:bold;">
-                        <td>
-                            <c:out value="${seat.levelName}"/>&nbsp;-&nbsp;<c:out value="${seat.alpha}"/>&nbsp;<c:out value="${seat.seat}"/>
-                        </td>
-                    </tr>
-                    </c:if>
-                </c:forEach>
-            </c:if>
-            </table>
-            </c:if>
-            </td>
-        </tr>
-    </c:if>
-    </c:if>
-    <tr><td>&nbsp;<BR></td></tr>
-    <c:if  test="${!empty registeredParticipant.registration.historyRecords}">
-        <tr align="left">
-            <td>
-                <b>Comments:</b>
-            </td>
-        </tr>
-        <tr>
-            <table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
-            <tr>
-                <td>Prepared By</td>
-                <td>Time Created</td>
-                <td>Comment</td>
-            </tr>
-            <c:forEach items="${registeredParticipant.registration.historyRecords}" var="historyRecord">
-                <tr>
-                    <td><c:out value="${historyRecord.preparedBy}"/> </td>
-                    <td><c:out value="${historyRecord.timeCreated}"/></td>
-                    <td><c:out value="${historyRecord.comment}"/></td>
-                </tr>
-            </c:forEach>
-            </table>
-        </tr>
-    </c:if>
-    <tr><td>&nbsp;<BR></td></tr>
+</table>
+<table align="center" cellspacing="2" cellpadding="2" width="60%" style="padding: 10px">
 	<tr align="center">
 		<td align="center">
             <form id="registrationSummary" method="post" action="">
-                <a id="nextRegistration" href="#">Next Registration</a>
+				<c:if test="${user.access.spotRegVolunteer || user.access.admin}">
+					<a id="nextRegistration" href="#">Next Registration</a>
+				</c:if>
+
+                
                 <a id="searchRegistration" href="#">Search Registrations</a>
             </form>
 		</td>
 	</tr>
 </table>
+
 <mytags:footer/>
 </body>
 </html>

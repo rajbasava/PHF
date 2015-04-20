@@ -12,6 +12,7 @@ import com.yvphfk.model.form.Kit;
 import com.yvphfk.model.form.ReferenceGroup;
 import com.yvphfk.model.form.RowMeta;
 import com.yvphfk.model.form.VolunteerKit;
+import com.yvphfk.model.form.WorkshopLevel;
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,10 @@ public interface EventDAO extends CommonDAO
 
     public CourseType getCourseType (Integer courseTypeId);
 
+    public WorkshopLevel getWorkshopLevel (Integer workshopLevelId);
+
+    public WorkshopLevel getWorkshopLevel (String courseShortName);
+
     public CourseType getCourseType (String shortName);
 
     public List<Event> allEvents ();
@@ -34,13 +39,17 @@ public interface EventDAO extends CommonDAO
 
     public void addFee (EventFee fee, Integer eventId);
 
+    public void addWorkshopLevel (WorkshopLevel workshopLevel, Integer eventId);
+
     public List<EventFee> getEventFees (Integer eventId);
 
     public List<EventFee> getAllEventFees (Integer eventId);
 
-    public List<EventFee> getEventFees (Integer eventId, Boolean review);
+    public List<WorkshopLevel> getAllWorkshopLevels (Integer eventId);
 
-    public EventFee getBestEventFee (Integer eventId, Boolean review, Long amount, CourseType courseType);
+    public List<EventFee> getEventFees (Integer eventId, Boolean review, Integer workshopLevelId);
+
+    public EventFee getBestEventFee (Integer eventId, Boolean review, Long amount, WorkshopLevel workshopLevel);
 
     public void removeEventFee (Integer eventFeeId);
 
@@ -76,5 +85,8 @@ public interface EventDAO extends CommonDAO
 
     public List<ReferenceGroup> listReferenceGroups ();
 
+    public List getAttendeesPivot (Integer eventId);
+
+    public Object getTotalAttendeesPivot (Integer eventId);
 
 }

@@ -24,5 +24,8 @@
         <mapping class="com.yvphfk.model.form.TrainerCourse"/>
         <mapping class="com.yvphfk.model.form.ParticipantCourse"/>
         <mapping class="com.yvphfk.model.form.MailNotification"/>
+        <mapping class="com.yvphfk.model.form.WorkshopLevel"/>
+        <mapping class="com.yvphfk.model.form.AccessFilter"/>
+        <mapping class="com.yvphfk.model.form.AccessControl"/>
     </session-factory>
 </hibernate-configuration>

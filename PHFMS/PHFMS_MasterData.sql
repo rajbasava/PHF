@@ -91,3 +91,6 @@ Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,time
 Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('440','GMCKS Pranic Healing Foundation East Africa','GMCKS PHF East Africa','Mumbai','Maharashtra','India','system', now(), now(), '1');
 Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('450','Pranic Healing Center USA','PHC USA','Mumbai','Maharashtra','India','system', now(), now(), '1');
 Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('460','Pranic Healing London UK','PH London','Mumbai','Maharashtra','India','system', now(), now(), '1');
+
+#--- 03/29/2015 --------
+Insert into phk_accesscontrol(id,volunteer,permission,preparedby,timecreated,timeupdated,active) values (1,1,'admin','admin@yvphfk.com',now(),now(),1);

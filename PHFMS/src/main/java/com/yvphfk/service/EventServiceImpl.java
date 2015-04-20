@@ -18,6 +18,7 @@ import com.yvphfk.model.form.PHFoundation;
 import com.yvphfk.model.form.ParticipantSeat;
 import com.yvphfk.model.form.ReferenceGroup;
 import com.yvphfk.model.form.VolunteerKit;
+import com.yvphfk.model.form.WorkshopLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,6 +60,13 @@ public class EventServiceImpl implements EventService
 
     @Override
     @Transactional
+    public WorkshopLevel getWorkshopLevel (Integer workshopLevelId)
+    {
+        return eventDAO.getWorkshopLevel(workshopLevelId);
+    }
+
+    @Override
+    @Transactional
     public List<Event> allEvents ()
     {
         return eventDAO.allEvents();
@@ -88,6 +96,13 @@ public class EventServiceImpl implements EventService
 
     @Override
     @Transactional
+    public void addWorkshopLevel (WorkshopLevel workshopLevel, Integer eventId)
+    {
+        eventDAO.addWorkshopLevel(workshopLevel, eventId);
+    }
+
+    @Override
+    @Transactional
     public List<EventFee> getEventFees (Integer eventId)
     {
         return eventDAO.getEventFees(eventId);
@@ -102,9 +117,16 @@ public class EventServiceImpl implements EventService
 
     @Override
     @Transactional
-    public List<EventFee> getEventFees (Integer eventId, Boolean review)
+    public List<WorkshopLevel> getAllWorkshopLevels (Integer eventId)
     {
-        return eventDAO.getEventFees(eventId, review);
+        return eventDAO.getAllWorkshopLevels(eventId);
+    }
+
+    @Override
+    @Transactional
+    public List<EventFee> getEventFees (Integer eventId, Boolean review, Integer workshopLevelId)
+    {
+        return eventDAO.getEventFees(eventId, review, workshopLevelId);
     }
 
     @Override
@@ -239,5 +261,17 @@ public class EventServiceImpl implements EventService
     public PHFoundation getFoundation (Integer foundationId)
     {
         return eventDAO.getFoundation(foundationId);
+    }
+    @Override
+    @Transactional
+    public List getAttendeesPivot (Integer eventId)
+    {
+        return eventDAO.getAttendeesPivot(eventId);
+    }
+    @Override
+    @Transactional
+    public Object getTotalAttendeesPivot (Integer eventId)
+    {
+        return eventDAO.getTotalAttendeesPivot(eventId);
     }
 }

@@ -30,6 +30,8 @@
                 buttonImage: '<c:url value="/resources/img/calendar.gif"/>'
             });
 
+            $("#registrationPayments input[name='currentPayment.receiptDate']").datepicker( "setDate", new Date());
+
             $("#registrationPayments input[name='currentPayment.pdcDate']").datepicker({
                 showOn: 'button',
                 dateFormat: 'dd/mm/yy',
@@ -57,6 +59,8 @@
                  $("#showPayments").get(0).setAttribute('action', 'showPayments.htm');
                  $("#showPayments").submit();
             });
+
+
         });
     </script>
 </head>
@@ -70,19 +74,19 @@
     <form:hidden path="currentPayment.id"/>
     <table align="center">
         <tr>
-            <td><form:label path="currentPayment.amountPaid"><spring:message code="label.amountPaid"/></form:label></td>
+            <td><form:label path="currentPayment.amountPaid"><spring:message code="label.amountPaid"/>&nbsp;*&nbsp;</form:label></td>
             <td><form:input path="currentPayment.amountPaid"/></td>
         </tr>
         <tr>
-            <td><form:label path="currentPayment.receiptInfo"><spring:message code="label.receiptInfo"/></form:label></td>
+            <td><form:label path="currentPayment.receiptInfo"><spring:message code="label.receiptInfo"/>&nbsp;*&nbsp;</form:label></td>
             <td><form:input path="currentPayment.receiptInfo"/></td>
         </tr>
         <tr>
-            <td><form:label path="currentPayment.receiptDate"><spring:message code="label.receiptDate"/></form:label></td>
+            <td><form:label path="currentPayment.receiptDate"><spring:message code="label.receiptDate"/>&nbsp;*&nbsp;</form:label></td>
             <td><form:input path="currentPayment.receiptDate"/></td>
         </tr>
         <tr>
-            <td><form:label path="currentPayment.mode"><spring:message code="label.mode"/></form:label></td>
+            <td><form:label path="currentPayment.mode"><spring:message code="label.mode"/>&nbsp;*&nbsp;</form:label></td>
             <td>
                 <form:select path="currentPayment.mode">
                     <form:option value="" label="--- Select ---"/>

@@ -316,3 +316,59 @@ CREATE INDEX idx_trn_part ON phk_trainer(participant);
 
 CREATE INDEX idx_trncrs_trn ON phk_trainercourse(trainer);
 CREATE INDEX idx_trncrs_crs ON phk_trainercourse(coursetype);
+
+#--- 03/29/2015 --------
+DROP TABLE IF EXISTS phk_workshoplevel;
+
+CREATE TABLE phk_workshoplevel (
+	id INT PRIMARY KEY auto_increment,
+	event int,
+	name VARCHAR(50),
+	coursetype int,
+	levelorder int,
+	start int,
+	preparedby VARCHAR(50),
+	timecreated TIMESTAMP null,
+	timeupdated TIMESTAMP null,
+	active VARCHAR(1)
+);
+
+ALTER TABLE `phk_eventregstrn` CHANGE column `coursetype` `workshoplevel` int;
+ALTER TABLE phk_eventregstrn add foodtype int;
+ALTER TABLE phk_eventregstrn add attend int NOT NULL DEFAULT 0;
+
+CREATE INDEX idx_evregs_attend ON phk_eventregstrn (attend);
+CREATE INDEX idx_evregs_fnd ON phk_eventregstrn (foundation);
+
+ALTER TABLE `phk_eventfee` CHANGE column `coursetype` `workshoplevel` int;
+
+ALTER TABLE phk_seat ADD gate varchar(100);
+ALTER TABLE phk_seat ADD foodcounter varchar(100);
+
+ALTER TABLE phk_rowmeta ADD gate varchar(100);
+ALTER TABLE phk_rowmeta ADD foodcounter varchar(100);
+
+DROP TABLE IF EXISTS phk_accessfilter;
+
+CREATE TABLE phk_accessfilter (
+	id INT PRIMARY KEY auto_increment,
+	volunteer int,
+	event int,
+	foundation int,
+	preparedby VARCHAR(50),
+	timecreated TIMESTAMP null,
+	timeupdated TIMESTAMP null,
+	active VARCHAR(1)
+);
+
+DROP TABLE IF EXISTS phk_accesscontrol;
+
+CREATE TABLE phk_accesscontrol (
+	id INT PRIMARY KEY auto_increment,
+	volunteer int,
+    permission VARCHAR(30),
+	preparedby VARCHAR(50),
+	timecreated TIMESTAMP null,
+	timeupdated TIMESTAMP null,
+	active VARCHAR(1)
+);

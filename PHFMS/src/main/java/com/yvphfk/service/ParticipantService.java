@@ -23,7 +23,7 @@ import com.yvphfk.model.form.TrainerCourse;
 
 import java.util.List;
 
-public interface ParticipantService
+public interface ParticipantService extends CommonService
 {
     public EventRegistration registerParticipant (RegisteredParticipant registeredParticipant, Login login);
 

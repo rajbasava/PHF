@@ -22,6 +22,7 @@ import com.yvphfk.model.form.LoggedInVolunteer;
 import com.yvphfk.model.form.ReferenceGroup;
 import com.yvphfk.model.form.Volunteer;
 import com.yvphfk.model.form.VolunteerKit;
+import com.yvphfk.model.form.WorkshopLevel;
 import com.yvphfk.model.form.validator.EventValidator;
 import com.yvphfk.service.EventService;
 import com.yvphfk.service.ParticipantService;
@@ -144,8 +145,10 @@ public class EventController extends CommonController
 
         map.put("event", event);
         map.put("isEdit", isEdit);
+        map.put("isWorkshop", event.isWorkshop());
         map.put("eventList", eventService.allEvents());
         map.put("eventFeeList", eventService.getAllEventFees(eventId));
+        map.put("workshopLevelList", eventService.getAllWorkshopLevels(eventId));
         map.put("allParticipantCourseTypes", allCourseTypes());
         map.put("allSeatingTypes", SeatingType.allSeatingTypes());
         map.put("allFoundations", allFoundations());
@@ -214,7 +217,7 @@ public class EventController extends CommonController
     }
 
     @RequestMapping("/eventFee")
-    public String listEventFee (Map<String, Object> map, HttpServletRequest request)
+    public String showEventFee (Map<String, Object> map, HttpServletRequest request)
     {
         String strEventId = request.getParameter("eventId");
         if (Util.nullOrEmptyOrBlank(strEventId)) {
@@ -223,15 +226,79 @@ public class EventController extends CommonController
         Integer eventId = Integer.parseInt(strEventId);
         EventFee fee = new EventFee();
         fee.setEventId(eventId);
-        if (fee.getCourseType() != null) {
-            fee.setCourseTypeId(fee.getCourseType().getId());
+        if (fee.getWorkshopLevel() != null) {
+            fee.setWorkshopLevelId(fee.getWorkshopLevel().getId());
         }
 
         map.put("eventFee", fee);
         map.put("eventFeeList", eventService.getEventFees(eventId));
         map.put("event", eventService.getEvent(eventId));
-        map.put("allParticipantCourseTypes", allCourseTypes());
+        map.put("workshopLevels", getWorkshopLevelMap(eventId));
         return "eventFee";
+    }
+
+    @RequestMapping("/showEventStatus")
+    public String showEventStatus(Map<String, Object> map, HttpServletRequest request)
+    {
+        String strEventId = request.getParameter("eventId");
+        if (Util.nullOrEmptyOrBlank(strEventId)) {
+            return null;
+        }
+        Integer eventId = Integer.parseInt(strEventId);
+
+        map.put("eventAttendees", eventService.getAttendeesPivot(eventId));
+        map.put("eventTotalAttendees", eventService.getTotalAttendeesPivot(eventId));
+        map.put("eventId", eventId);
+        return "eventStatus";
+    }
+
+    @RequestMapping(value = "/getWorkshopLevels", produces = "application/json; charset=utf-8")
+    public
+    @ResponseBody
+    List<Option> workshopLevels (HttpServletRequest request)
+    {
+        String strEventId = request.getParameter("eventId");
+        boolean review = false;
+        Integer eventId = null;
+        if (!Util.nullOrEmptyOrBlank(strEventId)) {
+            eventId = Integer.parseInt(strEventId);
+        }
+
+        List options = new ArrayList();
+        List<WorkshopLevel> workshopLevelList = eventService.getAllWorkshopLevels(eventId);
+        for (WorkshopLevel workshopLevel: workshopLevelList) {
+            options.add(new Option(workshopLevel.getId(), workshopLevel.getName()));
+        }
+
+        return options;
+    }
+
+    @RequestMapping("/showWorkshopLevel")
+    public String showWorkshopLevel (Map<String, Object> map, HttpServletRequest request)
+    {
+        String strEventId = request.getParameter("eventId");
+        if (Util.nullOrEmptyOrBlank(strEventId)) {
+            return null;
+        }
+        Integer eventId = Integer.parseInt(strEventId);
+        WorkshopLevel workshopLevel = new WorkshopLevel();
+        workshopLevel.setEventId(eventId);
+        map.put("workshopLevel", workshopLevel);
+        map.put("eventId", eventId);
+        map.put("allParticipantCourseTypes", allCourseTypes());
+        return "addWorkshopLevel";
+    }
+
+    @RequestMapping(value = "/addWorkshopLevel", method = RequestMethod.POST)
+    public String addWorkshopLevel (@ModelAttribute("event") WorkshopLevel workshopLevel,
+                                    HttpServletRequest request)
+    {
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+        workshopLevel.initialize(login.getEmail());
+        eventService.addWorkshopLevel(workshopLevel, workshopLevel.getEventId());
+        request.setAttribute("eventId", String.valueOf(workshopLevel.getEventId()));
+        request.setAttribute("isForward", "true");
+        return "forward:/showEventDetails.htm";
     }
 
     @RequestMapping("/showEventDetailUI")
@@ -452,9 +519,9 @@ public class EventController extends CommonController
     {
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
         eventFee.initialize(login.getEmail());
-        if (eventFee.getCourseTypeId() != null) {
-            CourseType courseType = eventService.getCourseType(eventFee.getCourseTypeId());
-            eventFee.setCourseType(courseType);
+        if (eventFee.getWorkshopLevelId() != null) {
+            WorkshopLevel workshopLevel = eventService.getWorkshopLevel(eventFee.getWorkshopLevelId());
+            eventFee.setWorkshopLevel(workshopLevel);
         }
         eventService.addEventFee(eventFee, eventFee.getEventId());
         request.setAttribute("eventId", String.valueOf(eventFee.getEventId()));
@@ -509,8 +576,10 @@ public class EventController extends CommonController
     {
         String strEventId = request.getParameter("eventId");
         String strReview = request.getParameter("review");
+        String strWorkshopLevelId = request.getParameter("workshopLevelId");
         boolean review = false;
         Integer eventId = null;
+        Integer workshopLevelId = null;
         if (!Util.nullOrEmptyOrBlank(strEventId)) {
             eventId = Integer.parseInt(strEventId);
         }
@@ -519,7 +588,11 @@ public class EventController extends CommonController
             review = Boolean.parseBoolean(strReview);
         }
 
-        return getAllEventFees(eventId, review);
+        if (!Util.nullOrEmptyOrBlank(strWorkshopLevelId)) {
+            workshopLevelId = Integer.parseInt(strWorkshopLevelId);
+        }
+
+        return getAllEventFees(eventId, review, workshopLevelId);
     }
 
     @RequestMapping(value = "/fetchEventFee", produces = "application/json; charset=utf-8")

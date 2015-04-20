@@ -15,6 +15,7 @@ import com.yvphfk.model.form.CourseType;
 import com.yvphfk.model.form.EventFee;
 import com.yvphfk.model.form.EventRegistration;
 import com.yvphfk.model.form.PHFoundation;
+import com.yvphfk.model.form.WorkshopLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class RegisteredParticipantImportableProcessor implements ImportableProce
     {
         RegisteredParticipant registeredParticipant = (RegisteredParticipant) importable;
         loadFoundation(registeredParticipant);
-        loadCourseLevel(registeredParticipant);
+        loadWorskopLevel(registeredParticipant);
         loadBestEventFee(registeredParticipant);
     }
 
@@ -54,13 +55,13 @@ public class RegisteredParticipantImportableProcessor implements ImportableProce
         }
     }
 
-    private void loadCourseLevel (RegisteredParticipant registeredParticipant)
+    private void loadWorskopLevel (RegisteredParticipant registeredParticipant)
     {
         String courseTypeShortName = registeredParticipant.getCourseTypeShortName();
         if (!Util.nullOrEmptyOrBlank(courseTypeShortName)) {
-            CourseType courseType = eventDAO.getCourseType(courseTypeShortName);
-            if (courseType != null) {
-                registeredParticipant.getRegistration().setCourseType(courseType);
+            WorkshopLevel workshopLevel = eventDAO.getWorkshopLevel(courseTypeShortName);
+            if (workshopLevel != null) {
+                registeredParticipant.getRegistration().setWorkshopLevel(workshopLevel);
             }
         }
     }
@@ -69,14 +70,12 @@ public class RegisteredParticipantImportableProcessor implements ImportableProce
     {
         String courseTypeShortName = registeredParticipant.getCourseTypeShortName();
         EventRegistration registration = registeredParticipant.getRegistration();
-        if (!Util.nullOrEmptyOrBlank(courseTypeShortName)) {
-            EventFee eventFee = eventDAO.getBestEventFee(registration.getEvent().getId(),
-                    registration.isReview(),
-                    registration.getAmountPayable(),
-                    registration.getCourseType());
-            if (eventFee != null) {
-                registeredParticipant.getRegistration().setEventFee(eventFee);
-            }
+        EventFee eventFee = eventDAO.getBestEventFee(registration.getEvent().getId(),
+                registration.isReview(),
+                registration.getAmountPayable(),
+                registration.getWorkshopLevel());
+        if (eventFee != null) {
+            registeredParticipant.getRegistration().setEventFee(eventFee);
         }
     }
 }

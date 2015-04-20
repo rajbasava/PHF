@@ -12,6 +12,7 @@ import com.yvphfk.model.form.EventRegistration;
 import com.yvphfk.model.form.ReferenceGroup;
 import com.yvphfk.model.RegistrationCriteria;
 import com.yvphfk.common.email.EmailService;
+import com.yvphfk.model.form.WorkshopLevel;
 import com.yvphfk.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,10 +107,15 @@ public class CommonController
 
     protected List<Option> getAllEventFees (Integer eventId, Boolean review)
     {
-        return getAllEventFees (eventId, review, Boolean.FALSE);
+        return getAllEventFees (eventId, review, null, Boolean.FALSE);
     }
 
-    protected List<Option> getAllEventFees (Integer eventId, Boolean review, Boolean includeInactive)
+    protected List<Option> getAllEventFees (Integer eventId, Boolean review, Integer workshopId)
+    {
+        return getAllEventFees (eventId, review, workshopId, Boolean.FALSE);
+    }
+
+    protected List<Option> getAllEventFees (Integer eventId, Boolean review, Integer workshopId, Boolean includeInactive)
     {
         List<EventFee> eventFeeList = new ArrayList<EventFee>();
 
@@ -116,7 +123,7 @@ public class CommonController
             eventFeeList = eventService.getAllEventFees(eventId);
         }
         else {
-            eventFeeList = eventService.getEventFees(eventId, review);
+            eventFeeList = eventService.getEventFees(eventId, review, workshopId);
         }
 
         ArrayList<Option> options = new ArrayList<Option>();
@@ -138,5 +145,16 @@ public class CommonController
         }
         return options;
     }
+
+    public Map getWorkshopLevelMap (Integer eventId)
+    {
+        Map<String, String> map = new HashMap();
+        List<WorkshopLevel> workshopLevelList = eventService.getAllWorkshopLevels(eventId);
+        for (WorkshopLevel workshopLevel: workshopLevelList) {
+            map.put(String.valueOf(workshopLevel.getId()), workshopLevel.getName());
+        }
+        return map;
+    }
+
 
 }

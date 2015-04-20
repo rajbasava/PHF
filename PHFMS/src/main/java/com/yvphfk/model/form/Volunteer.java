@@ -118,13 +118,6 @@ public class Volunteer extends BaseForm
         return permission;
     }
 
-    public String getPermissionName ()
-    {
-        if (Util.nullOrEmptyOrBlank(getPermission())) {
-            return null;
-        }
-        return VolunteerPermission.getName(getPermission());
-    }
 
     public void setPermission (String permission)
     {

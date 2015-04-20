@@ -18,7 +18,8 @@
                 $.getJSON(
                     "getAllEventFees.htm",
                     {eventId: $("select#eventId").val(),
-                     review: $("#registeredParticipant input[name='registration.review']").is(':checked')},
+                     review: $("#registeredParticipant input[name='registration.review']").is(':checked'),
+                     workshopLevelId: $("#registeredParticipant select[name='registration.workshopLevelId']").val()},
                     function(data) {
                         var options = '<option value="-1"> --- Select --- </option>';
                         var len = data.length;
@@ -27,6 +28,26 @@
                         }
                     $("select#eventFeeId").html(options);
                     $("#registeredParticipant input[name='registration.amountPayable']").val('0');
+                    }
+                );
+            }
+        }
+
+        function getWorkshopLevels(){
+            if ($("select#eventId").val() == ''){
+               $("select#workshopLevelId").html('<option value=""> --- Select --- </option>');
+            }
+            else {
+                $.getJSON(
+                    "getWorkshopLevels.htm",
+                    {eventId: $("select#eventId").val()},
+                    function(data) {
+                        var options = '<option value="-1"> --- Select --- </option>';
+                        var len = data.length;
+                        for(var i=0; i<len; i++){
+                            options +=  '<option value="' + data[i].id + '">' + data[i].value + '</option>';
+                        }
+                    $("#registeredParticipant select[name='registration.workshopLevelId']").html(options);
                     }
                 );
             }
@@ -50,6 +71,11 @@
         $(document).ready(function() {
             $("select#eventId").change(function()
             {
+                getWorkshopLevels();
+            });
+
+            $("#registeredParticipant select[name='registration.workshopLevelId']").change(function()
+            {
                 getEventFees();
             });
 
@@ -58,11 +84,24 @@
                 getEventFees();
             });
 
-            getEventFees();
-
             $("select#eventFeeId").change(function()
             {
                 populateEventFee();
+            });
+
+            $("a#submit").button();
+            $("a#submit").css("font-size", "11px");
+            $("a#submit").click(function() {
+                 $("#registeredParticipant").get(0).setAttribute('action', 'addRegistration.htm');
+                 $("#registeredParticipant").submit();
+            });
+
+            $("a#registerNAttend").button();
+            $("a#registerNAttend").css("font-size", "11px");
+            $("a#registerNAttend").click(function() {
+                 $("#registeredParticipant").get(0).setAttribute('action', 'addRegistration.htm');
+                 $("#registeredParticipant input[name='attend']").val('true');
+                 $("#registeredParticipant").submit();
             });
 
             $("#registeredParticipant input[name='currentPayment.receiptDate']").datepicker({
@@ -71,6 +110,8 @@
                 buttonImageOnly: true,
                 buttonImage: '<c:url value="/resources/img/calendar.gif"/>'
             });
+
+            $("#registeredParticipant input[name='currentPayment.receiptDate']").datepicker( "setDate", new Date());
 
         });
     </script>
@@ -124,7 +165,7 @@
                     <td width="60%">
                         <table width="100%" cellpadding="1" cellspacing="1">
                             <tr>
-                                <td width="30%"><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
+                                <td width="30%"><form:label path="eventId"><spring:message code="label.eventId"/></form:label>&nbsp;*&nbsp;</td>
                                 <td>
                                     <form:select path="eventId">
                                         <form:option value="" label="--- Select ---"/>
@@ -133,11 +174,11 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td width="30%"><form:label path="registration.courseTypeId"><spring:message code="label.courseType"/></form:label></td>
+                                <td width="30%"><form:label path="registration.workshopLevelId"><spring:message code="label.workshopLevel"/></form:label>&nbsp;*&nbsp;</td>
                                 <td>
-                                    <form:select path="registration.courseTypeId">
+                                    <form:select path="registration.workshopLevelId">
                                         <form:option value="" label="--- Select ---"/>
-                                        <form:options items="${allParticipantCourseTypes}" />
+                                        <form:options items="${workshopLevels}"/>
                                     </form:select>
                                 </td>
                             </tr>
@@ -146,7 +187,7 @@
                                 <td><form:checkbox path="registration.review"/></td>
                             </tr>
                             <tr>
-                                <td width="30%"><form:label path="registration.foundationId"><spring:message code="label.foundation"/></form:label></td>
+                                <td width="30%"><form:label path="registration.foundationId"><spring:message code="label.foundation"/></form:label>&nbsp;*&nbsp;</td>
                                 <td>
                                     <form:select path="registration.foundationId">
                                         <form:option value="" label="--- Select ---"/>
@@ -168,7 +209,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td width="30%"><form:label path="eventFeeId"><spring:message code="label.eventFeeId"/></form:label></td>
+                                <td width="30%"><form:label path="eventFeeId"><spring:message code="label.eventFeeId"/></form:label>&nbsp;*&nbsp;</td>
                                 <td>
                                     <form:select path="eventFeeId">
                                         <form:option value="-1" label="--- Select ---"/>
@@ -177,7 +218,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td width="30%"><form:label path="registration.amountPayable"><spring:message code="label.amountPayable"/></form:label></td>
+                                <td width="30%"><form:label path="registration.amountPayable"><spring:message code="label.amountPayable"/></form:label>&nbsp;*&nbsp;</td>
                                 <td><form:input path="registration.amountPayable"/></td>
                             </tr>
                         </table>
@@ -202,11 +243,11 @@
                     <td width="60%">
                         <table width="100%" cellpadding="1" cellspacing="1">
                             <tr>
-                                <td width="30%"><form:label path="currentPayment.amountPaid"><spring:message code="label.amountPaid"/></form:label></td>
+                                <td width="30%"><form:label path="currentPayment.amountPaid"><spring:message code="label.amountPaid"/>&nbsp;*&nbsp;</form:label></td>
                                 <td><form:input path="currentPayment.amountPaid"/></td>
                             </tr>
                             <tr>
-                                <td width="30%"><form:label path="currentPayment.mode"><spring:message code="label.mode"/></form:label></td>
+                                <td width="30%"><form:label path="currentPayment.mode"><spring:message code="label.mode"/>&nbsp;*&nbsp;</form:label></td>
                                 <td>
                                     <form:select path="currentPayment.mode">
                                         <form:option value="" label="--- Select ---"/>
@@ -215,11 +256,11 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td width="30%"><form:label path="currentPayment.receiptInfo"><spring:message code="label.receiptInfo"/></form:label></td>
+                                <td width="30%"><form:label path="currentPayment.receiptInfo"><spring:message code="label.receiptInfo"/>&nbsp;*&nbsp;</form:label></td>
                                 <td><form:input path="currentPayment.receiptInfo"/></td>
                             </tr>
                             <tr>
-                                <td width="30%"><form:label path="currentPayment.receiptDate"><spring:message code="label.receiptDate"/></form:label></td>
+                                <td width="30%"><form:label path="currentPayment.receiptDate"><spring:message code="label.receiptDate"/>&nbsp;*&nbsp;</form:label></td>
                                 <td><form:input path="currentPayment.receiptDate"/></td>
                             </tr>
                         </table>
@@ -259,6 +300,12 @@
                                 <td width="30%"><form:label path="registration.eventKit"><spring:message code="label.eventKit"/></form:label></td>
                                 <td><form:checkbox path="registration.eventKit"/></td>
                             </tr>
+                            <tr>
+                                <td>
+                                    <form:radiobutton path="registration.foodType" value="0"/>&nbsp;Veg Food&nbsp;
+                                    <form:radiobutton path="registration.foodType" value="1"/>&nbsp;Jain Food&nbsp;
+                                </td>
+                            </tr>
                         </table>
                     </td>
                     <td>
@@ -280,10 +327,11 @@
                 <tr style="background-color:#DFDFDF;">
                     <td align="right">
                         <form:hidden path="action"/>
-                        <input type="submit" value="<c:out value="${registeredParticipant.action}"/>"/>
+                        <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
                     </td>
                     <td align="left">
-                        <input type="reset" value="Cancel"/>
+                        <input id="attend" name="attend" type="hidden" value=""/>
+                        <a id="registerNAttend" href="#">Register and Attend</a>
                     </td>
                 </tr>
             </table>

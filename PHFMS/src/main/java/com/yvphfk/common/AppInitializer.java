@@ -26,10 +26,15 @@ public class AppInitializer
     public void initialize () throws Exception
     {
         initializeEmailTemplates();
+        initializeCache();
     }
 
     private void initializeEmailTemplates ()
     {
         EmailTemplateCache.getInstance();
+    }
+    private void initializeCache()
+    {
+        CommonCache.getInstance();
     }
 }

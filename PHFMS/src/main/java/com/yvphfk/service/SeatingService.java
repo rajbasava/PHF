@@ -7,6 +7,7 @@ package com.yvphfk.service;
 import com.yvphfk.model.form.Event;
 import com.yvphfk.model.form.EventRegistration;
 import com.yvphfk.model.form.ParticipantSeat;
+import com.yvphfk.model.form.RowMeta;
 
 public interface SeatingService
 {
@@ -15,8 +16,8 @@ public interface SeatingService
     public ParticipantSeat nextSeat (Event event, EventRegistration registration);
 
     public ParticipantSeat createSeat (EventRegistration registration,
-                                          String alpha,
-                                          Integer seatNo);
+                                       RowMeta rowMeta,
+                                       Integer seatNo);
 
 
 }

@@ -4,30 +4,45 @@
 */
 package com.yvphfk.web.controller;
 
+import com.yvphfk.common.CommonCache;
 import com.yvphfk.common.Util;
 import com.yvphfk.common.VolunteerPermission;
+import com.yvphfk.model.AccessFilterForm;
 import com.yvphfk.model.Login;
+import com.yvphfk.model.form.AccessControl;
+import com.yvphfk.model.form.AccessFilter;
+import com.yvphfk.model.form.BaseForm;
+import com.yvphfk.model.form.Event;
+import com.yvphfk.model.form.PHFoundation;
 import com.yvphfk.model.form.Volunteer;
+import com.yvphfk.service.EventService;
 import com.yvphfk.service.VolunteerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 @SessionAttributes({"user"})
-public class VolunteerController
+public class VolunteerController extends CommonController
 {
     @Autowired
     private VolunteerService volunteerService;
+
+    @Autowired
+    private EventService eventService;
 
     @RequestMapping("/volunteer")
     public String listVolunteer (Map<String, Object> map)
@@ -59,6 +74,166 @@ public class VolunteerController
         return "redirect:/volunteer.htm";
     }
 
+    @RequestMapping("/showVolunteerAccess")
+    public String showVolunteerAccess (HttpServletRequest request, Map<String, Object> map)
+    {
+        String strVolunteerId = request.getParameter("volunteerId");
+        if (!Util.nullOrEmptyOrBlank(strVolunteerId)) {
+            Integer volunteerId = Integer.parseInt(strVolunteerId);
+            Volunteer volunteer = volunteerService.getVolunteer(volunteerId);
+            map.put("volunteerId", volunteer.getId());
+            map.put("volunteerName", volunteer.getName());
+            map.put("accessControlList", volunteerService.getAccessControlList(volunteerId));
+            map.put("accessFilterList", volunteerService.getAccessFilterList(volunteerId));
+            return "volunteerAccess";
+        }
+
+        return "redirect:/volunteer.htm";
+    }
+
+    @RequestMapping("/showAccessFilter")
+    public String showAccessFilter (HttpServletRequest request, Map<String, Object> map)
+    {
+        String strVolunteerId = request.getParameter("volunteerId");
+        if (!Util.nullOrEmptyOrBlank(strVolunteerId)) {
+            Integer volunteerId = Integer.parseInt(strVolunteerId);
+            Volunteer volunteer = volunteerService.getVolunteer(volunteerId);
+            map.put("volunteerId", volunteer.getId());
+            map.put("volunteerName", volunteer.getName());
+            map.put("allEvents", getAllEventMap(eventService.allEvents()));
+            map.put("allFoundations", allFoundations());
+            map.put("accessFilterForm", new AccessFilterForm());
+            return "addAccessFilter";
+        }
+
+        return "redirect:/volunteer.htm";
+    }
+
+    @RequestMapping("/showAccessControl")
+    public String showAccessControl (HttpServletRequest request, Map<String, Object> map)
+    {
+        String strVolunteerId = request.getParameter("volunteerId");
+        if (!Util.nullOrEmptyOrBlank(strVolunteerId)) {
+            Integer volunteerId = Integer.parseInt(strVolunteerId);
+            Volunteer volunteer = volunteerService.getVolunteer(volunteerId);
+            map.put("volunteerId", volunteer.getId());
+            map.put("volunteerName", volunteer.getName());
+            map.put("allVolunteerPermissions", VolunteerPermission.allVolunteerPermissions());
+            map.put("accessControl", new AccessControl());
+            return "addAccessControl";
+        }
+
+        return "redirect:/volunteer.htm";
+    }
+
+    @RequestMapping("/addAccessFilter")
+    public String addAccessFilter (@ModelAttribute("accessFilterForm") AccessFilterForm accessFilterForm,
+                                   HttpServletRequest request)
+    {
+        Volunteer volunteer = volunteerService.getVolunteer(accessFilterForm.getVolunteerId());
+        Event event = eventService.getEvent(accessFilterForm.getEventId());
+        List<Integer> foundationIds = accessFilterForm.getFoundationIds();
+
+        List<BaseForm> volunteerAccessList = new ArrayList<BaseForm>();
+
+        if (foundationIds == null || foundationIds.isEmpty()) {
+            AccessFilter accessFilter = new AccessFilter();
+            accessFilter.initialize(Util.getCurrentUser().getEmail());
+            accessFilter.setVolunteer(volunteer);
+            accessFilter.setEvent(event);
+            volunteerAccessList.add(accessFilter);
+        }
+        else {
+            for (Integer foundationId : foundationIds) {
+                PHFoundation foundation = eventService.getFoundation(foundationId);
+                AccessFilter accessFilter = new AccessFilter();
+                accessFilter.initialize(Util.getCurrentUser().getEmail());
+                accessFilter.setVolunteer(volunteer);
+                accessFilter.setEvent(event);
+                accessFilter.setFoundation(foundation);
+                volunteerAccessList.add(accessFilter);
+            }
+        }
+
+        volunteerService.saveOrUpdate(volunteerAccessList);
+        Login.initializeAccessFilterList(volunteer.getEmail());
+
+        request.setAttribute("volunteerId", volunteer.getId());
+        return "forward:/showVolunteerAccess.htm";
+    }
+
+    @RequestMapping("/addAccessControl")
+    public String addAccessControl (@ModelAttribute("accessControl") AccessControl accessControl,
+                                    HttpServletRequest request)
+    {
+        Volunteer volunteer = null;
+        String strVolunteerId = request.getParameter("volunteerId");
+
+        if (!Util.nullOrEmptyOrBlank(strVolunteerId)) {
+            Integer volunteerId = Integer.parseInt(strVolunteerId);
+            volunteer = volunteerService.getVolunteer(volunteerId);
+        }
+
+        String permission = accessControl.getPermission();
+
+        accessControl.initialize(Util.getCurrentUser().getEmail());
+        accessControl.setVolunteer(volunteer);
+        accessControl.setPermission(permission);
+
+        volunteerService.saveOrUpdate(accessControl);
+        Login.initializeAccessControlList(volunteer.getEmail());
+
+        request.setAttribute("volunteerId", volunteer.getId());
+        return "forward:/showVolunteerAccess.htm";
+    }
+
+    @RequestMapping("/clearCache")
+    public String clearCache (HttpServletRequest request)
+    {
+        Volunteer volunteer = null;
+        String strVolunteerId = request.getParameter("volunteerId");
+
+        if (!Util.nullOrEmptyOrBlank(strVolunteerId)) {
+            Integer volunteerId = Integer.parseInt(strVolunteerId);
+            volunteer = volunteerService.getVolunteer(volunteerId);
+            CommonCache.getInstance().remove(Login.getSessionCacheKey(volunteer.getEmail()));
+        }
+
+        return "redirect:/volunteer.htm";
+    }
+
+    @RequestMapping("/deleteAccessFilter")
+    public String deleteAccessFilter (HttpServletRequest request)
+    {
+        String strAccessFilterId = request.getParameter("accessFilterId");
+        String strVolunteerId = request.getParameter("volunteerId");
+        if (!Util.nullOrEmptyOrBlank(strAccessFilterId) &&
+                !Util.nullOrEmptyOrBlank(strVolunteerId)) {
+            Volunteer volunteer = volunteerService.getVolunteer(Integer.parseInt(strVolunteerId));
+            Integer accessFilterId = Integer.parseInt(strAccessFilterId);
+            volunteerService.delete(accessFilterId, AccessFilter.class);
+            Login.initializeAccessFilterList(volunteer.getEmail());
+        }
+        request.setAttribute("volunteerId", Integer.parseInt(strVolunteerId));
+        return "forward:/showVolunteerAccess.htm";
+    }
+
+    @RequestMapping("/deleteAccessControl")
+    public String deleteAccessControl (HttpServletRequest request)
+    {
+        String strAccessControlId = request.getParameter("accessControlId");
+        String strVolunteerId = request.getParameter("volunteerId");
+        if (!Util.nullOrEmptyOrBlank(strAccessControlId) &&
+                !Util.nullOrEmptyOrBlank(strVolunteerId)) {
+            Volunteer volunteer = volunteerService.getVolunteer(Integer.parseInt(strVolunteerId));
+            Integer accessControlId = Integer.parseInt(strAccessControlId);
+            volunteerService.delete(accessControlId, AccessControl.class);
+            Login.initializeAccessControlList(volunteer.getEmail());
+        }
+        request.setAttribute("volunteerId", Integer.parseInt(strVolunteerId));
+        return "forward:/showVolunteerAccess.htm";
+    }
+
     @RequestMapping("/index")
     public String login (Map<String, Object> map)
     {
@@ -67,19 +242,45 @@ public class VolunteerController
     }
 
     @RequestMapping("/login")
-    public String processlogin (ModelMap map, @ModelAttribute("login") Login login,
-                                HttpSession session)
+    public ModelAndView processLogin (@ModelAttribute("login") Login login,
+                                      BindingResult errors,
+                                      HttpSession session)
     {
-        boolean isValid = volunteerService.processLogin(login);
-        map.addAttribute("user", login);
-        if (isValid) {
+        ModelAndView mv = new ModelAndView("login");
+
+        if (login == null || login.getEmail() == null) {
+            return mv;
+        }
+
+        if (CommonCache.getInstance().get(login.getSessionCacheKey()) != null) {
+            if (Login.isValidCacheEntry(login.getEmail())) {
+                errors.reject("login.multipleLogin", "login.multipleLogin");
+                mv.addObject("error", errors);
+                return mv;
+            }
+            else {
+                CommonCache.getInstance().remove(login.getSessionCacheKey());
+            }
+        }
+
+        int loginState = volunteerService.processLogin(login);
+
+        if (loginState == Login.Success) {
             login.setLastAccessed(new Date().getTime());
             session.setAttribute(Login.ClassName, login);
-            return "welcome";
+            mv = new ModelAndView("welcome");
+            mv.addObject("user", login);
+            CommonCache.getInstance().put(login.getSessionCacheKey(), login);
+            return mv;
         }
-        else {
-            return "redirect:/index.htm";
+        else if (loginState == Login.InvalidUsernamePassword) {
+            errors.reject("login.invalidUser", "login.invalidUser");
         }
+        else if (loginState == Login.UserHasNoAccess) {
+            errors.reject("login.noAccess", "login.noAccess");
+        }
+        mv.addObject("errors", errors);
+        return mv;
     }
 
     @RequestMapping("/logout")
@@ -88,6 +289,7 @@ public class VolunteerController
         Login login = (Login) session.getAttribute(Login.ClassName);
         volunteerService.processLogout(login);
         session.invalidate();
+        CommonCache.getInstance().remove(login.getSessionCacheKey());
         return "redirect:/index.htm";
     }
 

@@ -5,14 +5,16 @@
 package com.yvphfk.service;
 
 import com.yvphfk.model.Login;
+import com.yvphfk.model.form.AccessControl;
 import com.yvphfk.model.form.Volunteer;
+import com.yvphfk.model.form.AccessFilter;
 import com.yvphfk.model.form.VolunteerKit;
 
 import java.util.List;
 import java.util.Map;
 
 
-public interface VolunteerService
+public interface VolunteerService extends CommonService
 {
     public void addVolunteer (Volunteer volunteer);
 
@@ -24,9 +26,14 @@ public interface VolunteerService
 
     public void removeVolunteer (Integer id);
 
-    public boolean processLogin (Login login);
+    public int processLogin (Login login);
 
     public void processLogout (Login login);
 
     public Volunteer getVolunteer (Integer volunteerId);
+
+    public List<AccessFilter> getAccessFilterList (Integer volunteerId);
+
+    public List<AccessControl> getAccessControlList (Integer volunteerId);
+
 }

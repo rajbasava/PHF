@@ -4,13 +4,16 @@
 */
 package com.yvphfk.web.controller;
 
+import com.yvphfk.common.CommonCache;
 import com.yvphfk.common.Util;
 import com.yvphfk.model.Login;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 
 @Component
@@ -21,21 +24,60 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter
                               HttpServletResponse response,
                               Object handler) throws Exception
     {
-        String uri = request.getRequestURI();
-        if (!uri.endsWith("index.htm") &&
-                !uri.endsWith("login.htm") &&
-                !uri.endsWith("logout.htm")) {
-            Login userData = (Login) request.getSession().getAttribute(Login.class.getName());
-            if (userData == null ||
-                    Util.nullOrEmptyOrBlank(userData.getEmail()) ||
-                    (new Date().getTime() - userData.getLastAccessed()) > 15 * 60 * 1000) {
+        Login userData = (Login) request.getSession().getAttribute(Login.class.getName());
+        if (userData != null) {
+            if (Util.nullOrEmptyOrBlank(userData.getEmail())) {
+                response.sendRedirect("index.htm");
+            }
+            else if (userData.hasNoAccess() || !Login.isValidCacheEntry(userData.getEmail())) {
+
+                request.getSession().invalidate();
+                CommonCache.getInstance().remove(userData.getSessionCacheKey());
                 response.sendRedirect("index.htm");
                 return false;
             }
             else {
                 userData.setLastAccessed(new Date().getTime());
+
+                if (CommonCache.getInstance().get(userData.getSessionCacheKey()) == null) {
+                    Login.initializeAccessControlList(userData);
+                    Login.initializeAccessFilterList(userData);
+                    CommonCache.getInstance().put(userData.getSessionCacheKey(), userData);
+                }
+
+                if (isPathsToIgnore(request)) {
+                    RequestDispatcher rd = request.getRequestDispatcher("welcome.htm");
+                    rd.forward(request, response);
+                    return false;
+                }
             }
         }
+        else {
+            if (isPathsToIgnore(request)) {
+                return true;
+            }
+            else {
+                RequestDispatcher rd = request.getRequestDispatcher("index.htm");
+                rd.forward(request, response);
+                return false;
+            }
+        }
+
         return true;
+    }
+
+    private boolean isPathsToIgnore (HttpServletRequest request)
+    {
+        String uri = request.getRequestURI();
+        if (uri.endsWith("index.htm") ||
+                uri.endsWith("login.htm")) {
+            return true;
+        }
+
+        if (uri.substring(request.getContextPath().length(), uri.length()).equalsIgnoreCase("/")) {
+            return true;
+        }
+
+        return false;
     }
 }

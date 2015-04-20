@@ -33,7 +33,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class ParticipantServiceImpl implements ParticipantService
+public class ParticipantServiceImpl extends CommonServiceImpl implements ParticipantService
 {
     @Autowired
     private ParticipantDAO participantDAO;

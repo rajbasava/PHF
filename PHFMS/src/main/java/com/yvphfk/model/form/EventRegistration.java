@@ -35,6 +35,9 @@ public class EventRegistration extends BaseForm
     public static final String StatusCancelled = "Cancelled";
     public static final String StatusOnHold = "OnHold";
 
+    public static final int VegFood = 0;
+    public static final int JainFood = 1;
+
     public static final String ClassName = "com.yvphfk.model.form.EventRegistration";
 
     @Id
@@ -78,8 +81,8 @@ public class EventRegistration extends BaseForm
     private boolean certificates = false;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "coursetype")
-    private CourseType courseType;
+    @JoinColumn(name = "workshoplevel")
+    private WorkshopLevel workshopLevel;
 
     @Column(name = "REFERENCE")
     private String reference;
@@ -92,6 +95,12 @@ public class EventRegistration extends BaseForm
 
     @Column(name = "REGISTRATIONDATE", updatable = false)
     private Date registrationDate;
+
+    @Column(name = "foodtype")
+    private int foodType;
+
+    @Column(name = "attend", columnDefinition = "default false")
+    private boolean attend;
 
     @Column(name = "PREPAREDBY", updatable = false)
     private String preparedBy;
@@ -129,7 +138,7 @@ public class EventRegistration extends BaseForm
     private Integer foundationId;
 
     @Transient
-    private Integer courseTypeId;
+    private Integer workshopLevelId;
 
     @Transient
     private Integer eventFeeId;
@@ -239,23 +248,23 @@ public class EventRegistration extends BaseForm
         this.certificates = certificates;
     }
 
-    public CourseType getCourseType ()
+    public WorkshopLevel getWorkshopLevel ()
     {
-        return courseType;
+        return workshopLevel;
     }
 
-    public void setCourseType (CourseType courseType)
+    public void setWorkshopLevel (WorkshopLevel workshopLevel)
     {
-        this.courseType = courseType;
+        this.workshopLevel = workshopLevel;
     }
 
     public String getLevelName ()
     {
-        if (getCourseType() == null) {
+        if (getWorkshopLevel() == null) {
             return null;
         }
 
-        return getCourseType().getShortName();
+        return getWorkshopLevel().getName();
     }
 
     public String getStatus ()
@@ -447,14 +456,14 @@ public class EventRegistration extends BaseForm
         this.localEventKitStatus = localEventKitStatus;
     }
 
-    public Integer getCourseTypeId ()
+    public Integer getWorkshopLevelId ()
     {
-        return courseTypeId;
+        return workshopLevelId;
     }
 
-    public void setCourseTypeId (Integer courseTypeId)
+    public void setWorkshopLevelId (Integer workshopLevelId)
     {
-        this.courseTypeId = courseTypeId;
+        this.workshopLevelId = workshopLevelId;
     }
 
     public Integer getEventFeeId ()
@@ -465,5 +474,50 @@ public class EventRegistration extends BaseForm
     public void setEventFeeId (Integer eventFeeId)
     {
         this.eventFeeId = eventFeeId;
+    }
+
+    public int getFoodType ()
+    {
+        return foodType;
+    }
+
+    public void setFoodType (int foodType)
+    {
+        this.foodType = foodType;
+    }
+
+    public boolean isAttend ()
+    {
+        return attend;
+    }
+
+    public void setAttend (boolean attend)
+    {
+        this.attend = attend;
+    }
+
+    public boolean isAmountDue ()
+    {
+        return getAmountDue() == null || getAmountDue() > 0;
+    }
+
+    public boolean isJainFood ()
+    {
+        return getFoodType() == JainFood;
+    }
+
+    public boolean isVIP ()
+    {
+        return getParticipant().isVip();
+    }
+
+    public boolean isRegistered ()
+    {
+        return StatusRegistered.equals(getStatus());
+    }
+
+    public String foodType ()
+    {
+        return JainFood == getFoodType() ? "Jain Food" : "Veg Food";
     }
 }

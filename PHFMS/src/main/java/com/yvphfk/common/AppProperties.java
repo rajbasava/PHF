@@ -34,6 +34,9 @@ public class AppProperties
     @Value("${UI.displaySeatDays}")
     private Integer displaySeatDays;
 
+    @Value("${seating.alphaNumericScheme}")
+    private String alphaNumericScheme;
+
     public String getFromAddress ()
     {
         return fromAddress;
@@ -62,5 +65,10 @@ public class AppProperties
     public Integer getDisplaySeatDays ()
     {
         return displaySeatDays;
+    }
+
+    public String getAlphaNumericScheme ()
+    {
+        return alphaNumericScheme;
     }
 }

@@ -81,6 +81,8 @@ public class Report
         paymentFieldPaths.add("alpha");
         paymentFieldPaths.add("seat");
         paymentFieldPaths.add("custom");
+        paymentFieldPaths.add("gate");
+        paymentFieldPaths.add("foodCounter");
         return new ReportSheet("Seats", paymentFieldPaths);
     }
 
@@ -137,12 +139,14 @@ public class Report
         registrationFieldPaths.add("amountDue");
         registrationFieldPaths.add("pendingPdc");
         registrationFieldPaths.add("review");
-        registrationFieldPaths.add("courseType.ShortName");
+        registrationFieldPaths.add("workshopLevel.name");
         registrationFieldPaths.add("reference");
         registrationFieldPaths.add("application");
         registrationFieldPaths.add("certificates");
         registrationFieldPaths.add("foodCoupon");
         registrationFieldPaths.add("eventKit");
+        registrationFieldPaths.add("foodtype");
+        registrationFieldPaths.add("attend");
         registrationFieldPaths.add("registrationDate");
         registrationFieldPaths.add("status");
         registrationFieldPaths.add("Category");
@@ -163,11 +167,12 @@ public class Report
         registrationFieldPaths.add("participant.vipDesc");
         registrationFieldPaths.add("amountPayable");
         registrationFieldPaths.add("review");
-        registrationFieldPaths.add("courseType.shortName");
+        registrationFieldPaths.add("workshopLevel.name");
         registrationFieldPaths.add("reference");
         registrationFieldPaths.add("refOrder");
         registrationFieldPaths.add("application");
         registrationFieldPaths.add("certificates");
+        registrationFieldPaths.add("foodtype");
         registrationFieldPaths.add("registrationDate");
         registrationFieldPaths.add("status");
         return new ReportSheet("Registrations", registrationFieldPaths);

@@ -27,10 +27,25 @@
                  $("#modifyEvent").submit();
             });
 
+            $("a#addWorkshopLevel").button();
+            $("a#addWorkshopLevel").css("font-size", "11px");
+            $("a#addWorkshopLevel").click(function() {
+                 $("#modifyEvent").get(0).setAttribute('action', 'showWorkshopLevel.htm');
+                 $("#modifyEvent").submit();
+            });
+
+
             $("a#showKits").button();
             $("a#showKits").css("font-size", "11px");
             $("a#showKits").click(function() {
                  $("#modifyEvent").get(0).setAttribute('action', 'showKitsUI.htm');
+                 $("#modifyEvent").submit();
+            });
+
+            $("a#eventStatus").button();
+            $("a#eventStatus").css("font-size", "11px");
+            $("a#eventStatus").click(function() {
+                 $("#modifyEvent").get(0).setAttribute('action', 'showEventStatus.htm');
                  $("#modifyEvent").submit();
             });
 
@@ -86,6 +101,22 @@
                     singleSelect: true
             });
 
+            $("#workshopLevels").flexigrid({
+                    colModel : [
+                        {display: '<spring:message code="label.levelOrder"/>', width : 250, align: 'left'},
+                        {display: '<spring:message code="label.name"/>', width : 250, align: 'left'},
+                        {display: '<spring:message code="label.start"/>', width : 250, align: 'left'},
+                        {display: ' ', width : 260, align: 'left'}
+                    ],
+                    useRp: true,
+                    rp: 10,
+                    showTableToggleBtn: false,
+                    resizable: false,
+                    height: 175,
+                    width: 1325,
+                    singleSelect: true
+            });
+
         });
     </script>
 </head>
@@ -99,6 +130,37 @@
         <jsp:include page="eventSummary.jsp"/>
     </c:otherwise>
 </c:choose>
+
+<c:if  test="${!empty workshopLevelList}">
+<table width="100%">
+    <tr style="background-color:#E8E8E8;">
+        <td>Workshop Levels</td>
+    </tr>
+    <tr>
+        <td>
+            <table id="workshopLevels">
+                <tbody>
+                    <c:forEach items="${workshopLevelList}" var="workshopLevel">
+                        <tr>
+                            <td><c:out value="${workshopLevel.levelOrder}"/> </td>
+                            <td><c:out value="${workshopLevel.courseType.shortName}"/></td>
+                            <td><c:out value="${workshopLevel.start}"/></td>
+                            <td class="YLink">
+                                <form id="delWorkshopLevel<c:out value="${workshopLevel.id}"/>" method="post" action="deleteWorkshopLevel.htm">
+                                    <input type="hidden" name="workshopLevelId" value="<c:out value="${workshopLevel.id}"/>" />
+                                    <input type="hidden" name="eventId" value="<c:out value="${event.id}"/>" />
+                                    <a href="#" onclick="document.getElementById('delWorkshopLevel<c:out value="${workshopLevel.id}"/>').submit();"><spring:message code="label.delete"/></a>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                <tbody>
+            </table>
+        </td>
+    </tr>
+</table>
+</c:if>
+
 
 <c:if  test="${!empty eventFeeList}">
 <table width="100%">
@@ -139,9 +201,13 @@
             <tr height="10px"><td>&nbsp;</td></tr>
             <tr style="background-color:#E8E8E8;">
                 <td align="center" cellpadding="2px">
+                    <c:if  test="${isWorkshop}">
+                        <a id="addWorkshopLevel" href="#">Add Workshop Level</a>
+                    </c:if>
                     <a id="addEventFee" href="#">Add Event Fee</a>
-                    <a id="showKits" href="#">Volunteer Kits and Status</a>
-                    <a id="showEventDetail" href="#">Kits For Event</a>
+                    <!-- <a id="showKits" href="#">Volunteer Kits and Status</a>
+                    <a id="showEventDetail" href="#">Kits For Event</a> -->
+                    <a id="eventStatus" href="#">Status</a>
                     <a id="allocateSeats" href="#">Allocate Seats</a>
                     <a id="exportSeats" href="#">Export Allocated Seats</a>
                     <a id="deleteEvent" href="#">Deactivate</a>

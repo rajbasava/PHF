@@ -198,7 +198,9 @@ public class Util
         ServletRequestAttributes requestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpSession session = requestAttributes.getRequest().getSession();
-        return (Login) session.getAttribute(Login.ClassName);
+        Login login = (Login) session.getAttribute(Login.ClassName);
+        login = (Login) CommonCache.getInstance().get(login.getSessionCacheKey());
+        return login;
     }
 
     public static Object createInstance (String className)
@@ -322,5 +324,16 @@ public class Util
         }
 
         return builder.toString();
+    }
+
+    public static Object getBean (String beanName)
+    {
+        ApplicationContext context = ApplicationContextUtils.getApplicationContext();
+
+        if (context == null) {
+            return null;
+        }
+
+        return context.getBean(beanName);
     }
 }

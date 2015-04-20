@@ -126,7 +126,7 @@ public class ExcelReport
                 cell.setCellType(Cell.CELL_TYPE_BOOLEAN);
                 cell.setCellStyle(bodyCellStyle);
             }
-            else if (obj instanceof Long) {
+            else if (obj instanceof Long || obj instanceof Integer) {
                 cell.setCellType(Cell.CELL_TYPE_NUMERIC);
                 cell.setCellValue(Double.valueOf(String.valueOf(obj)));
                 cell.setCellStyle(bodyCellStyle);

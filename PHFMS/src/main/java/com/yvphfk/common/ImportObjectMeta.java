@@ -102,6 +102,7 @@ public class ImportObjectMeta
         registrationFieldPaths.add("registration.refOrder");
         registrationFieldPaths.add("registration.application");
         registrationFieldPaths.add("registration.certificates");
+        registrationFieldPaths.add("registration.foodType");
         registrationFieldPaths.add("registration.registrationDate");
         registrationFieldPaths.add("registration.status");
 
@@ -131,6 +132,8 @@ public class ImportObjectMeta
         rowMetaFieldPaths.add("sortOrder");
         rowMetaFieldPaths.add("rowName");
         rowMetaFieldPaths.add("rowMax");
+        rowMetaFieldPaths.add("gate");
+        rowMetaFieldPaths.add("foodCounter");
         return new ImportObjectSheet("RowMeta", rowMetaFieldPaths, null, null);
     }
 
@@ -143,6 +146,8 @@ public class ImportObjectMeta
         rowMetaFieldPaths.add("alpha");
         rowMetaFieldPaths.add("seat");
         rowMetaFieldPaths.add("custom");
+        rowMetaFieldPaths.add("gate");
+        rowMetaFieldPaths.add("foodcounter");
         return new ImportObjectSheet("CustomSeats", rowMetaFieldPaths, null, null);
     }
 

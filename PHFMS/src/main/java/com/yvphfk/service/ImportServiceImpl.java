@@ -216,7 +216,10 @@ public class ImportServiceImpl implements ImportService
                     Util.setDottedFieldValue(fields.get(j), importable, new Long((long) cell.getNumericCellValue()));
                 }
                 else if (fieldName.indexOf("refOrder") >= 0) {
-                    Util.setDottedFieldValue(fields.get(j), importable, cell.getNumericCellValue());
+                    if (!Util.nullOrEmptyOrBlank(cell.toString())) {
+                        cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+                        Util.setDottedFieldValue(fields.get(j), importable, cell.getNumericCellValue());
+                    }
                 }
                 else if (fieldName.indexOf("review") >= 0 ||
                         fieldName.indexOf("vip") >= 0 ||

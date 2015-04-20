@@ -437,6 +437,12 @@ public class Event extends BaseForm
         this.foundationId = foundationId;
     }
 
+    public boolean isWorkshop ()
+    {
+        return getEventType() != null &&
+                EventTypeWorkshop.equals(getEventType());
+    }
+
     @Override
     public boolean equals (Object o)
     {

@@ -47,8 +47,8 @@ public class EventFee extends BaseForm
     private boolean review;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "coursetype")
-    private CourseType courseType;
+    @JoinColumn(name = "workshopLevel")
+    private WorkshopLevel workshopLevel;
 
     @Column(name = "PREPAREDBY", updatable = false)
     private String preparedBy;
@@ -66,7 +66,7 @@ public class EventFee extends BaseForm
     private Integer eventId;
 
     @Transient
-    private Integer courseTypeId;
+    private Integer workshopLevelId;
 
     public Integer getId ()
     {
@@ -184,23 +184,23 @@ public class EventFee extends BaseForm
         this.eventId = eventId;
     }
 
-    public CourseType getCourseType ()
+    public WorkshopLevel getWorkshopLevel ()
     {
-        return courseType;
+        return workshopLevel;
     }
 
-    public void setCourseType (CourseType courseType)
+    public void setWorkshopLevel (WorkshopLevel workshopLevel)
     {
-        this.courseType = courseType;
+        this.workshopLevel = workshopLevel;
     }
 
-    public Integer getCourseTypeId ()
+    public Integer getWorkshopLevelId ()
     {
-        return courseTypeId;
+        return workshopLevelId;
     }
 
-    public void setCourseTypeId (Integer courseTypeId)
+    public void setWorkshopLevelId (Integer workshopLevelId)
     {
-        this.courseTypeId = courseTypeId;
+        this.workshopLevelId = workshopLevelId;
     }
 }

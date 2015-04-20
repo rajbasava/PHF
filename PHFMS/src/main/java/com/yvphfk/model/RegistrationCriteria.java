@@ -12,6 +12,7 @@ import java.util.Date;
 
 public class RegistrationCriteria implements Serializable
 {
+    private Integer id;
     private Integer participantId;
     private String name;
     private String mobile;
@@ -34,6 +35,16 @@ public class RegistrationCriteria implements Serializable
     private Integer amountDue;
     private boolean includeInactive;
     private int maxResults = Util.MaxResultCount;
+
+    public Integer getId ()
+    {
+        return id;
+    }
+
+    public void setId (Integer id)
+    {
+        this.id = id;
+    }
 
     public Integer getParticipantId ()
     {

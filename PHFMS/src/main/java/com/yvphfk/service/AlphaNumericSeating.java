@@ -43,13 +43,9 @@ public class AlphaNumericSeating extends AbstractSeatingService
             return;
         }
 
-        List<EventRegistration> allUnallocatedForeignRegistrations =
-                participantDAO.allUnallocatedRegistrations(event, false, ParticipantDAO.NonIndians);
-        List<EventRegistration> allUnallocatedIndianRegistrations =
-                participantDAO.allUnallocatedRegistrations(event, false, ParticipantDAO.Indians);
-        List<EventRegistration> allUnallocatedRegistrations = new ArrayList<EventRegistration>();
-        allUnallocatedRegistrations.addAll(allUnallocatedForeignRegistrations);
-        allUnallocatedRegistrations.addAll(allUnallocatedIndianRegistrations);
+        List<EventRegistration> allUnallocatedRegistrations =
+                AlphaNumericSeatingSchemeFactory.getInstance().fetchList(event);
+
         List<RowMeta> rowMetas = eventDAO.getAllEmptyRowMetas(event);
 
         int regsCount = 0;
@@ -74,7 +70,7 @@ public class AlphaNumericSeating extends AbstractSeatingService
 
                 if (!seatFlags[i]) {
                     EventRegistration registration = allUnallocatedRegistrations.get(regsCount);
-                    ParticipantSeat seat = createSeat(registration, rowMeta.getRowName(), seatCounter);
+                    ParticipantSeat seat = createSeat(registration, rowMeta, seatCounter);
                     participantDAO.saveOrUpdate(seat);
                     seatFlags[i] = true;
                     regsCount++;
@@ -125,7 +121,7 @@ public class AlphaNumericSeating extends AbstractSeatingService
             seatCounter = seatCounter + 1;
 
             if (!seatFlags[i]) {
-                seat = createSeat(registration, rowMeta.getRowName(), seatCounter);
+                seat = createSeat(registration, rowMeta, seatCounter);
                 break;
             }
         }

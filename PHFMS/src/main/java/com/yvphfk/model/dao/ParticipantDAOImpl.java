@@ -4,6 +4,7 @@
 */
 package com.yvphfk.model.dao;
 
+import com.yvphfk.common.AccessUtil;
 import com.yvphfk.common.AmountPaidCategory;
 import com.yvphfk.common.SeatingType;
 import com.yvphfk.common.Util;
@@ -16,7 +17,6 @@ import com.yvphfk.model.RegistrationCriteria;
 import com.yvphfk.model.RegistrationForm;
 import com.yvphfk.model.TrainerCriteria;
 import com.yvphfk.model.form.BaseForm;
-import com.yvphfk.model.form.CourseType;
 import com.yvphfk.model.form.Event;
 import com.yvphfk.model.form.EventPayment;
 import com.yvphfk.model.form.EventRegistration;
@@ -196,9 +196,6 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
         if (RegisteredParticipant.ActionRegister.equals(registeredParticipant.getAction())) {
 
-            CourseType courseType = registeredParticipant.getRegistration().getCourseType();
-            Event event = registeredParticipant.getRegistration().getEvent();
-
             //todo check the uniqueness of the participant before adding.
             if (!partNoSave) {
                 participant = saveOrUpdateParticipant(participant);
@@ -250,7 +247,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         session.flush();
         session.close();
 
-        updateKits(login, registration);
+//        updateKits(login, registration);
 
         addHistoryRecords(records, registration);
 
@@ -439,16 +436,6 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         }
     }
 
-    public HistoryRecord createHistoryRecord (String comment,
-                                              String preparedBy,
-                                              BaseForm object)
-    {
-        HistoryRecord record = new HistoryRecord();
-        record.setComment(comment);
-        record.initialize(preparedBy);
-        record.setObject(object);
-        return record;
-    }
 
     public void createAndAddHistoryRecord (String comment,
                                            String preparedBy,
@@ -723,6 +710,10 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
             criteria.add(Restrictions.eq("participant.id", registrationCriteria.getParticipantId()));
         }
 
+        if (registrationCriteria.getId() != null) {
+            criteria.add(Restrictions.eq("id", registrationCriteria.getId()));
+        }
+
         if (registrationCriteria.isConsolidated()) {
             criteria.setFetchMode("payments", FetchMode.EAGER);
         }
@@ -745,7 +736,11 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
             criteria.add(Restrictions.ilike("participant.name", registrationCriteria.getName(), MatchMode.ANYWHERE));
         }
 
-        if (registrationCriteria.getEventId() != null && registrationCriteria.getEventId() != -1) {
+        List<Integer> eventIds = AccessUtil.getEventFilterList();
+        if (!eventIds.isEmpty()) {
+            criteria.add(Restrictions.in("event.id", eventIds));
+        }
+        else if (registrationCriteria.getEventId() != null && registrationCriteria.getEventId() != -1) {
             criteria.add(Restrictions.eq("event.id", registrationCriteria.getEventId()));
         }
 
@@ -761,9 +756,13 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
             criteria.add(Restrictions.ilike("participant.email", registrationCriteria.getEmail(), MatchMode.ANYWHERE));
         }
 
-        if (!Util.nullOrEmptyOrBlank(registrationCriteria.getFoundationId())) {
+        List<Integer> foundationIds = AccessUtil.getFoundationIdFilterList();
+        if (!foundationIds.isEmpty()) {
+            criteria.add(Restrictions.in("foundation.id", foundationIds));
+        }
+        else if (!Util.nullOrEmptyOrBlank(registrationCriteria.getFoundationId())) {
             String foundationId = registrationCriteria.getFoundationId();
-            criteria.add(Restrictions.eq("registration.foundationId", foundationId));
+            criteria.add(Restrictions.eq("foundation.id", Integer.parseInt(foundationId)));
         }
 
         if (!Util.nullOrEmptyOrBlank(registrationCriteria.getMobile())) {
@@ -843,17 +842,52 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         switch (countryCode) {
             case Indians: {
                 Criterion indCond = Restrictions.eq("participant.country", "India");
+                Criterion emptyCond = Restrictions.eq("participant.country", " ");
                 Criterion nullCond = Restrictions.isNull("participant.country");
-                criteria.add(Restrictions.or(indCond, nullCond));
+                Criterion or1 = Restrictions.or(indCond, nullCond);
+                Criterion or2 = Restrictions.or(or1, emptyCond);
+                criteria.add(or2);
                 break;
             }
             case NonIndians: {
                 Criterion forgnCond = Restrictions.ne("participant.country", "India");
+                Criterion notEmptyCond = Restrictions.ne("participant.country", "");
                 Criterion notNullCond = Restrictions.isNotNull("participant.country");
-                criteria.add(Restrictions.or(forgnCond, notNullCond));
+                Criterion and1 = Restrictions.and(forgnCond, notNullCond);
+                Criterion and2 = Restrictions.and(and1, notEmptyCond);
+                criteria.add(and2);
                 break;
             }
         }
+
+        criteria.add(Restrictions.eq("status", EventRegistration.StatusRegistered));
+        criteria.add(Restrictions.eq("active", true));
+
+        List<EventRegistration> results = criteria.list();
+
+        session.close();
+        return results;
+    }
+
+    public List<EventRegistration> allRefOrderBasedUnallocatedRegistrations (Event event, boolean vip)
+    {
+        if (event == null) {
+            return null;
+        }
+
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(EventRegistration.class);
+        criteria.createAlias("event", "event");
+        criteria.createAlias("participant", "participant");
+        criteria.createAlias("seats", "seats", CriteriaSpecification.LEFT_JOIN);
+
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.addOrder(Order.asc("refOrder"));
+        criteria.addOrder(Order.asc("id"));
+
+        criteria.add(Restrictions.eq("event.id", event.getId()));
+        criteria.add(Restrictions.isNull("seats.seat"));
+        criteria.add(Restrictions.eq("participant.vip", vip));
 
         criteria.add(Restrictions.eq("status", EventRegistration.StatusRegistered));
         criteria.add(Restrictions.eq("active", true));
@@ -906,16 +940,25 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         criteria.createAlias("registration.participant", "participant");
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
-        if (paymentCriteria.getEventId() != null) {
+        List<Integer> eventIds = AccessUtil.getEventFilterList();
+        if (!eventIds.isEmpty()) {
+            criteria.add(Restrictions.in("registration.event.id", eventIds));
+            criteria.add(Restrictions.eq("registration.event.active", true));
+        }
+        else if (paymentCriteria.getEventId() != null) {
             criteria.add(Restrictions.eq("registration.event.id", paymentCriteria.getEventId()));
             if (!paymentCriteria.isIncludeInactive()) {
                 criteria.add(Restrictions.eq("registration.event.active", true));
             }
         }
 
-        if (!Util.nullOrEmptyOrBlank(paymentCriteria.getFoundation())) {
+        List<Integer> foundationIds = AccessUtil.getFoundationIdFilterList();
+        if (!foundationIds.isEmpty()) {
+            criteria.add(Restrictions.in("registration.foundation.id", foundationIds));
+        }
+        else if (!Util.nullOrEmptyOrBlank(paymentCriteria.getFoundation())) {
             String foundation = paymentCriteria.getFoundation();
-            criteria.add(Restrictions.eq("registration.foundationId", foundation));      // todo this is an integer
+            criteria.add(Restrictions.eq("registration.foundation.id", foundation));      // todo this is an integer
         }
 
         if (paymentCriteria.getCourseTypeId() != null) {

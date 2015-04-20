@@ -5,7 +5,9 @@
 package com.yvphfk.model.dao;
 
 import com.yvphfk.model.Login;
+import com.yvphfk.model.form.AccessControl;
 import com.yvphfk.model.form.Volunteer;
+import com.yvphfk.model.form.AccessFilter;
 import com.yvphfk.model.form.VolunteerKit;
 
 import java.util.List;
@@ -23,9 +25,13 @@ public interface VolunteerDAO extends CommonDAO
 
     public void removeVolunteer (Integer id);
 
-    public boolean processLogin (Login login);
+    public int processLogin (Login login);
 
     public void processLogout (Login login);
 
     public Volunteer getVolunteer (Integer volunteerId);
+
+    public List<AccessFilter> getAccessFilterList (Integer volunteerId);
+
+    public List<AccessControl> getAccessControlList (Integer volunteerId);
 }

@@ -36,15 +36,6 @@
 		<td><form:label path="activity"><spring:message code="label.activity"/></form:label></td>
         <td><form:input path="activity" /></td>
 	</tr>
-    <tr>
-        <td><form:label path="permission"><spring:message code="label.permission"/></form:label></td>
-        <td>
-            <form:select path="permission">
-                <form:option value="NONE" label="--- Select ---"/>
-                <form:options items="${allVolunteerPermissions}" />
-            </form:select>
-        </td>
-    </tr>
 	<tr>
 		<td colspan="2" align="center">
 			<input type="submit" value="<spring:message code="label.addVolunteer"/>"/>
@@ -61,20 +52,25 @@
     <th><spring:message code="label.email"/></th>
     <th><spring:message code="label.mobile"/></th>
     <th><spring:message code="label.activity"/></th>
-    <th><spring:message code="label.permission"/></th>
 	<th>&nbsp;</th>
 </tr>
 <c:forEach items="${volunteerList}" var="volunteer">
 	<tr>
-		<td><c:out value="${volunteer.name}"/> </td>
+		<td class="YLink">
+		    <form id="editVol<c:out value="${volunteer.id}"/>" method="post" action="showVolunteerAccess.htm">
+                <input type="hidden" name="volunteerId" value="<c:out value="${volunteer.id}"/>" />
+                <a href="#" onclick="document.getElementById('editVol<c:out value="${volunteer.id}"/>').submit();">
+                    <c:out value="${volunteer.name}"/>
+                </a>
+		    </form>
+		</td>
 		<td><c:out value="${volunteer.email}"/></td>
 		<td><c:out value="${volunteer.mobile}"/></td>
 		<td><c:out value="${volunteer.activity}"/></td>
-		<td><c:out value="${volunteer.permissionName}"/></td>
 		<td class="YLink">
             <form id="delVol<c:out value="${volunteer.id}"/>" method="post" action="delete.htm">
-            <input type="hidden" name="volunteerId" value="<c:out value="${volunteer.id}"/>" />
-            <a href="#" onclick="document.getElementById('delVol<c:out value="${volunteer.id}"/>').submit();"><spring:message code="label.deactivate"/></a>
+                <input type="hidden" name="volunteerId" value="<c:out value="${volunteer.id}"/>" />
+                <a href="#" onclick="document.getElementById('delVol<c:out value="${volunteer.id}"/>').submit();"><spring:message code="label.deactivate"/></a>
             </form>    
         </td>
 	</tr>

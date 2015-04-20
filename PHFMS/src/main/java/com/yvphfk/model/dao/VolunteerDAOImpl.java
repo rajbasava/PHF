@@ -4,7 +4,10 @@
 */
 package com.yvphfk.model.dao;
 
+import com.yvphfk.common.CommonCache;
 import com.yvphfk.common.Util;
+import com.yvphfk.model.form.AccessControl;
+import com.yvphfk.model.form.AccessFilter;
 import com.yvphfk.model.form.LoggedInVolunteer;
 import com.yvphfk.model.Login;
 import com.yvphfk.model.form.Volunteer;
@@ -78,15 +81,25 @@ public class VolunteerDAOImpl extends CommonDAOImpl implements VolunteerDAO
             sessionFactory.getCurrentSession().delete(loggedInVolunteer);
         }
 
+        List<AccessFilter> filterList = getAccessFilterList(volunteer.getId());
+        for (AccessFilter af: filterList) {
+            sessionFactory.getCurrentSession().delete(af);
+        }
+
+        List<AccessControl> controlList = getAccessControlList(volunteer.getId());
+        for (AccessControl ac: controlList) {
+            sessionFactory.getCurrentSession().delete(ac);
+        }
+
         if (null != volunteer) {
             sessionFactory.getCurrentSession().delete(volunteer);
         }
     }
 
-    public boolean processLogin (Login login)
+    public int processLogin (Login login)
     {
         if (Util.nullOrEmptyOrBlank(login.getEmail())) {
-            return false;
+            return Login.InvalidUsernamePassword;
         }
 
         Volunteer volunteer = getVolunteerByEmail(login.getEmail());
@@ -94,27 +107,34 @@ public class VolunteerDAOImpl extends CommonDAOImpl implements VolunteerDAO
         if (volunteer != null &&
                 volunteer.getEmail().equals(login.getEmail()) &&
                 volunteer.getPassword().equals(login.getPassword())) {
+            login.setName(volunteer.getName());
+            login.setVolunteerId(volunteer.getId());
+            List<AccessControl> accessControlList = getAccessControlList(volunteer.getId());
+            login.setAccessControlList(accessControlList);
+            List<AccessFilter> accessFilterList = getAccessFilterList(volunteer.getId());
+            login.setAccessFilterList(accessFilterList);
+
+            if (login.hasNoAccess()) {
+                return Login.UserHasNoAccess;
+            }
+
             LoggedInVolunteer loggedInVolunteer = volunteer.getLogin();
             if (loggedInVolunteer == null) {
                 loggedInVolunteer = new LoggedInVolunteer();
                 loggedInVolunteer.setVolunteer(volunteer);
-                loggedInVolunteer.setCounter(login.getCounter());
                 loggedInVolunteer.setLoggedin(new Date());
                 sessionFactory.getCurrentSession().save(loggedInVolunteer);
             }
             else {
-                loggedInVolunteer.setCounter(login.getCounter());
                 loggedInVolunteer.setLoggedin(new Date());
                 loggedInVolunteer.setLoggedout(null);
                 sessionFactory.getCurrentSession().update(loggedInVolunteer);
             }
-            login.setName(volunteer.getName());
-            login.setVolunteerId(volunteer.getId());
-            login.setPermission(volunteer.getPermission());
-            return true;
+
+            return Login.Success;
         }
 
-        return false;
+        return Login.InvalidUsernamePassword;
     }
 
     public void processLogout (Login login)
@@ -157,5 +177,42 @@ public class VolunteerDAOImpl extends CommonDAOImpl implements VolunteerDAO
         return volunteer;
     }
 
+    @Override
+    public List<AccessFilter> getAccessFilterList (Integer volunteerId)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(AccessFilter.class);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+        Volunteer volunteer = (Volunteer) lookup(volunteerId, Volunteer.class);
+
+        criteria.add(Restrictions.eq("volunteer", volunteer));
+
+        List<AccessFilter> accessFilterList = criteria.list();
+
+        session.flush();
+        session.close();
+
+        return accessFilterList;
+    }
+
+    @Override
+    public List<AccessControl> getAccessControlList (Integer volunteerId)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(AccessControl.class);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+        Volunteer volunteer = (Volunteer) lookup(volunteerId, Volunteer.class);
+
+        criteria.add(Restrictions.eq("volunteer", volunteer));
+
+        List<AccessControl> accessControlList = criteria.list();
+
+        session.flush();
+        session.close();
+
+        return accessControlList;
+    }
 
 }

@@ -5,7 +5,7 @@
 
 <html>
 <head>
-	<title>Arhatic Yoga Retreat - Volunteer Login</title>
+	<title>Arhatic Yoga Retreat - Login</title>
 </head>
 <mytags:style/>
 </head>
@@ -19,7 +19,8 @@
             <img src="<c:url value="/resources/img/mcks_meditation.jpg"/>"/>
         </td>
         <td>
-            <table valign="center" align="center" cellspacing="2">
+            <form:errors path="*" cssClass="errorblock" element="div" />
+            <table style="padding: 8px; margin-left: 8px;" valign="center" align="left" cellspacing="2">
                 <tr>
                     <td><form:label path="email"><spring:message code="label.email"/></form:label></td>
                     <td><form:input path="email" /></td>
@@ -27,10 +28,6 @@
                 <tr>
                     <td><form:label path="password"><spring:message code="label.password"/></form:label></td>
                     <td><form:password path="password"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="counter"><spring:message code="label.counter"/></form:label></td>
-                    <td><form:input path="counter" /></td>
                 </tr>
                 <tr align="center">
                     <td colspan="2" align="center">
