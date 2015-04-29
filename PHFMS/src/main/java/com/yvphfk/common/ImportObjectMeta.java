@@ -105,6 +105,9 @@ public class ImportObjectMeta
         registrationFieldPaths.add("registration.foodType");
         registrationFieldPaths.add("registration.registrationDate");
         registrationFieldPaths.add("registration.status");
+        registrationFieldPaths.add("currentSeat.seatNo");
+        registrationFieldPaths.add("currentSeat.foodCounter");
+        registrationFieldPaths.add("currentSeat.gate");
 
         return new ImportObjectSheet("Registrations", registrationFieldPaths, null, null);
     }

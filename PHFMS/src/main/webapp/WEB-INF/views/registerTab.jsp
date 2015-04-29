@@ -402,16 +402,25 @@
                         <td align="center">
                         <c:if test="${registeredParticipant.registration.isAmountDue()}" var="isAmountDue" />
                         <c:if test="${registeredParticipant.registration.isAttend()}" var="isAttend" />
-                        <c:if test="${isSpotRegVolunteer || isRegVolunteer}">
-                            <c:choose>
-                                <c:when test="${!isAttend && !isAmountDue}">
-                                    <a id="attend" href="#">Attend</a>
-                                </c:when>
-                                <c:when test="${isAttend}">
-                                    <a id="attend" href="#">Summary</a>
-                                </c:when>
-                            </c:choose>
-                        </c:if>
+                        <c:choose>
+                            <c:when test="${isSpotRegVolunteer || isRegVolunteer}">
+                                <c:choose>
+                                    <c:when test="${!isAttend && !isAmountDue}">
+                                        <a id="attend" href="#">Attend</a>
+                                    </c:when>
+                                    <c:when test="${isAttend}">
+                                        <a id="attend" href="#">Summary</a>
+                                    </c:when>
+                                </c:choose>
+                            </c:when>
+                            <c:when test="${isInfoVolunteer}">
+                                <c:choose>
+                                    <c:when test="${isAttend}">
+                                        <a id="attend" href="#">Summary</a>
+                                    </c:when>
+                                </c:choose>
+                            </c:when>
+                        </c:choose>
                         <c:if test="${isAdmin}" >
                             <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
                             <a id="updateNAttend" href="#">Update and Attend</a>

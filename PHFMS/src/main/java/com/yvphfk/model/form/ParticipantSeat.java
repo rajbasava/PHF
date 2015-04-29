@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "phk_seat")
@@ -65,6 +67,9 @@ public class ParticipantSeat extends BaseForm
 
     @Transient
     private String courseTypeShortName;
+
+    @Transient
+    private String seatNo;
 
     public Integer getId ()
     {
@@ -199,6 +204,25 @@ public class ParticipantSeat extends BaseForm
     public void setCourseTypeShortName (String courseTypeShortName)
     {
         this.courseTypeShortName = courseTypeShortName;
+    }
+
+    public String getSeatNo ()
+    {
+        return seatNo;
+    }
+
+    public void setSeatNo (String seatNo)
+    {
+        String alphaStr = "[a-zA-Z]+";
+        Pattern p = Pattern.compile(alphaStr);
+        this.seatNo = seatNo;
+        Matcher m = p.matcher(seatNo);
+        if (m.find()) {
+            String alpha = m.group(0);
+            setAlpha(alpha);
+            String numeric = seatNo.substring(alpha.length(), seatNo.length());
+            setSeat(Integer.parseInt(numeric));
+        }
     }
 
     @Override

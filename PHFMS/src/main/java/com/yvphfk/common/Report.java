@@ -172,7 +172,7 @@ public class Report
         registrationFieldPaths.add("refOrder");
         registrationFieldPaths.add("application");
         registrationFieldPaths.add("certificates");
-        registrationFieldPaths.add("foodtype");
+        registrationFieldPaths.add("foodType");
         registrationFieldPaths.add("registrationDate");
         registrationFieldPaths.add("status");
         return new ReportSheet("Registrations", registrationFieldPaths);

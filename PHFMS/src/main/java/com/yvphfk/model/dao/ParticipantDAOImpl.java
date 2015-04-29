@@ -223,6 +223,11 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
             ParticipantSeat participantSeat = registeredParticipant.getCurrentSeat();
             if (participantSeat != null) {
+                if (participantSeat.getRegistration() == null) {
+                    participantSeat.setRegistration(registration);
+                    participantSeat.setEvent(registration.getEvent());
+                    participantSeat.setCourseType(registration.getEvent().getPrimaryEligibility());
+                }
                 session.save(participantSeat);
             }
         }
@@ -694,6 +699,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(EventRegistration.class);
         criteria.createAlias("event", "event");
+        criteria.addOrder(Order.asc("id"));
 
         if (registrationCriteria.getMaxResults() != -1) {
             criteria.setMaxResults(registrationCriteria.getMaxResults());

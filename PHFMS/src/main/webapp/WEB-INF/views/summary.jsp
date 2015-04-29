@@ -94,12 +94,12 @@
 							<c:if  test="${seat.seat != null}">
 							<tr style="font-family: verdana; font-size:24px;color:#ff0000; text-align:center;">
 								<td>
-									<c:out value="${seat.levelName}"/>&nbsp;-&nbsp;<c:out value="${seat.alpha}"/>&nbsp;<c:out value="${seat.seat}"/>
+									Seat No#&nbsp;<c:out value="${seat.alpha}"/>&nbsp;<c:out value="${seat.seat}"/>
 								</td>
 							</tr>
 							<tr style="font-family: verdana; font-size:24px;color:#ff0000; text-align:center;">
 								<td>
-									<c:out value="${seat.gate}"/>
+									Gate No#&nbsp;<c:out value="${seat.gate}"/>
 								</td>
 							</tr>
 							<tr style="font-family: verdana; font-size:24px;color:#ff0000; text-align:center;">

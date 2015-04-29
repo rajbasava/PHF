@@ -31,7 +31,7 @@ public class RegisteredParticipant implements Serializable, Importable
     private List<EventPayment> allPayments = new ArrayList<EventPayment>();
     private HistoryRecord currentHistoryRecord;
     private List<HistoryRecord> allHistoryRecords = new ArrayList<HistoryRecord>();
-    private ParticipantSeat currentSeat;
+    private ParticipantSeat currentSeat = new ParticipantSeat();
     private List<ParticipantSeat> allSeats;
     private String action;
     private Integer eventId;
