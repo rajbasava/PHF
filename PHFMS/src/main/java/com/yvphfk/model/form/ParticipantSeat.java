@@ -29,11 +29,11 @@ public class ParticipantSeat extends BaseForm
     @GeneratedValue
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "EVENTREGSTRNID")
     private EventRegistration registration;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "EVENTID")
     private Event event;
 

@@ -80,7 +80,7 @@ public class EventRegistration extends BaseForm
     @Column(name = "CERTIFICATES", columnDefinition = "default false")
     private boolean certificates = false;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "workshoplevel")
     private WorkshopLevel workshopLevel;
 
@@ -114,11 +114,11 @@ public class EventRegistration extends BaseForm
     @Column(name = "ACTIVE")
     private boolean active;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "EVENTID")
     private Event event;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "PARTICIPANTID")
     private Participant participant;
 

@@ -146,6 +146,8 @@
         <property name="maxStatements" value="${jdbc.maxStatements}"/>
         <property name="maxStatementsPerConnection" value="${jdbc.maxStatementsPerConnection}"/>
         <property name="maxIdleTime" value="${jdbc.maxIdleTime}"/>
+        <!--<property name="unreturnedConnectionTimeout" value="40"/>-->
+        <!--<property name="debugUnreturnedConnectionStackTraces" value="true"/>-->
     </bean>
 
 

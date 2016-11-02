@@ -63,14 +63,14 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         Session session = sessionFactory.openSession();
         //todo check the uniqueness of the participant before adding.
         session.saveOrUpdate(participant);
-        createAndAddHistoryRecord(
-                messageSource.getMessage("key.participantAdded",
-                        new Object[]{participant.getId(),
-                                participant.getName()},
-                        null),
-                Util.getCurrentUser().getEmail(),
-                participant,
-                session);
+//        createAndAddHistoryRecord(
+//                messageSource.getMessage("key.participantAdded",
+//                        new Object[]{participant.getId(),
+//                                participant.getName()},
+//                        null),
+//                Util.getCurrentUser().getEmail(),
+//                participant,
+//                session);
         session.flush();
         session.close();
         return participant;
@@ -198,7 +198,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
             //todo check the uniqueness of the participant before adding.
             if (!partNoSave) {
-                participant = saveOrUpdateParticipant(participant);
+                session.saveOrUpdate(participant);
                 registration.setParticipant(participant);
             }
 

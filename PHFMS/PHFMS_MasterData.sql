@@ -1,36 +1,52 @@
 
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('100','Yoga Vidya Pranic Healing Foundation of Karnataka','YVPHF Karnataka','Bangalore','Karnataka','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('110','Yoga Vidya Pranic Healing Foundation Calicut','YVPHF Calicut','Calicut','Kerala','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('120','Yoga Vidya Pranic Healing Foundation Cochin','YVPHF Cochin','Cochin','Kerala','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('130','Yoga Vidya Pranic Healing Foundation Trust Mumbai','YVPHFT Mumbai','Mumbai','Maharashtra','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('140','Pranic Healing Gyan Prachar Kendra Maharashtra','PHGPK Maharashtra','Mumbai','Maharashtra','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('150','Pranic Healing Foundation Rajasthan','PHF Rajasthan','Jaipur','Rajasthan','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('160','Pranic Healing Trust Tamilnadu','PHT Tamilnadu','Chennai','Tamilnadu','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('170','Pranic Healing Home Chennai','PHH Chennai','Chennai','Tamilnadu','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('180','MCKS Yoga Vidya Pranic Healing Trust of UP Lucknow','MCKS YVPHTUP Lucknow','Lucknow','UttarPradesh','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('190','Yoga Vidya Pranic Healing Foundation Trust Uttar Pradesh Varanasi','YVPHFUP Varanasi','Varanasi','UttarPradesh','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('200','Yoga Vidya Pranic Healing Foundation of West Bengal','YVPHF West Bengal','Kolkota','WestBengal','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('210','MCKS Pranic Healing Trust West Bengal','MCKS PHT West Bengal','Kolkota','WestBengal','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('220','Pranic Healing Foundation Secunderabad','PHF Secunderabad','Secunderabad','AndhraPradesh','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('230','MCKS Yoga Vidya Pranic Healing Trust Delhi','MCKS YVPHT Delhi','Delhi','Delhi','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('240','Pranic Healing Foundation Punjab','PHF Punjab','Punjab','Punjab','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('250','Pranic Healing Foundation Singapore','PHF Singapore','Singapore','Singapore','Singapore','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('260','Pranic Healing Foundation Kenya','PHF Kenya','Kenya','Kenya','Kenya','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('270','Pranic Healing Foundation Malaysia','PHF Malaysia','Malaysia','Malaysia','Malaysia','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('280','Pranic Healing Foundation Mauritius','PHF Mauritius','Mauritius','Mauritius','Mauritius','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('290','Pranic Healing Foundation HongKong','PHF HongKong','HongKong','HongKong','HongKong','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('300','Pranic Healing Foundation Macau','PHF Macau','Macau','Macau','Macau','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('310','Pranic Healing Foundation Dubai','PHF Dubai','Dubai','Dubai','Dubai','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('320','Pranic Healing Foundation Oman','PHF Oman','Muscat','Muscat','Oman','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('330','Pranic Healing Foundation Uruguay','PHF Uruguay','Uruguay','Uruguay','Uruguay','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('340','Pranic Healing Foundation Thailand','PHF Thailand','Bangkok','Bangkok','Thailand','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('350','Pranic Healing Foundation USA','PHF USA','USA','USA','USA','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('360','Pranic Healing Foundation Sri Lanka','PHF Sri Lanka','Colombo','Colombo','Sri Lanka','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('370','Pranic Healing Foundation Australia','PHF Australia','Melbourne','Melbourne','Australia','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('380','Pranic Healing Foundation Iran','PHF Iran','Iran','Iran','Iran','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('390','Pranic Healing Foundation Italy','PHF Italy','Rome','Rome','Italy','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('400','MCKS International Arhatic Yoga Ashram','MCKS IAY Ashram','Pune','Pune','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('410','Pranic Healing Foundation Phillipines','PHF Phillipines','Pasig City','Pasig City','Phillipines','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('100','KARNATAKA','KARNATAKA','KARNATAKA','KARNATAKA','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('110','ANDHRA PRADESH','ANDHRA PRADESH','ANDHRA PRADESH','ANDHRA PRADESH','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('120','GOA','GOA','GOA','GOA','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('130','GUJARAT','GUJARAT','GUJARAT','GUJARAT','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('140','KERALA','KERALA','KERALA','KERALA','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('150','MAHARASHTRA','MAHARASHTRA','MAHARASHTRA','MAHARASHTRA','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('160','NEW DELHI','NEW DELHI','NEW DELHI','NEW DELHI','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('170','RAJASTHAN','RAJASTHAN','RAJASTHAN','RAJASTHAN','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('180','TAMILNADU','TAMILNADU','TAMILNADU','TAMILNADU','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('190','UTTAR PRADESH','UTTAR PRADESH','UTTAR PRADESH','UTTAR PRADESH','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('200','VARANASI','VARANASI','VARANASI','VARANASI','India','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('210','WEST BENGAL','WEST BENGAL','WEST BENGAL','WEST BENGAL','India','system', now(), now(), '1');
+
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('220','BAHRAIN','BAHRAIN','BAHRAIN','BAHRAIN','BAHRAIN','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('230','BHUTAN','BHUTAN','BHUTAN','BHUTAN','BHUTAN','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('240','EGYPT','EGYPT','EGYPT','EGYPT','EGYPT','system', now(), now(), '1');
+
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('250','GERMANY','GERMANY','GERMANY','GERMANY','GERMANY','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('260','INDONESIA','INDONESIA','INDONESIA','INDONESIA','INDONESIA','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('270','IRAN','IRAN','IRAN','IRAN','IRAN','system', now(), now(), '1');
+
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('280','ITALY','ITALY','ITALY','ITALY','ITALY','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('290','JORDAN','JORDAN','JORDAN','JORDAN','JORDAN','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('300','KENYA','KENYA','KENYA','KENYA','KENYA','system', now(), now(), '1');
+
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('310','KUWAIT','KUWAIT','KUWAIT','KUWAIT','KUWAIT','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('320','LEBANON','LEBANON','LEBANON','LEBANON','LEBANON','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('330','MALAYSIA','MALAYSIA','MALAYSIA','MALAYSIA','MALAYSIA','system', now(), now(), '1');
+
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('340','MAURITIUS','MAURITIUS','MAURITIUS','MAURITIUS','MAURITIUS','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('350','NEPAL','NEPAL','NEPAL','NEPAL','NEPAL','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('360','OMAN','OMAN','OMAN','OMAN','OMAN','system', now(), now(), '1');
+
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('370','PHILIPPINES','PHILIPPINES','PHILIPPINES','PHILIPPINES','PHILIPPINES','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('380','QATAR','QATAR','QATAR','QATAR','QATAR','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('390','SAUDI ARABIA','SAUDI ARABIA','SAUDI ARABIA','SAUDI ARABIA','SAUDI ARABIA','system', now(), now(), '1');
+
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('400','SINGAPORE','SINGAPORE','SINGAPORE','SINGAPORE','SINGAPORE','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('410','SOUTH AFRICA','SOUTH AFRICA','SOUTH AFRICA','SOUTH AFRICA','SOUTH AFRICA','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('420','SRILANKA','SRILANKA','SRILANKA','SRILANKA','SRILANKA','system', now(), now(), '1');
+
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('430','TANZANIA','TANZANIA','TANZANIA','TANZANIA','TANZANIA','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('440','THAILAND','THAILAND','THAILAND','THAILAND','THAILAND','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('450','THE GAMBIA','THE GAMBIA','THE GAMBIA','THE GAMBIA','THE GAMBIA','system', now(), now(), '1');
+
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('460','TOGO','TOGO','TOGO','TOGO','TOGO','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('470','UNITED ARAB EMIRATES','UNITED ARAB EMIRATES','UNITED ARAB EMIRATES','UNITED ARAB EMIRATES','UNITED ARAB EMIRATES','system', now(), now(), '1');
+Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('480','UNITED KINGDOM','UNITED KINGDOM','UNITED KINGDOM','UNITED KINGDOM','UNITED KINGDOM','system', now(), now(), '1');
 
 INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (100,'Basic Pranic Healing', 'Basic',null, null, 1,null,'system', now(), now(), '1');
 INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (110,'Inner Teaching of Hinduism Revealed', 'Hinduism',100, null, 1,null,'system', now(), now(), '1');
@@ -83,14 +99,6 @@ Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contr
 Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1015,1000,500,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
 Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1016,1000,510,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
 Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contractstartdate,contractenddate,preparedby,timecreated,timeupdated,active) values (1017,1000,520,null,0,null,null,'system@yvphfk.com', now(), now(), 1);
-
-update phk_foundation SET name = 'MCKS Yoga Vidya Pranic Healing Foundation Trust-Tamilnadu',shortname = 'MCKS YVPHFT TN' where id = 170;
-update phk_foundation SET name = 'Yoga Vidya Pranic Healing Foundation, Mumbai',shortname = 'YVPHF Mumbai' where id = 130;
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('420','Yoga Vidya Pranic Healing Foundation Trust of Maharashtra – Mumbai North','YVPHFT Mumbai North','Mumbai','Maharashtra','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('430','MCKS Pranic Healing UK Ireland','MCKS PH UK & Ireland','Mumbai','Maharashtra','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('440','GMCKS Pranic Healing Foundation East Africa','GMCKS PHF East Africa','Mumbai','Maharashtra','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('450','Pranic Healing Center USA','PHC USA','Mumbai','Maharashtra','India','system', now(), now(), '1');
-Insert into phk_foundation (id,name,shortname,city,state,country,preparedby,timecreated,timeupdated,active) values ('460','Pranic Healing London UK','PH London','Mumbai','Maharashtra','India','system', now(), now(), '1');
 
 #--- 03/29/2015 --------
 Insert into phk_accesscontrol(id,volunteer,permission,preparedby,timecreated,timeupdated,active) values (1,1,'admin','admin@yvphfk.com',now(),now(),1);

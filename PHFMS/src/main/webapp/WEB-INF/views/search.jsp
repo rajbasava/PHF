@@ -25,7 +25,7 @@
                         {display: '<spring:message code="label.name"/>', width : 250, align: 'left'},
                         {display: '<spring:message code="label.mobile"/>', width : 100, align: 'left'},
                         {display: '<spring:message code="label.email"/>', width : 200, align: 'left'},
-                        {display: '<spring:message code="label.foundation"/>', width : 190, align: 'left'},
+                        {display: 'Country/State', width : 190, align: 'left'},
                         {display: '<spring:message code="label.event"/>', width : 150, align: 'left'},
                         {display: 'Details', width : 200, align: 'left'},
                         {display: 'Action', width : 75, align: 'left'}
@@ -85,7 +85,7 @@
 		<td>
 			<table>
 				<tr>
-					<td><form:label path="foundationId"><spring:message code="label.foundation"/></form:label></td>
+					<td><form:label path="foundationId">Country/State</form:label></td>
 					<td>
 						<form:select path="foundationId">
                             <form:option value="" label="--- Select ---"/>

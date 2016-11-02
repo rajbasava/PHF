@@ -235,7 +235,7 @@ public class Login implements Serializable
             return false;
         }
 
-        if ((new Date().getTime() - login.getLastAccessed()) > 15 * 60 * 1000) {
+        if ((new Date().getTime() - login.getLastAccessed()) > 60 * 60 * 1000) {
             return false;
         }
 

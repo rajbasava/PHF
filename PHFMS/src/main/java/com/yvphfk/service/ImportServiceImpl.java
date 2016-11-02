@@ -205,6 +205,9 @@ public class ImportServiceImpl implements ImportService
         for (int i = 0; i < data.size(); i++) {
             List row = (List) data.get(i);
             for (int j = 0; j < fields.size(); j++) {
+                if (j+1 >= row.size()) {
+                    continue;
+                }
                 Cell cell = (Cell) row.get(j + 1); // to avoid the look up id field
                 String fieldName = fields.get(j);
                 if (fieldName.indexOf("Date") >= 0) {
