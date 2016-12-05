@@ -372,3 +372,5 @@ CREATE TABLE phk_accesscontrol (
 	timeupdated TIMESTAMP null,
 	active VARCHAR(1)
 );
+
+ALTER TABLE phk_vollogin ADD sessionid varchar(500);

@@ -23,12 +23,16 @@ public class Login implements Serializable
     public static final int Success = 1;
     public static final int InvalidUsernamePassword = 2;
     public static final int UserHasNoAccess = 3;
+    public static final int UserAlreadyLoggedIn = 4;
 
     private String email;
     private String name;
     private String password;
     private String counter;
+    private String sessionId;
+    private boolean overrideCurrentLogin;
     private Integer volunteerId;
+    private Integer status;
     private List<AccessControl> accessControlList;
     private List<AccessFilter> accessFilterList;
     private long lastAccessed;
@@ -49,6 +53,16 @@ public class Login implements Serializable
         return password;
     }
 
+    public Integer getStatus ()
+    {
+        return status;
+    }
+
+    public void setStatus (Integer status)
+    {
+        this.status = status;
+    }
+
     public void setPassword (String password)
     {
         this.password = password;
@@ -63,6 +77,27 @@ public class Login implements Serializable
     {
         this.counter = counter;
     }
+
+    public String getSessionId ()
+    {
+        return sessionId;
+    }
+
+    public void setSessionId (String sessionId)
+    {
+        this.sessionId = sessionId;
+    }
+
+    public boolean isOverrideCurrentLogin ()
+    {
+        return overrideCurrentLogin;
+    }
+
+    public void setOverrideCurrentLogin (boolean overrideCurrentLogin)
+    {
+        this.overrideCurrentLogin = overrideCurrentLogin;
+    }
+
 
     /**
      set user permission which can be accessed in jstl tags in the views
@@ -228,17 +263,9 @@ public class Login implements Serializable
         login.setAccessFilterList(accessFilterList);
     }
 
-    public static boolean isValidCacheEntry (String email)
+    public static boolean isValidCacheEntry (Login userData)
     {
-        Login login = (Login) CommonCache.getInstance().get(getSessionCacheKey(email));
-        if (login == null) {
-            return false;
-        }
-
-        if ((new Date().getTime() - login.getLastAccessed()) > 60 * 60 * 1000) {
-            return false;
-        }
-
-        return true;
+        VolunteerService volunteerService = (VolunteerService) Util.getBean("volunteerServiceImpl");
+        return volunteerService.isValidLogin(userData);
     }
 }

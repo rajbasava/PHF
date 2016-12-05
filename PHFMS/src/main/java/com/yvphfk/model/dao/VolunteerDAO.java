@@ -27,6 +27,8 @@ public interface VolunteerDAO extends CommonDAO
 
     public int processLogin (Login login);
 
+    public boolean isValidLogin (Login login);
+
     public void processLogout (Login login);
 
     public Volunteer getVolunteer (Integer volunteerId);

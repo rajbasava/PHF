@@ -252,25 +252,25 @@ public class VolunteerController extends CommonController
             return mv;
         }
 
-        if (CommonCache.getInstance().get(login.getSessionCacheKey()) != null) {
-            if (Login.isValidCacheEntry(login.getEmail())) {
-                errors.reject("login.multipleLogin", "login.multipleLogin");
-                mv.addObject("error", errors);
-                return mv;
-            }
-            else {
-                CommonCache.getInstance().remove(login.getSessionCacheKey());
-            }
-        }
+        login.setSessionId(session.getId());
 
         int loginState = volunteerService.processLogin(login);
 
-        if (loginState == Login.Success) {
+        if (loginState == Login.UserAlreadyLoggedIn) {
             login.setLastAccessed(new Date().getTime());
+            login.setStatus(Login.UserAlreadyLoggedIn);
             session.setAttribute(Login.ClassName, login);
             mv = new ModelAndView("welcome");
             mv.addObject("user", login);
-            CommonCache.getInstance().put(login.getSessionCacheKey(), login);
+            return mv;
+
+        }
+        else if (loginState == Login.Success) {
+            login.setLastAccessed(new Date().getTime());
+            login.setStatus(Login.Success);
+            session.setAttribute(Login.ClassName, login);
+            mv = new ModelAndView("welcome");
+            mv.addObject("user", login);
             return mv;
         }
         else if (loginState == Login.InvalidUsernamePassword) {
@@ -289,7 +289,31 @@ public class VolunteerController extends CommonController
         Login login = (Login) session.getAttribute(Login.ClassName);
         volunteerService.processLogout(login);
         session.invalidate();
-        CommonCache.getInstance().remove(login.getSessionCacheKey());
+//        CommonCache.getInstance().remove(login.getSessionCacheKey());
+        return "redirect:/index.htm";
+    }
+
+    @RequestMapping("/overrideLogin")
+    public String overrideLogin (HttpSession session, Map<String, Object> map)
+    {
+        Login login = (Login) session.getAttribute(Login.ClassName);
+        login.setOverrideCurrentLogin(true);
+
+        if (login == null || login.getEmail() == null) {
+            return "redirect:/index.htm";
+        }
+
+        int loginState = volunteerService.processLogin(login);
+
+        if (loginState == Login.Success) {
+            login.setLastAccessed(new Date().getTime());
+            login.setStatus(Login.Success);
+            login.setOverrideCurrentLogin(false);
+            session.setAttribute(Login.ClassName, login);
+            map.put("user", login);
+            return "redirect:/welcome.htm";
+        }
+
         return "redirect:/index.htm";
     }
 

@@ -31,6 +31,18 @@
                      $("#registeredParticipant").submit();
                 });
 
+                $("a#unattend").button();
+                $("a#unattend").css("font-size", "11px");
+                $("a#unattend").click(function() {
+                    jQuery('<form>', {
+                            'action': 'unattendRegistration.htm',
+                        }).append(jQuery('<input>', {
+                            'name': 'registrationId',
+                            'value': '<c:out value="${registeredParticipant.registration.id}"/>',
+                            'type': 'hidden'
+                        })).submit();
+                });
+
                 $("a#attend").button();
                 $("a#attend").css("font-size", "11px");
                 $("a#attend").click(function() {
@@ -42,6 +54,7 @@
                             'type': 'hidden'
                         })).submit();
                 });
+
                 $("a#summary").button();
                 $("a#summary").css("font-size", "11px");
                 $("a#summary").click(function() {
@@ -424,6 +437,7 @@
                         <c:if test="${isAdmin}" >
                             <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
                             <a id="updateNAttend" href="#">Update and Attend</a>
+                            <a id="unattend" href="#">Unattend</a>
                             <a id="cancelRegistration" href="#">Cancel Registration</a>
                             <a id="onHoldRegistration" href="#">On Hold</a>
                             <a id="changeToRegistered" href="#">Change To Registered</a>
@@ -490,7 +504,7 @@
                     <tr style="background-color:#DFDFDF;">
                         <td align="center">
                             <c:if test="${isAdmin || isSpotRegVolunteer}" >
-                                <a id="showPayments" href="#">Payments</a>
+                                <a id="showPayments" href="#">Add Payments</a>
                             </c:if>
                             <a id="back" href="#">Back</a>
                         </td>

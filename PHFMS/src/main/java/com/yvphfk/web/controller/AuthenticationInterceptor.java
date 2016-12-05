@@ -20,30 +20,32 @@ import java.util.Date;
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter
 {
     @Override
-    public boolean preHandle (HttpServletRequest request,
-                              HttpServletResponse response,
-                              Object handler) throws Exception
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
+                             Object handler) throws Exception
     {
         Login userData = (Login) request.getSession().getAttribute(Login.class.getName());
+
         if (userData != null) {
             if (Util.nullOrEmptyOrBlank(userData.getEmail())) {
                 response.sendRedirect("index.htm");
             }
-            else if (userData.hasNoAccess() || !Login.isValidCacheEntry(userData.getEmail())) {
+            else if (!request.getRequestURI().endsWith("overrideLogin.htm") &&
+                    (userData.hasNoAccess() || !Login.isValidCacheEntry(userData))) {
 
                 request.getSession().invalidate();
-                CommonCache.getInstance().remove(userData.getSessionCacheKey());
+//                CommonCache.getInstance().remove(userData.getSessionCacheKey());
                 response.sendRedirect("index.htm");
                 return false;
             }
             else {
                 userData.setLastAccessed(new Date().getTime());
 
-                if (CommonCache.getInstance().get(userData.getSessionCacheKey()) == null) {
-                    Login.initializeAccessControlList(userData);
-                    Login.initializeAccessFilterList(userData);
-                    CommonCache.getInstance().put(userData.getSessionCacheKey(), userData);
-                }
+//                if (CommonCache.getInstance().get(userData.getSessionCacheKey()) == null) {
+                Login.initializeAccessControlList(userData);
+                Login.initializeAccessFilterList(userData);
+//                    CommonCache.getInstance().put(userData.getSessionCacheKey(), userData);
+//                }
 
                 if (isPathsToIgnore(request)) {
                     RequestDispatcher rd = request.getRequestDispatcher("welcome.htm");

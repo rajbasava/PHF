@@ -60,6 +60,12 @@ public class VolunteerServiceImpl extends CommonServiceImpl implements Volunteer
     }
 
     @Transactional
+    public boolean isValidLogin (Login login)
+    {
+        return volunteerDAO.isValidLogin(login);
+    }
+
+    @Transactional
     public void processLogout (Login login)
     {
         volunteerDAO.processLogout(login);

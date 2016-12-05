@@ -33,11 +33,24 @@ public class LoggedInVolunteer extends BaseForm
     @Column(name = "COUNTER")
     private String counter;
 
+    @Column(name = "SESSIONID")
+    private String sessionId;
+
     @Column(name = "LOGGEDIN")
     private Date loggedin;
 
     @Column(name = "LOGGEDOUT")
     private Date loggedout;
+
+    public String getSessionId ()
+    {
+        return sessionId;
+    }
+
+    public void setSessionId (String sessionId)
+    {
+        this.sessionId = sessionId;
+    }
 
     public Integer getId ()
     {

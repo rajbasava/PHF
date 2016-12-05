@@ -199,7 +199,7 @@ public class Util
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpSession session = requestAttributes.getRequest().getSession();
         Login login = (Login) session.getAttribute(Login.ClassName);
-        login = (Login) CommonCache.getInstance().get(login.getSessionCacheKey());
+//        login = (Login) CommonCache.getInstance().get(login.getSessionCacheKey());
         return login;
     }
 

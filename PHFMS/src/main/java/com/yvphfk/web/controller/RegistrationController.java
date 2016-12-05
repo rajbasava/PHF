@@ -452,6 +452,34 @@ public class RegistrationController extends CommonController
         return "summary";
     }
 
+    @RequestMapping("/unattendRegistration")
+    public String unattendRegistration (Map<String, Object> map,
+                                        HttpServletRequest request)
+    {
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+
+        String strRegistrationId = request.getParameter("registrationId");
+        Integer registrationId = Integer.parseInt(strRegistrationId);
+
+        EventRegistration registration = participantService.getEventRegistration(registrationId);
+        registration.initializeForUpdate(login.getEmail());
+        registration.setAttend(false);
+
+        participantService.saveOrUpdate(registration);
+
+        participantService.createAndAddHistoryRecord(
+                messageSource.getMessage("key.registrationUnattend",
+                        new Object[]{registration.getId()}, null),
+                login.getEmail(),
+                registration);
+
+        RegisteredParticipant registeredParticipant =
+                populateRegisteredParticipant(String.valueOf(registration.getId()));
+        map.put("registeredParticipant", registeredParticipant);
+
+        return "redirect:/search.htm";
+    }
+
     @RequestMapping("/showAttendanceSummary")
     public String showAttendanceSummary (Map<String, Object> map,
                                          HttpServletRequest request)

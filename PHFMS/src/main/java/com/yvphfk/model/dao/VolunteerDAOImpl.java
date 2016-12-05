@@ -123,11 +123,18 @@ public class VolunteerDAOImpl extends CommonDAOImpl implements VolunteerDAO
                 loggedInVolunteer = new LoggedInVolunteer();
                 loggedInVolunteer.setVolunteer(volunteer);
                 loggedInVolunteer.setLoggedin(new Date());
+                loggedInVolunteer.setSessionId(login.getSessionId());
                 sessionFactory.getCurrentSession().save(loggedInVolunteer);
             }
             else {
+                if (!login.isOverrideCurrentLogin() &&
+                        (loggedInVolunteer.getSessionId() != null &&
+                        !loggedInVolunteer.getSessionId().equalsIgnoreCase(login.getSessionId()))) {
+                    return Login.UserAlreadyLoggedIn;
+                }
                 loggedInVolunteer.setLoggedin(new Date());
                 loggedInVolunteer.setLoggedout(null);
+                loggedInVolunteer.setSessionId(login.getSessionId());
                 sessionFactory.getCurrentSession().update(loggedInVolunteer);
             }
 
@@ -137,11 +144,33 @@ public class VolunteerDAOImpl extends CommonDAOImpl implements VolunteerDAO
         return Login.InvalidUsernamePassword;
     }
 
+    public boolean isValidLogin (Login login)
+    {
+        if (Util.nullOrEmptyOrBlank(login.getEmail())) {
+            return false;
+        }
+
+        Volunteer volunteer = getVolunteerByEmail(login.getEmail());
+
+        if (volunteer != null) {
+
+            LoggedInVolunteer loggedInVolunteer = volunteer.getLogin();
+            if (loggedInVolunteer != null &&
+                    (loggedInVolunteer.getSessionId() != null &&
+                            loggedInVolunteer.getSessionId().equalsIgnoreCase(login.getSessionId()))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void processLogout (Login login)
     {
         if (login != null && !Util.nullOrEmptyOrBlank(login.getEmail())) {
             Volunteer volunteer = getVolunteerByEmail(login.getEmail());
             LoggedInVolunteer loggedInVolunteer = volunteer.getLogin();
+            loggedInVolunteer.setSessionId(null);
             loggedInVolunteer.setLoggedout(new Date());
             sessionFactory.getCurrentSession().update(loggedInVolunteer);
         }
