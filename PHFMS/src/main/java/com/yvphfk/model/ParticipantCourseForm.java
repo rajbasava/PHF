@@ -49,6 +49,9 @@ public class ParticipantCourseForm
         if (participant != null) {
             participant.initialize(email);
         }
-        participantCourse.initialize(email);
+
+        if (participantCourse != null) {
+            participantCourse.initialize(email);
+        }
     }
 }

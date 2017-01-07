@@ -19,7 +19,7 @@ public class RegistrationCriteria implements Serializable
     private String email;
     private Integer courseTypeId;
     private String foundationId;
-    private Integer seat;
+    private String seat;
     private String amountPaidCategory;
     private String reference;
     private Integer eventId;
@@ -106,12 +106,12 @@ public class RegistrationCriteria implements Serializable
         this.foundationId = foundationId;
     }
 
-    public Integer getSeat ()
+    public String getSeat ()
     {
         return seat;
     }
 
-    public void setSeat (Integer seat)
+    public void setSeat (String seat)
     {
         this.seat = seat;
     }

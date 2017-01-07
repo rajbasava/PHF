@@ -80,6 +80,12 @@
 					<td ><form:label path="mobile"><spring:message code="label.mobile"/></form:label></td>
 					<td ><form:input path="mobile" /></td>
 				</tr>
+				<c:if test="${user.access.admin}" >
+                    <tr>
+                        <td ><form:label path="seat"><spring:message code="label.seat"/></form:label></td>
+                        <td ><form:input path="seat" /></td>
+                    </tr>
+				</c:if>
 			</table>
 		</td>
 		<td>

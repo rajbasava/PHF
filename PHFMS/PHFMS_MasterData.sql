@@ -75,7 +75,9 @@ INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligib
 INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (590,'Arhatic Yoga Level 5', 'AY L5',580, null, 1,null,'system', now(), now(), '1');
 INSERT INTO phk_coursetype (id,name,shortName,primaryeligibility,secondaryeligibility,version,description,preparedby,timecreated,timeupdated,active) values (600,'Arhatic Yoga Level 6', 'AY L6',590, null, 1,null,'system', now(), now(), '1');
 
-INSERT INTO phk_volunteer(name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated) VALUES('Admin',   'admin@yvphfk.com',   'admin',   '9999999999',   'admin',   'admin',   'system',   now(),   now());
+INSERT INTO phk_volunteer(id, name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated) VALUES(1, 'Admin',   'admin@yvphfk.com',   'admin',   '9999999999',   'admin',   'admin',   'system',   now(),   now());
+INSERT INTO phk_volunteer(id, name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated) VALUES(2, 'Spot',   'spot@yvphfk.com',   'spot',   '9999999999',   'spot',   'admin',   'system',   now(),   now());
+INSERT INTO phk_volunteer(id, name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated) VALUES(3, 'Reg',   'reg@yvphfk.com',   'reg',   '9999999999',   'reg',   'admin',   'system',   now(),   now());
 
 Insert into phk_participant (id,name,mobile,home,email,vip,vipdesc,address,city,state,country,zipcode,preparedby,timecreated,timeupdated,active) values (1000,'Master Choa Kok Sui','9999999999','9999999999','mcks@pranichealing.com','1','Grand Master',null,null,null,null,null,'system@yvphfk.com', now(), now(), 1);
 
@@ -102,3 +104,5 @@ Insert into phk_trainercourse (id,trainer,coursetype,foundation,apprentice,contr
 
 #--- 03/29/2015 --------
 Insert into phk_accesscontrol(id,volunteer,permission,preparedby,timecreated,timeupdated,active) values (1,1,'admin','admin@yvphfk.com',now(),now(),1);
+Insert into phk_accesscontrol(id,volunteer,permission,preparedby,timecreated,timeupdated,active) values (2,2,'sptregtvoln','admin@yvphfk.com',now(),now(),1);
+Insert into phk_accesscontrol(id,volunteer,permission,preparedby,timecreated,timeupdated,active) values (3,3,'regtvoln','admin@yvphfk.com',now(),now(),1);

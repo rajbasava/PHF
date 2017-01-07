@@ -26,6 +26,9 @@
 <form:form method="post" action="listParticipants.htm" commandName="participantCriteria">
 <input type="hidden" name="page" value="<c:out value="${page}"/>"/>
 <input type="hidden" name="registrationId" value="<c:out value="${registrationId}"/>"/>
+<input type="hidden" name="eventId" value="<c:out value="${eventId}"/>"/>
+<input type="hidden" name="eventName" value="<c:out value="${eventName}"/>"/>
+<input type="hidden" name="participantName" value="<c:out value="${participantName}"/>"/>
 <table align="center" cellspacing="2">
     <tr>
         <td><form:label path="participantId">Id</form:label></td>

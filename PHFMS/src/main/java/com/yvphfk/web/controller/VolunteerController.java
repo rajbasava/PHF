@@ -286,10 +286,7 @@ public class VolunteerController extends CommonController
     @RequestMapping("/logout")
     public String processlogout (HttpSession session)
     {
-        Login login = (Login) session.getAttribute(Login.ClassName);
-        volunteerService.processLogout(login);
         session.invalidate();
-//        CommonCache.getInstance().remove(login.getSessionCacheKey());
         return "redirect:/index.htm";
     }
 

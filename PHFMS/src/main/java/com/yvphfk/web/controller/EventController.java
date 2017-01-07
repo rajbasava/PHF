@@ -252,6 +252,21 @@ public class EventController extends CommonController
         return "eventStatus";
     }
 
+    @RequestMapping("/showEventPaymentStatus")
+    public String showEventPartialPMTStatus(Map<String, Object> map, HttpServletRequest request)
+    {
+        String strEventId = request.getParameter("eventId");
+        if (Util.nullOrEmptyOrBlank(strEventId)) {
+            return null;
+        }
+        Integer eventId = Integer.parseInt(strEventId);
+
+        map.put("eventPayments", eventService.getPaymentPivot(eventId));
+        map.put("eventTotalPayments", eventService.getTotalPaymentPivot(eventId));
+        map.put("eventId", eventId);
+        return "eventPaymentStatus";
+    }
+
     @RequestMapping(value = "/getWorkshopLevels", produces = "application/json; charset=utf-8")
     public
     @ResponseBody

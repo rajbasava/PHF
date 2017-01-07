@@ -49,6 +49,13 @@
                  $("#modifyEvent").submit();
             });
 
+            $("a#eventPaymentStatus").button();
+            $("a#eventPaymentStatus").css("font-size", "11px");
+            $("a#eventPaymentStatus").click(function() {
+                 $("#modifyEvent").get(0).setAttribute('action', 'showEventPaymentStatus.htm');
+                 $("#modifyEvent").submit();
+            });
+
             $("a#showEventDetail").button();
             $("a#showEventDetail").css("font-size", "11px");
             $("a#showEventDetail").click(function() {
@@ -207,7 +214,8 @@
                     <a id="addEventFee" href="#">Add Event Fee</a>
                     <!-- <a id="showKits" href="#">Volunteer Kits and Status</a>
                     <a id="showEventDetail" href="#">Kits For Event</a> -->
-                    <a id="eventStatus" href="#">Status</a>
+                    <a id="eventStatus" href="#">Attendance Status</a>
+                    <a id="eventPaymentStatus" href="#">Payment Status</a>
                     <a id="allocateSeats" href="#">Allocate Seats</a>
                     <a id="exportSeats" href="#">Export Allocated Seats</a>
                     <a id="deleteEvent" href="#">Deactivate</a>

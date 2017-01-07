@@ -20,6 +20,7 @@ import com.yvphfk.model.form.HistoryRecord;
 import com.yvphfk.model.form.Participant;
 import com.yvphfk.model.form.ParticipantSeat;
 import com.yvphfk.model.form.WorkshopLevel;
+import com.yvphfk.model.form.validator.ParticipantValidator;
 import com.yvphfk.model.form.validator.PaymentValidator;
 import com.yvphfk.model.form.validator.RegistrationValidator;
 import com.yvphfk.service.EventService;
@@ -28,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -511,14 +513,63 @@ public class RegistrationController extends CommonController
         String strRegistrationId = request.getParameter("registration.id");
         RegisteredParticipant registeredParticipant = populateRegisteredParticipant(strRegistrationId);
         if (registeredParticipant != null) {
-            map.put("registeredParticipant", registeredParticipant);
+            map.put("participantName", registeredParticipant.getParticipant().getName());
+            map.put("eventId", registeredParticipant.getRegistration().getEvent().getId());
+            map.put("eventName", registeredParticipant.getRegistration().getEvent().getName());
         }
         map.put("registrationId", strRegistrationId);
         return "replaceRegistration";
     }
 
+    @RequestMapping("/showAddParticipantForReplacement")
+    public String showAddParticipantForReplacement (Map<String, Object> map,
+                                                    HttpServletRequest request)
+    {
+
+        map.put("participant", new Participant());
+        String strRegistrationId = request.getParameter("registrationId");
+        RegisteredParticipant registeredParticipant = populateRegisteredParticipant(strRegistrationId);
+        if (registeredParticipant != null) {
+            map.put("participantName", registeredParticipant.getParticipant().getName());
+            map.put("eventId", registeredParticipant.getRegistration().getEvent().getId());
+            map.put("eventName", registeredParticipant.getRegistration().getEvent().getName());
+        }
+        map.put("registrationId", strRegistrationId);
+        return "addParticipantForReplacement";
+    }
+
+    @RequestMapping("/addParticipantForReplacement")
+    public String addParticipantForReplacement(@ModelAttribute("participant")
+                                                       Participant participant,
+                                               BindingResult errors,
+                                               Map<String, Object> map,
+                                               HttpServletRequest request)
+    {
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+        participant.initialize(login.getEmail());
+
+        ParticipantValidator val = new ParticipantValidator();
+        val.validate(participant, errors);
+
+        if (errors.hasErrors()) {
+            map.put("errors", errors);
+            map.put("participant", participant);
+            return "addParticipantForReplacement";
+        }
+
+        participant = participantService.saveOrUpdateParticipant(participant);
+
+        request.setAttribute("registrationId", request.getParameter("registrationId"));
+        request.setAttribute("participantId", String.valueOf(participant.getId()));
+        request.setAttribute("comments", request.getParameter("comments"));
+        return "forward:/replaceRegistration.htm";
+    }
+
+
+
     @RequestMapping("/replaceRegistration")
     public String replaceRegistration (Map<String, Object> map,
+                                       BindingResult errors,
                                        HttpServletRequest request)
     {
         String strRegistrationId = request.getParameter("registrationId");
@@ -527,7 +578,8 @@ public class RegistrationController extends CommonController
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
 
         if (Util.nullOrEmptyOrBlank(strRegistrationId) || Util.nullOrEmptyOrBlank(strParticipantId)) {
-            return null;
+            errors.reject("participant.name.unique");
+            return "replaceRegistration";
         }
 
         Integer registrationId = Integer.parseInt(strRegistrationId);

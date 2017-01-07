@@ -33,21 +33,13 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.CriteriaSpecification;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Repository;
 
 import java.text.MessageFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Repository
 public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
@@ -456,12 +448,13 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
                                 Integer registrationId,
                                 boolean isAdd)
     {
-        if (payment.getAmountPaid() == null || payment.getAmountPaid() == 0) {
-            return;
-        }
-
         Session session = sessionFactory.openSession();
         EventRegistration registration = (EventRegistration) session.load(EventRegistration.class, registrationId);
+
+        if (payment.getAmountPaid() == null || payment.getAmountPaid() == 0) {
+            updateTotalPayments(registration);
+            return;
+        }
 
         payment.setRegistration(registration);
 
@@ -493,9 +486,10 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
     }
 
-    private void updateTotalPayments (EventRegistration registration)
+    private void updateTotalPayments (EventRegistration registrationArg)
     {
         Session session = sessionFactory.openSession();
+        EventRegistration registration = (EventRegistration) session.load(EventRegistration.class, registrationArg.getId());
         Criteria criteria = session.createCriteria(EventPayment.class);
         criteria.add(Restrictions.eq("registration", registration));
         criteria.setProjection(Projections.sum("amountPaid"));
@@ -685,6 +679,49 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         return results;
     }
 
+    public List<Participant> listParticipantsNotInEvent (ParticipantCriteria participantCriteria, Event event)
+    {
+        if (event == null) {
+            return new ArrayList<Participant>();
+        }
+
+        Session session = sessionFactory.openSession();
+
+        DetachedCriteria subQuery = DetachedCriteria.forClass(EventRegistration.class);
+        subQuery.createAlias("event", "event");
+        subQuery.createAlias("participant", "participant");
+        subQuery.add(Restrictions.eq("event.id", event.getId()));
+        subQuery.setProjection(Projections.property("participant.id"));
+        subQuery.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+        Criteria criteria = session.createCriteria(Participant.class);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.add(Restrictions.eq("active", true));
+
+        if (participantCriteria.getMaxResults() != -1) {
+            criteria.setMaxResults(participantCriteria.getMaxResults());
+        }
+
+        criteria.add(Subqueries.propertyNotIn("id", subQuery));
+
+        if (!Util.nullOrEmptyOrBlank(participantCriteria.getName())) {
+            criteria.add(Restrictions.ilike("name", participantCriteria.getName(), MatchMode.ANYWHERE));
+        }
+
+        if (!Util.nullOrEmptyOrBlank(participantCriteria.getEmail())) {
+            criteria.add(Restrictions.ilike("email", participantCriteria.getEmail(), MatchMode.ANYWHERE));
+        }
+
+        if (!Util.nullOrEmptyOrBlank(participantCriteria.getMobile())) {
+            criteria.add(Restrictions.like("mobile", "%" + participantCriteria.getMobile() + "%"));
+        }
+
+        List<Participant> results = criteria.list();
+
+        session.close();
+        return results;
+    }
+
     public List<HistoryRecord> getHistoryRecords (Integer objectId, String objectType, Session session)
     {
         Criteria criteria = session.createCriteria(HistoryRecord.class);
@@ -724,12 +761,31 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
             criteria.setFetchMode("payments", FetchMode.EAGER);
         }
 
-        if (registrationCriteria.getSeat() != null) {
+        if (!Util.nullOrEmptyOrBlank(registrationCriteria.getSeat())) {
             criteria.createAlias("seats", "seats");
-            criteria.add(Restrictions.eq("seats.seat", registrationCriteria.getSeat()));
+            List result = Util.splitAlphaNumeric(registrationCriteria.getSeat());
+
+            if (!result.isEmpty() && result.size() == 1) {
+                criteria.add(Restrictions.eq("seats.seat", Integer.parseInt((String) result.get(0))));
+            }
+
+            if (!result.isEmpty() && result.size() == 2) {
+                criteria.add(Restrictions.eq("seats.alpha", result.get(0)));
+                if (!Util.nullOrEmptyOrBlank((String) result.get(1))) {
+                    criteria.add(Restrictions.eq("seats.seat", Integer.parseInt((String) result.get(1))));
+                }
+            }
 
             if (registrationCriteria.getCourseTypeId() != null) {
                 criteria.add(Restrictions.eq("seats.courseType.id", registrationCriteria.getCourseTypeId()));
+            }
+
+            List<Integer> eventIds = AccessUtil.getEventFilterList();
+            if (!eventIds.isEmpty()) {
+                criteria.add(Restrictions.in("seats.event.id", eventIds));
+            }
+            else if (registrationCriteria.getEventId() != null && registrationCriteria.getEventId() != -1) {
+                criteria.add(Restrictions.eq("seats.event.id", registrationCriteria.getEventId()));
             }
         }
         else {

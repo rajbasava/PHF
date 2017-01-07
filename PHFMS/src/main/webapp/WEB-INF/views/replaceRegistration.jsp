@@ -18,6 +18,13 @@
                      $("#replaceRegistration").submit();
                 });
 
+                $("a#addParticipantForReplacement").button();
+                $("a#addParticipantForReplacement").css("font-size", "11px");
+                $("a#addParticipantForReplacement").click(function() {
+                     $("#addParticipantForReplacement").get(0).setAttribute('action', 'showAddParticipantForReplacement.htm');
+                     $("#addParticipantForReplacement").submit();
+                });
+
                 $("a#back").button();
                 $("a#back").css("font-size", "11px");
                 $("a#back").click(function() {
@@ -33,12 +40,12 @@
 <table width="100%" cellpadding="1" cellspacing="1">
     <tr>
         <td align="center" style="font-size:18px">
-            Search Participant to Replace <c:out value="${registeredParticipant.participant.name}"/> - <c:out value="${registeredParticipant.registration.event.name}"/>
+            Search Participant to Replace <c:out value="${participantName}"/> - <c:out value="${eventName}"/>
         </td>
     </tr>
     <tr><td>&nbsp;</td></tr>
 </table>
-<jsp:include page="searchParticipantsFilters.jsp" />
+<jsp:include page="searchParticipantFilters.jsp" />
 <c:if  test="${!empty participantList}">
 <table width="100%" cellpadding="2" cellspacing="2">
     <form id="replaceRegistration" method="post" action="replaceRegistration.htm">
@@ -65,7 +72,7 @@
                     <td>
                         <div style="width:100%; height:200px; overflow-y:scroll; overflow-x:hidden; empty-cells:show; font-size:11px">
                             <table border="1" width="100%">
-                                <input type="hidden" name="registrationId" value="<c:out value="${registeredParticipant.registration.id}"/>" />
+                                <input type="hidden" name="registrationId" value="<c:out value="${registrationId}"/>" />
                                 <c:forEach items="${participantList}" var="participant">
                                     <tr>
                                         <td width="3%"><span><input type="radio" name="participantId" value="<c:out value="${participant.id}"/>"></span></td>
@@ -96,12 +103,18 @@
         </td>
     </tr>
     </form>
+</table>
+</c:if>
+<table>
     <tr style="background-color:#E8E8E8;">
         <td>
             <table width="100%" cellpadding="2" cellspacing="2">
                 <tr>
                     <td align="left">
-                        <a id="replaceRegistration" href="#">Replace Registration</a>
+                        <c:if  test="${!empty participantList}">
+                            <a id="replaceRegistration" href="#">Replace Registration</a>
+                        </c:if>
+                        <!-- <a id="addParticipantForReplacement" href="#">Add Replaceable Participant</a> -->
                         <a id="back" href="#">Back</a>
                     </td>
                 </tr>
@@ -109,7 +122,6 @@
         </td>
     </tr>
 </table>
-</c:if>
 <mytags:footer/>
 </body>
 </html>

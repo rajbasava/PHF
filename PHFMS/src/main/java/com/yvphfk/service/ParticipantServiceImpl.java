@@ -78,6 +78,12 @@ public class ParticipantServiceImpl extends CommonServiceImpl implements Partici
     }
 
     @Transactional
+    public List<Participant> listParticipantsNotInEvent (ParticipantCriteria participantCriteria, Event event)
+    {
+        return participantDAO.listParticipantsNotInEvent(participantCriteria, event);
+    }
+
+    @Transactional
     public void processPayment (EventPayment payment, Integer registrationId, boolean isAdd)
     {
         participantDAO.processPayment(payment, registrationId, isAdd);

@@ -37,6 +37,8 @@ public interface ParticipantService extends CommonService
 
     public List<EventPayment> listPayments (PaymentCriteria paymentCriteria);
 
+    public List<Participant> listParticipantsNotInEvent (ParticipantCriteria participantCriteria, Event event);
+
     public void processPayment (EventPayment payment, Integer registrationId, boolean isAdd);
 
     public void cancelRegistration (EventRegistration registration, HistoryRecord historyRecord);

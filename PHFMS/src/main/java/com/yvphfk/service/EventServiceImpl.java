@@ -274,4 +274,18 @@ public class EventServiceImpl implements EventService
     {
         return eventDAO.getTotalAttendeesPivot(eventId);
     }
+
+    @Override
+    @Transactional
+    public List getPaymentPivot (Integer eventId)
+    {
+        return eventDAO.getPaymentPivot(eventId);
+    }
+
+    @Override
+    @Transactional
+    public Object getTotalPaymentPivot (Integer eventId)
+    {
+        return eventDAO.getTotalPaymentPivot(eventId);
+    }
 }

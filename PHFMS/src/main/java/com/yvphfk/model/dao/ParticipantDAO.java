@@ -48,6 +48,8 @@ public interface ParticipantDAO extends CommonDAO
 
     public List<Participant> listParticipants (ParticipantCriteria participantCriteria);
 
+    public List<Participant> listParticipantsNotInEvent (ParticipantCriteria participantCriteria, Event event);
+
     public List<EventRegistration> listRegistrations (RegistrationCriteria registrationCriteria);
 
     public List<EventRegistration> allUnallocatedRegistrations (Event event, boolean vip, int countryCode);

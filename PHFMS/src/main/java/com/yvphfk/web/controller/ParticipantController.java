@@ -14,6 +14,7 @@ import com.yvphfk.model.form.EventRegistration;
 import com.yvphfk.model.form.Participant;
 import com.yvphfk.model.form.ParticipantCourse;
 import com.yvphfk.model.form.Trainer;
+import com.yvphfk.model.form.Event;
 import com.yvphfk.model.form.TrainerCourse;
 import com.yvphfk.model.form.validator.ParticipantCourseValidator;
 import com.yvphfk.model.form.validator.ParticipantValidator;
@@ -45,16 +46,27 @@ public class ParticipantController extends CommonController
                                     ParticipantCriteria participantCriteria,
                                     HttpServletRequest request)
     {
+        String page = request.getParameter("page");
         map.put("participantCriteria", participantCriteria);
+        map.put("page", page);
+        map.put("registrationId", request.getParameter("registrationId"));
+        String eventIdStr = request.getParameter("eventId");
+        map.put("eventId", eventIdStr);
+        map.put("eventName", request.getParameter("eventName"));
+        map.put("participantName", request.getParameter("participantName"));
+
+        Event event = null;
+        if (!Util.nullOrEmptyOrBlank(eventIdStr)) {
+            event = eventService.getEvent(Integer.parseInt(eventIdStr));
+        }
+
         if (participantCriteria != null) {
             //todo if the page is replace, we should search participant that are not participating in the current event.
-            map.put("participantList", participantService.listParticipants(participantCriteria));
+            map.put("participantList", participantService.listParticipantsNotInEvent(participantCriteria, event));
             map.put("allParticipantCourseTypes", allCourseTypes());
             map.put("allFoundations", allFoundations());
         }
 
-        String page = request.getParameter("page");
-        map.put("page", page);
 
         return page;
     }

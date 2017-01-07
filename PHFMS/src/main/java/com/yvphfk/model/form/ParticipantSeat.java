@@ -4,6 +4,8 @@
 */
 package com.yvphfk.model.form;
 
+import com.yvphfk.common.Util;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -213,15 +216,15 @@ public class ParticipantSeat extends BaseForm
 
     public void setSeatNo (String seatNo)
     {
-        String alphaStr = "[a-zA-Z]+";
-        Pattern p = Pattern.compile(alphaStr);
-        this.seatNo = seatNo;
-        Matcher m = p.matcher(seatNo);
-        if (m.find()) {
-            String alpha = m.group(0);
-            setAlpha(alpha);
-            String numeric = seatNo.substring(alpha.length(), seatNo.length());
-            setSeat(Integer.parseInt(numeric));
+        List result = Util.splitAlphaNumeric(seatNo);
+
+        if (!result.isEmpty() && result.size() == 1) {
+            setSeat(Integer.parseInt((String) result.get(0)));
+        }
+
+        if (!result.isEmpty() && result.size() == 2) {
+            setAlpha((String) result.get(0));
+            setSeat(Integer.parseInt((String) result.get(1)));
         }
     }
 

@@ -89,4 +89,8 @@ public interface EventDAO extends CommonDAO
 
     public Object getTotalAttendeesPivot (Integer eventId);
 
+    public List getPaymentPivot (Integer eventId);
+
+    public Object getTotalPaymentPivot (Integer eventId);
+
 }

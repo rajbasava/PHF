@@ -16,6 +16,7 @@ public class ParticipantCriteria
     private Integer foundationId;
     private boolean vip;
     private Integer courseTypeId;
+    private Integer excludeEventId;
     private int maxResults = Util.MaxResultCount;
 
     public Integer getParticipantId ()
@@ -96,5 +97,13 @@ public class ParticipantCriteria
     public void setMaxResults (int maxResults)
     {
         this.maxResults = maxResults;
+    }
+
+    public Integer getExcludeEventId() {
+        return excludeEventId;
+    }
+
+    public void setExcludeEventId(Integer excludeEventId) {
+        this.excludeEventId = excludeEventId;
     }
 }

@@ -29,13 +29,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Util
 {
@@ -335,5 +331,24 @@ public class Util
         }
 
         return context.getBean(beanName);
+    }
+
+    public static List<String> splitAlphaNumeric (String seatNo)
+    {
+        List<String> result = new ArrayList();
+        String alphaStr = "[a-zA-Z]+";
+        Pattern p = Pattern.compile(alphaStr);
+        Matcher m = p.matcher(seatNo);
+        if (m.find()) {
+            String alpha = m.group(0);
+            result.add(alpha);
+            String numeric = seatNo.substring(alpha.length(), seatNo.length());
+            result.add(numeric);
+        }
+        else {
+            result.add(seatNo); // it is just numeric
+        }
+
+        return result;
     }
 }

@@ -748,4 +748,72 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
 
         return result;
     }
+
+    public List getPaymentPivot (Integer eventId)
+    {
+        /**
+         SELECT foundation.shortname,
+         (SELECT COUNT(id) FROM phk_eventregstrn WHERE amountdue = 0 AND foundation = reg.foundation and eventid = 1 ) AS CompCount,
+         (SELECT SUM(totalamountpaid) FROM phk_eventregstrn WHERE amountdue = 0 AND foundation = reg.foundation and eventid = 1) AS TotalPaidAmt,
+         (SELECT COUNT(id) FROM phk_eventregstrn WHERE amountdue > 0 AND foundation = reg.foundation and eventid = 1 ) AS PPCount,
+         (SELECT SUM(amountdue) FROM phk_eventregstrn WHERE amountdue > 0 AND foundation = reg.foundation and eventid = 1) AS TotalAmtDue
+         FROM phk_eventregstrn AS reg, phk_foundation AS foundation
+         WHERE reg.foundation = foundation.id and reg.eventid = 1
+         GROUP BY foundation.id
+         */
+
+        String strQuery = "select foundation.shortname, " +
+                " (SELECT COUNT(id) FROM phk_eventregstrn WHERE amountdue = 0 AND foundation = reg.foundation and eventid = :eventId  ) AS CompCount, " +
+                " (SELECT SUM(totalamountpaid) FROM phk_eventregstrn WHERE amountdue = 0 AND foundation = reg.foundation and eventid = :eventId ) AS TotalPaidAmt, " +
+                " (SELECT COUNT(id) FROM phk_eventregstrn WHERE amountdue > 0 AND foundation = reg.foundation and eventid = :eventId  ) AS PPCount, " +
+                " (SELECT SUM(amountdue) FROM phk_eventregstrn WHERE amountdue > 0 AND foundation = reg.foundation and eventid = :eventId ) AS TotalAmtDue "+
+                " FROM phk_eventregstrn AS reg, phk_foundation AS foundation " +
+                " where reg.foundation = foundation.id and reg.eventid = :eventId" +
+                " group by foundation.id ";
+
+        Session session = sessionFactory.openSession();
+
+        Query query = session.createSQLQuery(strQuery);
+        query.setInteger("eventId", eventId);
+        List results = query.list();
+
+        session.flush();
+        session.close();
+
+        return results;
+    }
+
+    public Object getTotalPaymentPivot (Integer eventId)
+    {
+        /**
+            SELECT
+             (SELECT COUNT(id) FROM phk_eventregstrn WHERE amountdue = 0  and eventid = 1 ) AS CompCount,
+             (SELECT SUM(totalamountpaid) FROM phk_eventregstrn WHERE amountdue = 0 and eventid = 1) AS TotalPaidAmt,
+             (SELECT COUNT(id) FROM phk_eventregstrn WHERE amountdue > 0 and eventid = 1 ) AS PPCount,
+             SUM(amountdue) AS TotalAmtDue
+            FROM phk_eventregstrn
+            WHERE  eventid = 1
+         */
+
+        String strQuery = " SELECT " +
+                " (SELECT COUNT(id) FROM phk_eventregstrn WHERE amountdue = 0 and eventid = :eventId) AS CompCount, " +
+                " (SELECT SUM(totalamountpaid) FROM phk_eventregstrn WHERE amountdue = 0 and eventid = :eventId) AS TotalPaidAmt, " +
+                " (SELECT COUNT(id) FROM phk_eventregstrn WHERE amountdue > 0 and eventid = :eventId) AS PPCount, " +
+                " SUM(amountdue) AS TotalAmtDue  " +
+                " FROM phk_eventregstrn " +
+                " WHERE  eventid = :eventId";
+
+        Session session = sessionFactory.openSession();
+
+        Query query = session.createSQLQuery(strQuery);
+        query.setInteger("eventId", eventId);
+        Object result = query.uniqueResult();
+
+        session.flush();
+        session.close();
+
+        return result;
+    }
+
+
 }
