@@ -46,13 +46,9 @@
                 $("a#attend").button();
                 $("a#attend").css("font-size", "11px");
                 $("a#attend").click(function() {
-                    jQuery('<form>', {
-                            'action': 'attendRegistration.htm',
-                        }).append(jQuery('<input>', {
-                            'name': 'registrationId',
-                            'value': '<c:out value="${registeredParticipant.registration.id}"/>',
-                            'type': 'hidden'
-                        })).submit();
+                    $("#registeredParticipant").get(0).setAttribute('action', 'attendRegistration.htm');
+                    $("#registeredParticipant input[name='attend']").val('true');
+                    $("#registeredParticipant").submit();
                 });
 
                 $("a#summary").button();

@@ -426,14 +426,15 @@ public class RegistrationController extends CommonController
         return "redirect:/search.htm";
     }
 
-    @RequestMapping("/attendRegistration")
-    public String attendRegistration (Map<String, Object> map,
+    @RequestMapping(value = "/attendRegistration", method = RequestMethod.POST)
+    public String attendRegistration (RegisteredParticipant registeredParticipant,
+                                      Map<String, Object> map,
                                       HttpServletRequest request)
     {
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
 
         String strRegistrationId = request.getParameter("registrationId");
-        Integer registrationId = Integer.parseInt(strRegistrationId);
+        Integer registrationId = registeredParticipant.getRegistration().getId();
 
         EventRegistration registration = participantService.getEventRegistration(registrationId);
         registration.initializeForUpdate(login.getEmail());
@@ -447,9 +448,16 @@ public class RegistrationController extends CommonController
                 login.getEmail(),
                 registration);
 
-        RegisteredParticipant registeredParticipant =
+        if (!Util.nullOrEmptyOrBlank(registeredParticipant.getCurrentHistoryRecord().getComment())) {
+            participantService.createAndAddHistoryRecord(
+                    registeredParticipant.getCurrentHistoryRecord().getComment(),
+                    Util.getCurrentUser().getEmail(),
+                    registration);
+        }
+
+        RegisteredParticipant registeredParticipantTmp =
                 populateRegisteredParticipant(String.valueOf(registration.getId()));
-        map.put("registeredParticipant", registeredParticipant);
+        map.put("registeredParticipant", registeredParticipantTmp);
 
         return "summary";
     }
