@@ -434,7 +434,13 @@ public class RegistrationController extends CommonController
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
 
         String strRegistrationId = request.getParameter("registrationId");
-        Integer registrationId = registeredParticipant.getRegistration().getId();
+        Integer registrationId = null;
+        if (Util.nullOrEmptyOrBlank((strRegistrationId))) {
+            registrationId = registeredParticipant.getRegistration().getId();
+        }
+        else {
+            registrationId = Integer.parseInt(strRegistrationId);
+        }
 
         EventRegistration registration = participantService.getEventRegistration(registrationId);
         registration.initializeForUpdate(login.getEmail());
@@ -448,7 +454,9 @@ public class RegistrationController extends CommonController
                 login.getEmail(),
                 registration);
 
-        if (!Util.nullOrEmptyOrBlank(registeredParticipant.getCurrentHistoryRecord().getComment())) {
+        if (registeredParticipant != null &&
+                registeredParticipant.getCurrentHistoryRecord() != null &&
+                !Util.nullOrEmptyOrBlank(registeredParticipant.getCurrentHistoryRecord().getComment())) {
             participantService.createAndAddHistoryRecord(
                     registeredParticipant.getCurrentHistoryRecord().getComment(),
                     Util.getCurrentUser().getEmail(),
