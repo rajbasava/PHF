@@ -58,11 +58,14 @@ public class ParticipantController extends CommonController
         Event event = null;
         if (!Util.nullOrEmptyOrBlank(eventIdStr)) {
             event = eventService.getEvent(Integer.parseInt(eventIdStr));
+            map.put("participantList", participantService.listParticipantsNotInEvent(participantCriteria, event));
+        }
+        else {
+            map.put("participantList", participantService.listParticipants(participantCriteria));
         }
 
         if (participantCriteria != null) {
-            //todo if the page is replace, we should search participant that are not participating in the current event.
-            map.put("participantList", participantService.listParticipantsNotInEvent(participantCriteria, event));
+
             map.put("allParticipantCourseTypes", allCourseTypes());
             map.put("allFoundations", allFoundations());
         }

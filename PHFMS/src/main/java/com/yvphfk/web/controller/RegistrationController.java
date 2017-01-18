@@ -532,8 +532,8 @@ public class RegistrationController extends CommonController
             map.put("participantName", registeredParticipant.getParticipant().getName());
             map.put("eventId", registeredParticipant.getRegistration().getEvent().getId());
             map.put("eventName", registeredParticipant.getRegistration().getEvent().getName());
+            map.put("registrationId", registeredParticipant.getRegistration().getId());
         }
-        map.put("registrationId", strRegistrationId);
         return "replaceRegistration";
     }
 
@@ -570,6 +570,9 @@ public class RegistrationController extends CommonController
         if (errors.hasErrors()) {
             map.put("errors", errors);
             map.put("participant", participant);
+            map.put("registrationId", request.getParameter("registrationId"));
+            map.put("participantName", request.getParameter("participantName"));
+            map.put("eventName", request.getParameter("eventName"));
             return "addParticipantForReplacement";
         }
 
@@ -585,16 +588,36 @@ public class RegistrationController extends CommonController
 
     @RequestMapping("/replaceRegistration")
     public String replaceRegistration (Map<String, Object> map,
+                                       ParticipantCriteria participantCriteria,
+                                       Participant participant,
                                        BindingResult errors,
                                        HttpServletRequest request)
     {
-        String strRegistrationId = request.getParameter("registrationId");
-        String strParticipantId = request.getParameter("participantId");
-        String comment = request.getParameter("comments");
+        String strRegistrationId = (String) request.getParameter("registrationId");
+        String strParticipantId =  request.getParameter("participantId");
+        if (Util.nullOrEmptyOrBlank(strParticipantId)) {
+            strParticipantId = (String) request.getAttribute("participantId");
+        }
+        String comment = (String) request.getParameter("comments");
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
 
         if (Util.nullOrEmptyOrBlank(strRegistrationId) || Util.nullOrEmptyOrBlank(strParticipantId)) {
             errors.reject("participant.name.unique");
+
+            map.put("participantCriteria", participantCriteria);
+            map.put("allParticipantCourseTypes", allArhaticCourseTypes());
+            map.put("allFoundations", allFoundations());
+            map.put("page", "replaceRegistration");
+
+            strRegistrationId = request.getParameter("registrationId");
+            RegisteredParticipant registeredParticipant = populateRegisteredParticipant(strRegistrationId);
+            if (registeredParticipant != null) {
+                map.put("participantName", registeredParticipant.getParticipant().getName());
+                map.put("eventId", registeredParticipant.getRegistration().getEvent().getId());
+                map.put("eventName", registeredParticipant.getRegistration().getEvent().getName());
+                map.put("registrationId", registeredParticipant.getRegistration().getId());
+            }
+
             return "replaceRegistration";
         }
 

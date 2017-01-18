@@ -25,7 +25,16 @@
 <body>
 <form:form method="post" action="" commandName="participant">
 <form:errors path="*" cssClass="errorblock" element="div" />
+<input type="hidden" name="registrationId" value="<c:out value="${registrationId}"/>" />
+<input type="hidden" name="participantName" value="<c:out value="${participantName}"/>" />
+<input type="hidden" name="eventName" value="<c:out value="${eventName}"/>" />
 <table align="center" cellspacing="2" cellspacing="2" width="80%">
+<tr>
+        <td align="center" style="font-size:18px">
+            Adding Participant to Replace <c:out value="${participantName}"/> For Event <c:out value="${eventName}"/>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
     <tr>
         <td>
             <table width="100%" cellpadding="1" cellspacing="1">
@@ -78,17 +87,12 @@
                                 <td width="40%"><form:label path="vipDesc"><spring:message code="label.vipDesc"/></form:label></td>
                                 <td><form:input path="vipDesc"/></td>
                             </tr>
+                            <tr>
+                                <td width="40%">Comments:</td>
+                                <td align="left"><textarea name="comments" rows="5" cols="30"></textarea></td>
+                            </tr>
                         </table>
                     </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <table width="100%" cellpadding="1" cellspacing="1">
-                <tr style="background-color:#E8E8E8;">
-                    <td align="left"><b>Course Details:</b></td>
                 </tr>
             </table>
         </td>
@@ -99,10 +103,7 @@
 	        <table width="100%" cellpadding="2" cellspacing="2" style="background-color:#DFDFDF;">
                 <tr>
                     <td align="right">
-                        <a id="addParticipant">Submit</a>
-                    </td>
-                    <td align="left">
-                        <a id="back">Cancel</a>
+                        <a id="addParticipant">Replace Participant</a>
                     </td>
                 </tr>
             </table>
