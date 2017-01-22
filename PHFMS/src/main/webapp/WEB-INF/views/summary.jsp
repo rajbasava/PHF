@@ -26,7 +26,7 @@
                 });
             });
 	    });
-	</script>	
+	</script>
 </head>
 <body>
 <h2 align="center">Registration Summary</h2>
@@ -46,33 +46,33 @@
 		</td>
 	</tr>
 	<c:if  test="${not empty registeredParticipant.registration.participant.email}">
-		<tr>  			
+		<tr>
 			<td style="display:inline; font-family: verdana;  color:green; font-size:20px; text-align:center; padding: 2px">
 				&#9993;&nbsp;<c:out value="${registeredParticipant.registration.participant.email}"/>
 			</td>
-		</tr>	
+		</tr>
 	</c:if>
 	<c:if  test="${not empty registeredParticipant.registration.participant.mobile}">
-		<tr>  			
+		<tr>
 			<td style="display:inline; font-family: verdana; color:green; font-size:20px; text-align:center; padding: 2px">
 				&#9742;&nbsp;<c:out value="${registeredParticipant.registration.participant.mobile}"/>
 			</td>
-		</tr>	
+		</tr>
 	</c:if>
-	<tr>  			
+	<tr>
 		<td style="font-family: verdana; color:green; font-size:20px; text-align:center; padding: 2px; border-bottom:1px violet solid; ">
 			<c:out value="${registeredParticipant.registration.foundation.shortName}"/>
 		</td>
-	</tr>	
+	</tr>
 	<tr>
 		<td>
-			<table width="100%">	
+			<table width="100%">
 				<tr>
 					<td width="50%" style="display:inline; font-family: verdana; color:green; font-size:20px; text-align:center; padding: 2px">
 						Reg.Id#<c:out value="${registeredParticipant.registration.id}"/>
 					</td>
 					<td style="font-weight:bold; font-family: verdana; color:green; font-size:20px; text-align:center; padding: 2px">
-						
+
 						<c:out value="${registeredParticipant.registration.getLevelName()}"/>
 
 					</td>
@@ -80,9 +80,9 @@
 			</table>
 		</td>
 	</tr>
-	<tr> 
+	<tr>
 		<td>
-			<table align="center" cellpadding="1" cellspacing="1" width="40%" style="border:3px violet solid; border-radius: 15px; padding: 2px">
+			<table align="center" cellpadding="1" cellspacing="1" width="50%" style="border:3px violet solid; border-radius: 15px; padding: 2px">
 				<tr style="font-family: verdana; font-size:24px;color:#ff0000; text-align:center;">
 					<td>
 						<c:out value="${registeredParticipant.registration.foodType()}"/>
@@ -94,19 +94,19 @@
 							<c:if  test="${seat.seat != null}">
 							<tr style="font-family: verdana; font-size:24px;color:#ff0000; text-align:center;">
 								<td>
-									Seat No#&nbsp;<c:out value="${seat.alpha}"/>&nbsp;<c:out value="${seat.seat}"/>
+									Seat No#&nbsp;<c:out value="${seat.courseType.shortName}"/>&nbsp;-&nbsp;<c:out value="${seat.alpha}"/>&nbsp;<c:out value="${seat.seat}"/>
 								</td>
 							</tr>
-							<tr style="font-family: verdana; font-size:24px;color:#ff0000; text-align:center;">
+                            <!-- <tr style="font-family: verdana; font-size:24px;color:#ff0000; text-align:center;">
 								<td>
 									Gate No#&nbsp;<c:out value="${seat.gate}"/>
 								</td>
 							</tr>
 							<tr style="font-family: verdana; font-size:24px;color:#ff0000; text-align:center;">
 								<td>
-									<c:out value="${seat.foodCounter}"/>                        
+									<c:out value="${seat.foodCounter}"/>
 								</td>
-							</tr>
+							</tr> -->
 							</c:if>
 						</c:forEach>
 					</c:if>
@@ -123,7 +123,7 @@
 					<a id="nextRegistration" href="#">Next Registration</a>
 				</c:if>
 
-                
+
                 <a id="searchRegistration" href="#">Search Registrations</a>
             </form>
 		</td>

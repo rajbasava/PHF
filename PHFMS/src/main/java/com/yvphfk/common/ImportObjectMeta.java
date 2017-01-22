@@ -147,7 +147,7 @@ public class ImportObjectMeta
         rowMetaFieldPaths.add("registrationId");
         rowMetaFieldPaths.add("CourseTypeShortName");
         rowMetaFieldPaths.add("alpha");
-        rowMetaFieldPaths.add("seat");
+        rowMetaFieldPaths.add("seatNo");
         rowMetaFieldPaths.add("custom");
         rowMetaFieldPaths.add("gate");
         rowMetaFieldPaths.add("foodcounter");
